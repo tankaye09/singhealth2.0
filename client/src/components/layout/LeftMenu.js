@@ -8,9 +8,9 @@ class LeftMenu extends Component {
     return (
       <Menu mode="horizontal">
         <Menu.Item key="mail">
-          <a href="">Home</a>
+          <a href="">Audits</a>
         </Menu.Item>
-        <SubMenu title={<span>Blogs</span>}>
+        <SubMenu title={<span>Create Audit</span>}>
           <MenuItemGroup title="Item 1">
             <Menu.Item key="setting:1">Option 1</Menu.Item>
             <Menu.Item key="setting:2">Option 2</Menu.Item>
@@ -21,7 +21,7 @@ class LeftMenu extends Component {
           </MenuItemGroup>
         </SubMenu>
         <Menu.Item key="alipay">
-          <a href="">Contact Us</a>
+          <a href="">Directory</a>
         </Menu.Item>
       </Menu>
     );

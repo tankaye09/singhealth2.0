@@ -3,7 +3,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const onFinish = (values: any) => {
+  const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
 
@@ -78,6 +78,7 @@ export default Login;
 
 //   onChange = (e) => {
 //     this.setState({ [e.target.id]: e.target.value });
+//     console.log(this.state.email);
 //   };
 
 //   onFinish = (e) => {
