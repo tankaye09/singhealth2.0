@@ -22,7 +22,7 @@ class Register extends Component {
   componentDidMount() {
     // If loggied in and user navigates to Register page, should redirect them to dashboad
     if (this.props.auth.isAuthenticaed) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/dashboard"); // Push new entry into history stack, ie redirecting the user to another route
     }
   }
 
@@ -68,15 +68,21 @@ class Register extends Component {
             error={errors.name}
             id="name"
             type="text"
-            className={classnames("", {
-              invalid: errors.name,
-            })}
+            // className={classnames("", {
+            // invalid: errors.name,
+            // })}
           />
         </Form.Item>
 
         <Form.Item
           name="email"
-          rules={[{ required: true, message: "Please input your Email!" }]}
+          rules={[
+            {
+              required: true,
+              type: "email",
+              message: "Please input a valid Email!",
+            },
+          ]}
         >
           <Input
             prefix={<MailOutlined className="site-form-item-icon" />}
@@ -86,9 +92,9 @@ class Register extends Component {
             error={errors.email}
             id="email"
             type="email"
-            className={classnames("", {
-              invalid: errors.email,
-            })}
+            // className={classnames("", {
+            //   invalid: errors.email,
+            // })}
           />
         </Form.Item>
 
@@ -104,9 +110,9 @@ class Register extends Component {
             error={errors.password}
             id="password"
             type="password"
-            className={classnames("", {
-              invalid: errors.password,
-            })}
+            // className={classnames("", {
+            //   invalid: errors.password,
+            // })}
           />
         </Form.Item>
 
@@ -137,9 +143,9 @@ class Register extends Component {
             error={errors.password2}
             id="password2"
             type="password"
-            className={classnames("", {
-              invalid: errors.password2,
-            })}
+            // className={classnames("", {
+            // invalid: errors.password2,
+            // })}
           />
         </Form.Item>
 
@@ -157,16 +163,17 @@ class Register extends Component {
     );
   }
 }
-
+// Props stands for properties and is being used for passing data from one component to another
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
+// Get state from Redux and map it to props
 const mapStateToProps = (state) => ({
-  auth: state.auth,
-  errors: state.errors,
+  auth: state.auth, // allows us to call this.props.auth
+  errors: state.errors, // allows us to call this.props.errors
 });
 
 export default connect(mapStateToProps, { registerUser })(withRouter(Register));

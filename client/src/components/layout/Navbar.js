@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
+import RightMenuLoggedIn from "./RightMenuLoggedIn";
 import { Drawer, Button } from "antd";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 // import Logo from "SingHealthLogo.png";
 
 class Navbar extends Component {
-  state = {
-    current: "mail",
-    visible: false,
-  };
+  constructor() {
+    super();
+    this.state = {
+      current: "mail",
+      visible: false,
+    };
+  }
   showDrawer = () => {
     this.setState({
       visible: true,
@@ -19,7 +25,14 @@ class Navbar extends Component {
       visible: false,
     });
   };
+
   render() {
+    let rightMenu;
+    if (this.props.auth.isAuthenticated) {
+      rightMenu = <RightMenuLoggedIn />;
+    } else {
+      rightMenu = <RightMenu />;
+    }
     return (
       <nav className="menuBar">
         <div className="logo">
@@ -33,9 +46,7 @@ class Navbar extends Component {
           <div className="leftMenu">
             <LeftMenu />
           </div>
-          <div className="rightMenu">
-            <RightMenu />
-          </div>
+          <div className="rightMenu">{rightMenu}</div>
           <Button className="barsMenu" type="primary" onClick={this.showDrawer}>
             <span className="barsBtn"></span>
           </Button>
@@ -54,4 +65,10 @@ class Navbar extends Component {
     );
   }
 }
-export default Navbar;
+Navbar.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps)(Navbar);

@@ -159,3 +159,28 @@ div.form {
 .login-register-form-button {
   width: 100%;
 }
+
+/* Table */
+.table {
+  width: 90%;
+  max-width: 767px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+}
+
+/* Change header text and background color   */
+.ant-table-thead > tr > th {
+  color: rgb(0, 0, 0);
+  background: #fff5bd !important;
+}
+
+/* Modify list text and background color   */
+.ant-table-tbody > tr > th {
+  color: white;
+  background: #3071b9 !important;
+}
+
+.table-info {
+  /* background: #fff5bd; */
+}

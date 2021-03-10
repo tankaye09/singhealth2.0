@@ -13,6 +13,8 @@ import Navbar from "./components/layout/Navbar";
 import Register from "./components/auth/Register";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
+import AuditList from "./components/audit-list.component";
+import ChecklistNonFB from "./components/ChecklistNonFB.component";
 
 // Check fo token to keep user logged in
 if (localStorage.jwtToken) {
@@ -47,6 +49,12 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/auditlist" component={AuditList} />
+              <PrivateRoute
+                exact
+                path="/checklist"
+                component={ChecklistNonFB}
+              />
             </Switch>
           </div>
         </Router>
