@@ -160,7 +160,91 @@ div.form {
   width: 100%;
 }
 
-/* Table */
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #ffffff;
+}
+
+.start {
+  width: 90%;
+  max-width: 767px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+}
+
+.nav-link {
+  color: #000000;
+}
+
+.navbar-brand {
+  color: #000000;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.buttons {
+  background-color: #ffdc97;
+}
+
+.content {
+  width: 90%;
+  max-width: 767px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+}
+
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+  background-color: #fff;
+}
+
 .table {
   width: 90%;
   max-width: 767px;
@@ -169,10 +253,16 @@ div.form {
   margin-top: 100px;
 }
 
+.table-title {
+  font-weight: bold;
+  font-size: x-large;
+}
+
 /* Change header text and background color   */
 .ant-table-thead > tr > th {
   color: rgb(0, 0, 0);
   background: #fff5bd !important;
+  font-weight: 600;
 }
 
 /* Modify list text and background color   */
@@ -181,6 +271,53 @@ div.form {
   background: #3071b9 !important;
 }
 
-.table-info {
-  /* background: #fff5bd; */
+/* for checklist */
+
+.text-right {
+  text-align: right;
+}
+
+@import "~antd/dist/antd.css";
+
+.panels {
+  width: 90%;
+  max-width: 767px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+}
+
+.ant-checkbox .ant-checkbox-inner {
+  border-color: black;
+}
+
+.create-audit-row {
+  text-align: left;
+  padding-right: 5px;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.bg-orange {
+  background-color: #fff5bd;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* OVERRIDES */
+#nav-drawer .ant-drawer-body {
+  background-color: #ffffff !important;
+  padding: 0;
 }

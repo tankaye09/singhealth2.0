@@ -9,14 +9,14 @@ class LeftMenu extends Component {
   render() {
     return (
       <Menu mode="horizontal">
-        <Menu.Item key="mail">
+        <Menu.Item key="audits">
           <NavLink to="/auditlist">Audits</NavLink>
         </Menu.Item>
-        <Menu.Item key="mail">
+        <Menu.Item key="create">
           <NavLink to="/checklist">Create Audit</NavLink>
         </Menu.Item>
-        <Menu.Item key="alipay">
-          <a href="">Directory</a>
+        <Menu.Item key="directory">
+          <NavLink to="/directory">Directory</NavLink>
         </Menu.Item>
       </Menu>
     );
