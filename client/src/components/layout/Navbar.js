@@ -51,14 +51,13 @@ class Navbar extends Component {
             <span className="barsBtn"></span>
           </Button>
           <Drawer
-            title="Basic Drawer"
             placement="right"
             closable={false}
             onClose={this.onClose}
             visible={this.state.visible}
           >
             <LeftMenu />
-            <RightMenu />
+            {rightMenu}
           </Drawer>
         </div>
       </nav>

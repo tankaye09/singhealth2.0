@@ -1,10 +1,22 @@
 import "../App.css";
 import { Collapse, Divider, List, Input, Checkbox } from "antd";
 import React, { Component } from "react";
+import Questions from "../data/questions.json";
 
 const { Panel } = Collapse;
 
 class ChecklistNonFB extends Component {
+  constructor(props) {
+    super(props);
+    this.getHeader = this.getHeader.bind(this);
+    this.getQuestions = this.getQuestions.bind(this);
+    this.getKeys = this.getKeys.bind(this);
+  }
+
+  getHeader = function name(params) {};
+  getQuestions = function name(params) {};
+  getKeys = function name(params) {};
+
   componentWillMount = () => {
     this.selectedCheckboxes = new Set();
   };

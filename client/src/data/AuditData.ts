@@ -19,7 +19,7 @@ export const getAudits = (user: string): Audits[] => {
             username: user,
             image: "https://miro.medium.com/max/700/1*VqkKTiFqZn40oSxpo42w6A.jpeg",
             notes: "Tenant has bad food",
-            tags: ['food quality', 'disappointment is immeasurable', 'day is ruined'],
+            tags: ['food quality', 'disappointment', 'day is ruined'],
             date: "02/02/21",
         },
         {

@@ -10,8 +10,10 @@
 }
 
 .logo {
-  width: 150px;
+  width: 120px;
   float: left;
+  margin-left: -40px;
+  padding: 5px;
 }
 
 .logo a {
@@ -49,6 +51,7 @@
 
 .menuCon .rightMenu {
   float: right;
+  margin-right: -90px;
 }
 
 .barsMenu {
@@ -56,6 +59,7 @@
   height: 32px;
   padding: 6px;
   margin-top: 8px;
+  margin-right: -80px;
   display: none;
   background: none;
 }
@@ -190,14 +194,6 @@ div.form {
   color: #ffffff;
 }
 
-.start {
-  width: 90%;
-  max-width: 767px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-}
-
 .nav-link {
   color: #000000;
 }
@@ -217,14 +213,6 @@ div.form {
 
 .buttons {
   background-color: #ffdc97;
-}
-
-.content {
-  width: 90%;
-  max-width: 767px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 100px;
 }
 
 .site-layout-content {
