@@ -304,6 +304,14 @@ div.form {
   font-weight: 700;
 }
 
+.submit-button {
+  height: 50px;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  width: 100%;
+  font-weight: bold;
+}
+
 /* OVERRIDES */
 #nav-drawer .ant-drawer-body {
   background-color: #ffffff !important;
