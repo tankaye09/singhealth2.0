@@ -6,7 +6,7 @@ import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, SketchOutlined } from "@ant-design/icons";
 
 class Login extends Component {
   constructor() {
@@ -14,6 +14,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      key: "",
       errors: {},
     };
   }
@@ -21,13 +22,13 @@ class Login extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/auditlist");
+      this.props.history.push("/audits");
     }
   }
   // might be deprecated
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/auditlist"); // push user to dashboard when they login
+      this.props.history.push("/audits"); // push user to dashboard when they login
     }
     if (nextProps.errors) {
       this.setState({
@@ -35,6 +36,8 @@ class Login extends Component {
       });
     }
   }
+  // TODO: Implement staff key to ensure only staff can register
+
   onChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
@@ -54,6 +57,8 @@ class Login extends Component {
         name="normal_login"
         className="login-register-form"
       >
+        <h1>Welcome to SingHealth Audit</h1>
+        <h2>Enter your username and password to log in </h2>
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Please input your Email!" }]}
@@ -86,6 +91,25 @@ class Login extends Component {
             type="password"
             className={classnames("", {
               invalid: errors.password || errors.passwordincorrect,
+            })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="key"
+          rules={[{ required: true, message: "Please input your staff key!" }]}
+        >
+          <Input
+            prefix={<SketchOutlined className="site-form-item-icon" />}
+            placeholder="Staff Key"
+            onChange={this.onChange}
+            onCh
+            value={this.state.key}
+            error={errors.key}
+            id="key"
+            type="key"
+            className={classnames("", {
+              invalid: errors.key || errors.keyincorrect,
             })}
           />
         </Form.Item>

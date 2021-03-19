@@ -66,3 +66,17 @@ export const logoutUser = () => (dispatch) => {
   // Set current user to empty object {} which will set isAuthenticaed to false
   dispatch(setCurrentUser({}));
 };
+
+/* Tenant */
+// Register Tenant
+export const registerTenant = (userData, history) => (dispatch) => {
+  axios
+    .post("/api/users/register", userData)
+    .then((res) => history.push("/login")) // re-direct to login on successful register
+    .catch((err) =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      })
+    );
+};

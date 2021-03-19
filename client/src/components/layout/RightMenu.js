@@ -3,6 +3,7 @@ import { Menu, Icon } from "antd";
 import { logoutUser } from "../../actions/authActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -17,10 +18,10 @@ class RightMenu extends Component {
     return (
       <Menu mode="horizontal">
         <Menu.Item key="mail">
-          <a href="">Login</a>
+          <Link to="/login">Login</Link>
         </Menu.Item>
         <Menu.Item key="app">
-          <a href="">Register</a>
+          <Link to="/register">Register</Link>
         </Menu.Item>
       </Menu>
     );
