@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-var-requires */
 const Validator = require("validator");
 const isEmpty = require("is-empty");
 

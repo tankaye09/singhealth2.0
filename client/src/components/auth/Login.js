@@ -6,7 +6,7 @@ import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined, SketchOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 class Login extends Component {
   constructor() {
@@ -14,7 +14,6 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      key: "",
       errors: {},
     };
   }
@@ -36,7 +35,6 @@ class Login extends Component {
       });
     }
   }
-  // TODO: Implement staff key to ensure only staff can register
 
   onChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
@@ -59,6 +57,7 @@ class Login extends Component {
       >
         <h1>Welcome to SingHealth Audit</h1>
         <h2>Enter your username and password to log in </h2>
+        <h3>Key: {}</h3>
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Please input your Email!" }]}
@@ -91,25 +90,6 @@ class Login extends Component {
             type="password"
             className={classnames("", {
               invalid: errors.password || errors.passwordincorrect,
-            })}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="key"
-          rules={[{ required: true, message: "Please input your staff key!" }]}
-        >
-          <Input
-            prefix={<SketchOutlined className="site-form-item-icon" />}
-            placeholder="Staff Key"
-            onChange={this.onChange}
-            onCh
-            value={this.state.key}
-            error={errors.key}
-            id="key"
-            type="key"
-            className={classnames("", {
-              invalid: errors.key || errors.keyincorrect,
             })}
           />
         </Form.Item>

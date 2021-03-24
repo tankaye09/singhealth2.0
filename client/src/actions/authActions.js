@@ -4,6 +4,12 @@ import jwt_decode from "jwt-decode";
 
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
+// Pre-register User
+
+export const preRegister = (key, history) => (dispatch) => {
+  axios.get("api/keys/");
+};
+
 // Register User
 export const registerUser = (userData, history) => (dispatch) => {
   axios

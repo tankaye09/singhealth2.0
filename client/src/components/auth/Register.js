@@ -4,8 +4,14 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
+import staffkey from "../../data/staffkey.json";
 import { Form, Input, Button, Checkbox } from "antd";
-import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  MailOutlined,
+  UserOutlined,
+  LockOutlined,
+  SketchOutlined,
+} from "@ant-design/icons";
 
 class Register extends Component {
   constructor() {
@@ -15,6 +21,7 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
+      staffkey: "",
       errors: {},
     };
   }
@@ -38,14 +45,18 @@ class Register extends Component {
     this.setState({ [e.target.id]: e.target.value });
   };
   onFinish = (values) => {
-    const newUser = {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-      password2: values.password2,
-    };
-    console.log(newUser);
-    this.props.registerUser(newUser, this.props.history);
+    if (this.state.staffkey === staffkey["staff key"]) {
+      const newUser = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        password2: values.password2,
+      };
+      console.log(newUser);
+      this.props.registerUser(newUser, this.props.history);
+    } else {
+      alert("Staff Key is incorrect!");
+    }
   };
 
   render() {
@@ -146,6 +157,25 @@ class Register extends Component {
             // className={classnames("", {
             // invalid: errors.password2,
             // })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="staffkey"
+          rules={[{ required: true, message: "Please input your staff key!" }]}
+        >
+          <Input
+            prefix={<SketchOutlined className="site-form-item-icon" />}
+            placeholder="Staff Key"
+            onChange={this.onChange}
+            onCh
+            value={this.state.staffkey}
+            error={errors.staffkey}
+            id="staffkey"
+            type="staffkey"
+            className={classnames("", {
+              invalid: errors.key || errors.keyincorrect,
+            })}
           />
         </Form.Item>
 

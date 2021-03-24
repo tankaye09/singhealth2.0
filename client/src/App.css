@@ -312,6 +312,11 @@ div.form {
   font-weight: bold;
 }
 
+/* Dropdown */
+.dropdown {
+  text-align: left;
+}
+
 /* OVERRIDES */
 #nav-drawer .ant-drawer-body {
   background-color: #ffffff !important;
