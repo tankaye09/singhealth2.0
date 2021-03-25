@@ -18,7 +18,6 @@ import AuditList from "./components/Audit-list";
 import Directory from "./components/Directory";
 import Checklist from "./components/Checklist";
 import CreateTenant from "./components/auth/RegisterTenant";
-import PreRegister from "./components/auth/PreRegister";
 
 // Check fo token to keep user logged in
 if (localStorage.jwtToken) {
@@ -49,7 +48,6 @@ class App extends Component {
           <div className="App">
             <Navbar />
             <Route exact path="/" component={Login} />
-            <Route exact path="/preregister" component={PreRegister} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>

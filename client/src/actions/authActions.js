@@ -73,6 +73,11 @@ export const logoutUser = () => (dispatch) => {
   dispatch(setCurrentUser({}));
 };
 
+/* Get Staff Key */
+export const getStaffKey = () => (dispatch) => {
+  axios.get("/api/staffkey").then((response) => console.log(response));
+};
+
 /* Tenant */
 // Register Tenant
 export const registerTenant = (userData, history) => (dispatch) => {

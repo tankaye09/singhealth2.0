@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
 import staffkey from "../../data/staffkey.json";
+import { getStaffKey } from "../../actions/authActions";
 import { Form, Input, Button, Checkbox } from "antd";
 import {
   MailOutlined,
@@ -45,7 +46,8 @@ class Register extends Component {
     this.setState({ [e.target.id]: e.target.value });
   };
   onFinish = (values) => {
-    if (this.state.staffkey === staffkey["staff key"]) {
+    getStaffKey();
+    if (this.state.staffkey === getStaffKey) {
       const newUser = {
         name: values.name,
         email: values.email,
