@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
-import staffkey from "../../data/staffkey.json";
 import { getStaffKey } from "../../actions/authActions";
 import { Form, Input, Button, Checkbox } from "antd";
 import {
@@ -23,6 +22,7 @@ class Register extends Component {
       password: "",
       password2: "",
       staffkey: "",
+      dbstaffkey: "",
       errors: {},
     };
   }
@@ -46,19 +46,24 @@ class Register extends Component {
     this.setState({ [e.target.id]: e.target.value });
   };
   onFinish = (values) => {
-    getStaffKey();
-    if (this.state.staffkey === getStaffKey) {
-      const newUser = {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-        password2: values.password2,
-      };
-      console.log(newUser);
-      this.props.registerUser(newUser, this.props.history);
-    } else {
-      alert("Staff Key is incorrect!");
-    }
+    getStaffKey((data) => {
+      console.log("data is: ", data);
+      this.setState({ ...this.state, dbstaffkey: data });
+      console.log("dbstaffkey is: ", this.state.dbstaffkey);
+      if (this.state.staffkey === this.state.dbstaffkey) {
+        const newUser = {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          password2: values.password2,
+        };
+        console.log(newUser);
+        alert("User created!");
+        this.props.registerUser(newUser, this.props.history);
+      } else {
+        alert("Staff Key is incorrect!");
+      }
+    });
   };
 
   render() {

@@ -4,13 +4,16 @@ import jwt_decode from "jwt-decode";
 
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
-// Pre-register User
+// Register User
 
-export const preRegister = (key, history) => (dispatch) => {
-  axios.get("api/keys/");
+/* Get Staff Key */
+export const getStaffKey = (onDataReceived) => {
+  axios.get("/api/staffkey").then((response) => {
+    console.log("response is:", response.data[0].staffkey);
+    onDataReceived(response.data[0].staffkey);
+  });
 };
 
-// Register User
 export const registerUser = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/register", userData)
@@ -71,11 +74,6 @@ export const logoutUser = () => (dispatch) => {
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticaed to false
   dispatch(setCurrentUser({}));
-};
-
-/* Get Staff Key */
-export const getStaffKey = () => (dispatch) => {
-  axios.get("/api/staffkey").then((response) => console.log(response));
 };
 
 /* Tenant */
