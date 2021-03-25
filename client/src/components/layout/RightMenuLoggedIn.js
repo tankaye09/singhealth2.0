@@ -18,7 +18,7 @@ class RightMenu extends Component {
     return (
       <Menu mode="horizontal">
         <Menu.Item key="mail">
-          <Button onClick={this.onLogoutClick} type="text">
+          <Button onClick={this.onLogoutClick} type="text" id="logout-button">
             Logout
           </Button>
         </Menu.Item>

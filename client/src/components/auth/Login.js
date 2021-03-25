@@ -96,6 +96,7 @@ class Login extends Component {
 
         <Form.Item>
           <Button
+            id="login-button"
             type="primary"
             htmlType="submit"
             className="login-register-form-button"
