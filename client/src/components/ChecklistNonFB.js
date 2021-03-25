@@ -46,7 +46,7 @@ class ChecklistNonFB extends Component {
     submit({
       type: "Non-FB",
       catCounts: this.state.catCounts,
-      total_score: ,
+      total_score: catCounts[0] + catCounts[1] + catCounts[2],
     });
     this.showModal2();
   }

@@ -2,9 +2,9 @@ import "../App.css";
 import { Collapse, Divider, List, Input, Checkbox, Button, Modal } from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
-import PhotoPop from "./photo/PhotoPop.js";
-import { submit, display } from "../actions/auditActions.js";
-import { FB } from "./questionsData";
+import PhotoPop from "./photo/PhotoPop.js"
+import { submit, display } from "../actions/auditActions.js"
+import { FB } from '../data/questionsData'
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
 
