@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import PhotoPop from "./photo/PhotoPop.js"
 import { submit, display } from "../actions/auditActions.js"
-import { FB } from './questionsData'
+import { FB } from '../data/questionsData'
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
 

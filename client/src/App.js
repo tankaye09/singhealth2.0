@@ -17,6 +17,7 @@ import AuditList from "./components/Audit-list";
 // import ChecklistNonFB from "./components/ChecklistNonFB";
 import Directory from "./components/Directory";
 import Checklist from "./components/Checklist";
+import ChecklistNonFB from "./components/ChecklistNonFB";
 
 // Check fo token to keep user logged in
 if (localStorage.jwtToken) {
@@ -52,7 +53,8 @@ class App extends Component {
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/auditlist" component={AuditList} />
-              <PrivateRoute exact path="/checklist" component={Checklist} />
+              <PrivateRoute exact path="/checklistFB" component={Checklist} />
+              <PrivateRoute exact path="/checklistNonFB" component={ChecklistNonFB} />
               <PrivateRoute exact path="/directory" component={Directory} />
             </Switch>
           </div>
