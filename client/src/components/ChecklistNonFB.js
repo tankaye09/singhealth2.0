@@ -1,7 +1,9 @@
 import "../App.css";
-import { Collapse, Divider, List, Input, Checkbox, Button } from "antd";
+import { Collapse, Divider, List, Input, Checkbox, Button, Modal } from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
+import PhotoPop from "./photo/PhotoPop.js"
+import { submit } from "../actions/auditActions.js"
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 
@@ -38,6 +40,49 @@ class ChecklistNonFB extends Component {
     };
 
     console.log(submitData);
+  };
+
+  submitAudit = () => {
+    submit({
+      type: "Non-FB",
+      catCounts: this.state.catCounts,
+      total_score: ,
+    });
+    this.showModal2();
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  showModal2 = () => {
+    this.setState({
+      visible2: true,
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleOk2 = e => {
+    console.log(e);
+    this.setState({
+      visible2: false,
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
   };
 
   createCheckbox = (label, catIndex) => (
@@ -140,6 +185,34 @@ class ChecklistNonFB extends Component {
         >
           SUBMIT
         </Button>
+        <Button type="primary" onClick={this.showModal}>
+          Upload Photo
+        </Button>
+        <Modal
+          title="Upload Photo"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          okButtonProps={{ disabled: true }}
+          cancelButtonProps={{ disabled: false }}
+        >
+          <PhotoPop />
+        </Modal>
+        <Button onClick={() => this.submitAudit()} className="submit-button" type="primary" htmlType="submit">
+          SUBMIT
+        </Button>
+        {/* <Button onClick={() => this.updateItems()} className="submit-button" type="primary" htmlType="submit">
+          TEST
+        </Button> */}
+        <Modal
+          title=""
+          visible={this.state.visible2}
+          onOk={this.handleOk2}
+          okButtonProps={{ disabled: false }}
+          cancelButtonProps={{ disabled: true, visible: false, }}
+        >
+          <p>Audit Uploaded!</p>
+        </Modal>
       </div>
     );
   }

@@ -130,8 +130,19 @@ class Checklist extends Component {
   };
 
   submitAudit = () => {
-    this.setState();
-    submit();
+    submit({
+      type: "FB",
+      profcount: Math.round(this.state.profcount / 2),
+      gc_count: Math.round(this.state.gc_count / 2),
+      food_count: Math.round(this.state.food_count / 2),
+      health_count: Math.round(this.state.health_count / 2),
+      safety_count: Math.round(this.state.safety_count / 2),
+      total_score: Math.round(20 / 2 / (safety_cat_size) * (this.state.safety_count)
+        + 15 / 2 / (health_cat_size) * (this.state.health_count)
+        + 35 / 2 / (food_cat_size) * (this.state.food_count)
+        + 20 / 2 / (housekeeping_cat_size) * (this.state.gc_count)
+        + 10 / 2 / (prof_cat_size) * (this.state.profcount)),
+    });
     this.showModal2();
   }
 
@@ -158,6 +169,7 @@ class Checklist extends Component {
     console.log(e);
     this.setState({
       visible2: false,
+      visible: false,
     });
   };
 
@@ -364,7 +376,7 @@ class Checklist extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           okButtonProps={{ disabled: true }}
-          cancelButtonProps={{ disabled: true }}
+          cancelButtonProps={{ disabled: false }}
         >
           <PhotoPop />
         </Modal>
