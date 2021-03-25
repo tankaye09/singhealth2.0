@@ -1,7 +1,7 @@
 import "../App.css";
 import { Collapse, Divider, List, Input, Checkbox, Button } from "antd";
 import React, { Component } from "react";
-import { FB } from './questionsData'
+import { FB } from '../data/questionsData'
 const { Panel } = Collapse;
 
 
