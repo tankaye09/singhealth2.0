@@ -12,8 +12,8 @@ class LeftMenu extends Component {
         <Menu.Item key="viewAudits">
           <NavLink to="/audits">Audits</NavLink>
         </Menu.Item>
-        <Menu.Item key="createAudit">
-          <NavLink to="/createAudit">Create Audit</NavLink>
+        <Menu.Item key="create" >
+          <NavLink to="/checklist">Create Audit</NavLink>
         </Menu.Item>
         <Menu.Item key="directory">
           <NavLink to="/directory">Directory</NavLink>

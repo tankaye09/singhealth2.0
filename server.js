@@ -4,7 +4,12 @@ const bodyParser = require("body-parser");
 
 const passport = require("passport");
 const users = require("./routes/api/users");
+<<<<<<< HEAD
 const staffkey = require("./routes/api/staffkey");
+=======
+const audits = require("./routes/api/audits");
+const photos = require("./routes/api/photos");
+>>>>>>> week9cw
 
 const app = express();
 
@@ -33,6 +38,8 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/audits", audits);
+app.use("/api/photos", photos);
 
 //TODO: take staffkey from db not working
 app.use("/api/staffkey", staffkey);
