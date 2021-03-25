@@ -57,7 +57,6 @@ class Login extends Component {
       >
         <h1>Welcome to SingHealth Audit</h1>
         <h2>Enter your username and password to log in </h2>
-        <h3>Key: {}</h3>
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Please input your Email!" }]}

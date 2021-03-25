@@ -53,14 +53,13 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
-<<<<<<< HEAD
-              <PrivateRoute exact path="/audits" component={AuditList} />
-              <PrivateRoute exact path="/createAudit" component={Checklist} />
-=======
               <PrivateRoute exact path="/auditlist" component={AuditList} />
               <PrivateRoute exact path="/checklistFB" component={Checklist} />
-              <PrivateRoute exact path="/checklistNonFB" component={ChecklistNonFB} />
->>>>>>> week9cw
+              <PrivateRoute
+                exact
+                path="/checklistNonFB"
+                component={ChecklistNonFB}
+              />
               <PrivateRoute exact path="/directory" component={Directory} />
               <PrivateRoute
                 exact

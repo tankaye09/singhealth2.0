@@ -2,8 +2,8 @@ import "../App.css";
 import { Collapse, Divider, List, Input, Checkbox, Button, Modal } from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
-import PhotoPop from "./photo/PhotoPop.js"
-import { submit } from "../actions/auditActions.js"
+import PhotoPop from "./photo/PhotoPop.js";
+import { submit } from "../actions/auditActions.js";
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 
@@ -46,10 +46,13 @@ class ChecklistNonFB extends Component {
     submit({
       type: "Non-FB",
       catCounts: this.state.catCounts,
-      total_score: catCounts[0] + catCounts[1] + catCounts[2],
+      total_score:
+        this.state.catCounts[0] +
+        this.state.catCounts[1] +
+        this.state.catCounts[2],
     });
     this.showModal2();
-  }
+  };
 
   showModal = () => {
     this.setState({
@@ -63,14 +66,14 @@ class ChecklistNonFB extends Component {
     });
   };
 
-  handleOk = e => {
+  handleOk = (e) => {
     console.log(e);
     this.setState({
       visible: false,
     });
   };
 
-  handleOk2 = e => {
+  handleOk2 = (e) => {
     console.log(e);
     this.setState({
       visible2: false,
@@ -78,7 +81,7 @@ class ChecklistNonFB extends Component {
     });
   };
 
-  handleCancel = e => {
+  handleCancel = (e) => {
     console.log(e);
     this.setState({
       visible: false,
@@ -99,7 +102,7 @@ class ChecklistNonFB extends Component {
     type: "Non-FB",
     checked: false,
     catCounts: [0, 0, 0],
-    // counts[0]: for Professionalism & Staff Hygiene (20%), 
+    // counts[0]: for Professionalism & Staff Hygiene (20%),
     //counts[1]: for Housekeeping & General Cleanliness (40%)
     //counts[2]: for Workplace Safety & Health (40%)
     total_score: 0,
@@ -198,7 +201,12 @@ class ChecklistNonFB extends Component {
         >
           <PhotoPop />
         </Modal>
-        <Button onClick={() => this.submitAudit()} className="submit-button" type="primary" htmlType="submit">
+        <Button
+          onClick={() => this.submitAudit()}
+          className="submit-button"
+          type="primary"
+          htmlType="submit"
+        >
           SUBMIT
         </Button>
         {/* <Button onClick={() => this.updateItems()} className="submit-button" type="primary" htmlType="submit">
@@ -209,7 +217,7 @@ class ChecklistNonFB extends Component {
           visible={this.state.visible2}
           onOk={this.handleOk2}
           okButtonProps={{ disabled: false }}
-          cancelButtonProps={{ disabled: true, visible: false, }}
+          cancelButtonProps={{ disabled: true, visible: false }}
         >
           <p>Audit Uploaded!</p>
         </Modal>
