@@ -1,209 +1,148 @@
 import "../App.css";
-import { Collapse, Divider, List, Input, Checkbox } from "antd";
+import { Collapse, Divider, List, Input, Checkbox, Button } from "antd";
 import React, { Component } from "react";
-import Questions from "../data/questions.json";
-
+import importJSON from "../data/questionsDict.json";
+const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 
+// TODO: Take score from json file => Update the score, replace the json file
+
 class ChecklistNonFB extends Component {
-  componentWillMount = () => {
-    this.selectedCheckboxes = new Set();
-  };
+  // componentWillMount = () => {
+  //   this.selectedCheckboxes = new Set();
+  // };
 
-  toggleCheckbox = (label) => {
-    if (this.selectedCheckboxes.has(label)) {
-      this.selectedCheckboxes.delete(label);
-    } else {
-      this.selectedCheckboxes.add(label);
+  // toggleCheckbox = (label) => {
+  //   if (this.selectedCheckboxes.has(label)) {
+  //     this.selectedCheckboxes.delete(label);
+  //   } else {
+  //     this.selectedCheckboxes.add(label);
+  //   }
+  // };
+
+  // handleFormSubmit = (formSubmitEvent) => {
+  //   formSubmitEvent.preventDefault();
+
+  //   for (const checkbox of this.selectedCheckboxes) {
+  //     console.log(checkbox, "is selected.");
+  //   }
+  // };
+
+  onFinish = () => {
+    var newState = [];
+    for (var i = 0; i < this.state.catCounts.length; i++) {
+      newState.push(this.state.catCounts[i] / 2);
     }
+    const submitData = {
+      catCounts: newState,
+    };
+
+    console.log(submitData);
   };
 
-  handleFormSubmit = (formSubmitEvent) => {
-    formSubmitEvent.preventDefault();
-
-    for (const checkbox of this.selectedCheckboxes) {
-      console.log(checkbox, "is selected.");
-    }
-  };
-
-  createprofCheckbox = (label) => (
+  createCheckbox = (label, catIndex) => (
     <Checkbox
       label={label}
-      handleCheckboxChange={this.toggleCheckbox}
+      // handleCheckboxChange={this.toggleCheckbox}
       key={label}
-      onChange={(e) => this.handleprofCheckCount(e)}
+      onChange={(e) => this.handleCount(e, catIndex)}
     />
   );
 
+  // not exactly dynamic
   state = {
+    type: "Non-FB",
     checked: false,
-    profcount: 0,
+    catCounts: [0, 0, 0],
+    // counts[0]: for Professionalism & Staff Hygiene (20%), 
+    //counts[1]: for Housekeeping & General Cleanliness (40%)
+    //counts[2]: for Workplace Safety & Health (40%)
+    total_score: 0,
   };
-  handleprofCheckCount = (e) => {
+  handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
-    if (type === "checkbox" && checked === true) {
-      this.setState((state) => state.profcount++, this.logCount);
-    } else {
-      this.setState((state) => state.profcount--, this.logCount);
+    switch (catIndex) {
+      case 0:
+        if (type === "checkbox" && checked === true) {
+          this.setState((state) => state.catCounts[0]++);
+        } else {
+          this.setState((state) => state.catCounts[0]--);
+        }
+        break;
+      case 1:
+        if (type === "checkbox" && checked === true) {
+          this.setState((state) => state.catCounts[1]++);
+        } else {
+          this.setState((state) => state.catCounts[1]--);
+        }
+        break;
+      case 2:
+        if (type === "checkbox" && checked === true) {
+          this.setState((state) => state.catCounts[2]++);
+        } else {
+          this.setState((state) => state.catCounts[2]--);
+        }
+        break;
+
+      default:
+        break;
     }
   };
 
   render() {
     return (
       <div className="panels">
-        <Collapse defaultActiveKey="1">
-          <Panel
-            header="1. Professionalism & Staff Hygiene"
-            key="1"
-            className="bg-orange text-white"
-          >
-            <Collapse defaultActiveKey="1">
+        {nonFb.map((cat, catIndex) => {
+          // var catScore = cat.score;
+          return (
+            // Category
+            <Collapse defaultActiveKey={["1"]}>
               <Panel
-                header="Professionalism"
-                key="1"
-                className="bg-orange text-white"
+                header={<div catIndex={catIndex}>{cat.name}</div>}
+                key={catIndex + 1}
+                className="bg-orange"
               >
-                <List
-                  dataSource={[
-                    "Shop is open and ready to service patients/visitors according to operating hours.",
-                    "Staff Attendance: adequate staff for peak and non-peak hours.",
-                    "At least one clearly assigned person in-charge on site.",
-                  ]}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div className="create-audit-row">{item}</div>
-                      <div>{this.createprofCheckbox()}</div>
-                    </List.Item>
-                  )}
-                />
-              </Panel>
-
-              <Panel
-                header="Staff Hygiene"
-                key="2"
-                className="bg-orange text-white"
-              >
-                <List
-                  dataSource={[
-                    "Staff uniform/attire is not soiled.",
-                    "Staff who are unfit for work due to illness should not report to work",
-                    "Staff who are fit for work but suffering from the lingering effects of a cough and/or cold should cover their mouths with a surgical mask.",
-                  ]}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div className="create-audit-row">{item}</div>
-                      <div>{this.createprofCheckbox()}</div>
-                    </List.Item>
-                  )}
-                />
+                <div catIndex={catIndex}>
+                  {cat.subcategories.map((subCat, subCatIndex) => {
+                    return (
+                      // SubCategory
+                      <Collapse defaultActiveKey={["1"]}>
+                        <Panel
+                          header={
+                            <div subCatIndex={subCatIndex}>{subCat.name}</div>
+                          }
+                          key={subCatIndex + 1}
+                          className="bg-orange"
+                        >
+                          <List
+                            dataSource={subCat.questions} // Questions
+                            renderItem={(item) => (
+                              <List.Item>
+                                <div className="create-audit-row">{item}</div>
+                                <div>{this.createCheckbox(item, catIndex)}</div>
+                              </List.Item>
+                            )}
+                          />
+                        </Panel>
+                      </Collapse>
+                    );
+                  })}
+                </div>
+                <div>Score: {this.state.catCounts[catIndex] / 2}</div>
               </Panel>
             </Collapse>
-            <div class="pt-10 font-bold text-right">
-              Score: {Math.round((20 / 6) * this.state.profcount)}/20
-            </div>
-          </Panel>
-
-          <Panel
-            header="2. Housekeeping & General Cleanliness"
-            key="2"
-            className="bg-orange text-white"
-          >
-            <Collapse defaultActiveKey="1">
-              <Panel
-                header="General Environment Cleanliness"
-                key="1"
-                className="bg-orange text-white"
-              >
-                <List
-                  // dataSource={dataNonFB.data2_1}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div className="create-audit-row">{item}</div>
-                    </List.Item>
-                  )}
-                />
-              </Panel>
-            </Collapse>
-            <div class="pt-10 font-bold text-right">Score: __/40</div>
-          </Panel>
-
-          <Panel
-            header="3. Workplace Safety & Health"
-            key="3"
-            className="bg-orange text-white"
-          >
-            <Collapse defaultActiveKey="1">
-              <Panel
-                header="General Safety"
-                key="1"
-                className="bg-orange text-white"
-              >
-                <List
-                  // dataSource={dataNonFB.data3_1}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div className="create-audit-row">{item}</div>
-                    </List.Item>
-                  )}
-                />
-              </Panel>
-
-              <Panel
-                header="Fire & Emergency Safety"
-                key="2"
-                className="bg-orange text-white"
-              >
-                <List
-                  // dataSource={dataNonFB.data3_2}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div className="create-audit-row">{item}</div>
-                    </List.Item>
-                  )}
-                />
-              </Panel>
-
-              <Panel
-                header="Electrical Safety"
-                key="3"
-                className="bg-orange text-white"
-              >
-                <List
-                  // dataSource={dataNonFB.data3_3}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div className="create-audit-row">{item}</div>
-                    </List.Item>
-                  )}
-                />
-              </Panel>
-            </Collapse>
-            <div class="pt-10 font-bold text-right">Score: __/40</div>
-          </Panel>
-        </Collapse>
+          );
+        })}
+        <Button
+          className="submit-button"
+          type="primary"
+          onClick={this.onFinish}
+        >
+          SUBMIT
+        </Button>
       </div>
-
-      // {/*  <div class="pt-20">
-      //         <TextArea placeholder="Remarks" allowClear onChange={onChange} />
-      //     </div>
-      //     <Divider />
-      //     <div class="create-audit-row">
-      //         <div>Professionalism & Staff Hygiene</div>
-      //         <div>__/20%</div>
-      //     </div>
-      //     <div class="create-audit-row">
-      //         <div>Housekeeping & General Cleanliness</div>
-      //         <div>__/40%</div>
-      //     </div>
-      //     <div class="create-audit-row">
-      //         <div>Workplace Safety & Health</div>
-      //         <div>__/40%</div>
-      //     </div>
-      //     <div class="create-audit-row font-bold">
-      //         <div>Total</div>
-      //         <div>__/100%</div>
-      //     </div> */}
     );
   }
 }
+
 export default ChecklistNonFB;

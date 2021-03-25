@@ -2,14 +2,15 @@
     "fb": [
         {
             "name": "Professionalism & Staff Hygiene (10%)",
+            "score": 0,
             "subcategories": [
                 {
                     "name": "Professionalism",
-                    "questions": [
-                        "Shop is open and ready to service patients/visitors according to operating hours.",
-                        "Staff Attendance: adequate staff for peak and non-peak hours.",
-                        "At least one (1) clearly assigned person in-charge on site.",
-                        "Question 4"
+                    "questions":[
+                        "Shop is open and ready to service patients/visitors according to operating hours.", 
+                        "Staff Attendance: adequate staff for peak and non-peak hours.", 
+                        "At least one (1) clearly assigned person in-charge on site."
+                        
                     ]
                 },
                 {
@@ -28,9 +29,12 @@
                     ]
                 }
             ]
+            
+            
         },
         {
             "name": "Housekeeping & General Cleanliness (20%)",
+            "score": 0,
             "subcategories": [
                 {
                     "name": "General Environment Cleanliness",
@@ -63,6 +67,7 @@
         },
         {
             "name": "Food Hygiene (35%)",
+            "score": 0,
             "subcategories": [
                 {
                     "name": "Storage & Preparation of Food",
@@ -115,6 +120,7 @@
         },
         {
             "name": "Healthier Choice in line with HPB’s Healthy Eating’s Initiative (15%)",
+            "score": 0,
             "subcategories": [
                 {
                     "name": "Food",
@@ -141,6 +147,7 @@
         },
         {
             "name": "Workplace Safety & Health (20%)",
+            "score": 0,
             "subcategories": [
                 {
                     "name": "General Safety",
@@ -178,6 +185,12 @@
             ]
         }
     ],
+
+
+
+
+
+
     "non_fb": [
         {
             "name": "Professionalism & Staff Hygiene (20%)",
