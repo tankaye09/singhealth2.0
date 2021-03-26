@@ -31,16 +31,64 @@ class Checklist extends Component {
   //   }
   // };
 
-  onFinish = () => {
-    var newState = [];
-    for (var i = 0; i < this.state.catCounts.length; i++) {
-      newState.push(this.state.catCounts[i] / 2);
-    }
-    const submitData = {
-      catCounts: newState,
-    };
+  // onFinish = () => {
+  //   var newState = [];
+  //   for (var i = 0; i < this.state.catCounts.length; i++) {
+  //     newState.push(this.state.catCounts[i] / 2);
+  //   }
+  //   const submitData = {
+  //     catCounts: newState,
+  //   };
 
-    console.log(submitData);
+  //   console.log(submitData);
+  // };
+
+  submitAudit = () => {
+    submit({
+      type: "Non-FB",
+      catCounts: this.state.catCounts,
+      total_score:
+        this.state.catCounts[0] +
+        this.state.catCounts[1] +
+        this.state.catCounts[2] +
+        this.state.catCounts[3] +
+        this.state.catCounts[4],
+    });
+    this.showModal2();
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  showModal2 = () => {
+    this.setState({
+      visible2: true,
+    });
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleOk2 = (e) => {
+    console.log(e);
+    this.setState({
+      visible2: false,
+      visible: false,
+    });
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
   };
 
   createCheckbox = (label, catIndex) => (
@@ -79,8 +127,10 @@ class Checklist extends Component {
 
   // not exactly dynamic
   state = {
+    type: "FB",
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
+    total_score: 0,
   };
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -170,10 +220,34 @@ class Checklist extends Component {
             </Collapse>
           );
         })}
-        <Button
+        {/* <Button
           className="submit-button"
           type="primary"
           onClick={this.onFinish}
+        >
+          SUBMIT
+        </Button> */}
+        {/* <Button onClick={() => this.updateItems()} className="submit-button" type="primary" htmlType="submit">
+          TEST
+        </Button> */}
+        <Button type="primary" onClick={this.showModal}>
+          Upload Photo
+        </Button>
+        <Modal
+          title="Upload Photo"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          okButtonProps={{ disabled: true }}
+          cancelButtonProps={{ disabled: false }}
+        >
+          <PhotoPop />
+        </Modal>
+        <Button
+          onClick={() => this.submitAudit()}
+          className="submit-button"
+          type="primary"
+          htmlType="submit"
         >
           SUBMIT
         </Button>
