@@ -8,7 +8,7 @@ const AuditSchema = new Schema({
         required: true,
     },
     catCounts: {
-        type: Number,
+        type: [],
         required: false,
     },
     profcount: {

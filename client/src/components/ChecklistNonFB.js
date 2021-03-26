@@ -30,17 +30,17 @@ class ChecklistNonFB extends Component {
   //   }
   // };
 
-  onFinish = () => {
-    var newState = [];
-    for (var i = 0; i < this.state.catCounts.length; i++) {
-      newState.push(this.state.catCounts[i] / 2);
-    }
-    const submitData = {
-      catCounts: newState,
-    };
+  // onFinish = () => {
+  //   var newState = [];
+  //   for (var i = 0; i < this.state.catCounts.length; i++) {
+  //     newState.push(this.state.catCounts[i] / 2);
+  //   }
+  //   const submitData = {
+  //     catCounts: newState,
+  //   };
 
-    console.log(submitData);
-  };
+  //   console.log(submitData);
+  // };
 
   submitAudit = () => {
     submit({
@@ -181,13 +181,13 @@ class ChecklistNonFB extends Component {
             </Collapse>
           );
         })}
-        <Button
+        {/* <Button
           className="submit-button"
           type="primary"
           onClick={this.onFinish}
         >
           SUBMIT
-        </Button>
+        </Button> */}
         <Button type="primary" onClick={this.showModal}>
           Upload Photo
         </Button>
