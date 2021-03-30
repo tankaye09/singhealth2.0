@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, Radio } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 class Login extends Component {
@@ -14,6 +14,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      usertypebool: false,
       errors: {},
     };
   }
@@ -21,13 +22,13 @@ class Login extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/audits");
+      this.props.history.push("/auditlist");
     }
   }
   // might be deprecated
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/audits"); // push user to dashboard when they login
+      this.props.history.push("/auditlist"); // push user to dashboard when they login
     }
     if (nextProps.errors) {
       this.setState({
@@ -39,11 +40,28 @@ class Login extends Component {
   onChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
+
+  onCheckboxChange = (e) => {
+    this.setState({ usertypebool: !this.state.usertypebool });
+    console.log(this.state.usertypebool);
+  };
+
   onFinish = (values) => {
-    console.log(values);
+    // console.log(values);
+    // Process checkbox boolean to usertype string
+    var { usertype } = "";
+    if (this.state.usertypebool) {
+      console.log("if");
+      usertype = "staff";
+    } else {
+      console.log("else");
+      usertype = "tenant";
+      console.log(usertype);
+    }
     const userData = {
       email: values.email,
       password: values.password,
+      usertype: usertype,
     };
     this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
   };
@@ -91,6 +109,17 @@ class Login extends Component {
               invalid: errors.password || errors.passwordincorrect,
             })}
           />
+        </Form.Item>
+
+        <Form.Item name="usertypebool">
+          <Checkbox
+            onChange={this.onCheckboxChange}
+            value={this.state.usertypebool}
+            error={errors.usertypebool}
+            id="usertypebool"
+          >
+            Singhealth Staff Member?
+          </Checkbox>
         </Form.Item>
 
         <Form.Item>

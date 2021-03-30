@@ -56,6 +56,7 @@ class Register extends Component {
           email: values.email,
           password: values.password,
           password2: values.password2,
+          usertype: "staff",
         };
         console.log(newUser);
         alert("User created!");

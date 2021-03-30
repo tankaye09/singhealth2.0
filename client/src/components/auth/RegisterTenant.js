@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+import { registerTenant } from "../../actions/authActions";
 import classnames from "classnames";
 import { Form, Input, Button, Checkbox, Select } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -47,11 +47,6 @@ class Register extends Component {
 
   onDropdownChange = (e, { value }) => this.setState({ value });
 
-  // TODO create password method
-  createPassword() {
-    return "password";
-  }
-
   // TODO send email to tenant with login details
 
   onFinish = (values) => {
@@ -60,10 +55,9 @@ class Register extends Component {
       address: values.address,
       institution: values.institution,
       auditor: values.auditor,
-      password: this.createPassword(),
     };
     console.log(newUser);
-    // this.props.registerUser(newUser, this.props.history);
+    this.props.registerTenant(newUser, this.props.history);
   };
 
   render() {
@@ -188,7 +182,7 @@ class Register extends Component {
 }
 // Props stands for properties and is being used for passing data from one component to another
 Register.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+  registerTenant: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
@@ -199,4 +193,6 @@ const mapStateToProps = (state) => ({
   errors: state.errors, // allows us to call this.props.errors
 });
 
-export default connect(mapStateToProps, { registerUser })(withRouter(Register));
+export default connect(mapStateToProps, { registerTenant })(
+  withRouter(Register)
+);

@@ -20,7 +20,7 @@ import Checklist from "./components/Checklist";
 import CreateTenant from "./components/auth/RegisterTenant";
 import ChecklistNonFB from "./components/ChecklistNonFB";
 
-// Check fo token to keep user logged in
+// Check for token to keep user logged in
 if (localStorage.jwtToken) {
   // Set auth token header auth
   const token = localStorage.jwtToken;

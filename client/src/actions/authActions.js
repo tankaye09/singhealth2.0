@@ -80,8 +80,8 @@ export const logoutUser = () => (dispatch) => {
 // Register Tenant
 export const registerTenant = (userData, history) => (dispatch) => {
   axios
-    .post("/api/users/register", userData)
-    .then((res) => history.push("/login")) // re-direct to login on successful register
+    .post("/api/users/createtenant", userData)
+    .then((res) => history.push("/createtenant")) // TODO: set up ViewTenants{AuditorName} or sth
     .catch((err) =>
       dispatch({
         type: GET_ERRORS,
