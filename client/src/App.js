@@ -8,17 +8,22 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Login from "./components/auth/Login";
+import StaffRoute from "./components/private-route/StaffRoute";
+import TenantRoute from "./components/private-route/TenantRoute";
+
 import Navbar from "./components/layout/Navbar";
+// Login Flow
+import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import PrivateRoute from "./components/private-route/PrivateRoute";
-import Dashboard from "./components/dashboard/Dashboard";
+//Staff Flow
 import AuditList from "./components/Audit-list";
-// import ChecklistNonFB from "./components/ChecklistNonFB";
 import Directory from "./components/Directory";
 import Checklist from "./components/Checklist";
-import CreateTenant from "./components/auth/RegisterTenant";
 import ChecklistNonFB from "./components/ChecklistNonFB";
+import CreateTenant from "./components/auth/RegisterTenant";
+//Tenant Flow
+import TenantHome from "./components/tenant/TenantHome";
+import TenantEditAudit from "./components/tenant/EditAudit";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -52,19 +57,21 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-              <PrivateRoute exact path="/auditlist" component={AuditList} />
-              <PrivateRoute exact path="/checklistFB" component={Checklist} />
-              <PrivateRoute
+              <StaffRoute exact path="/auditlist" component={AuditList} />
+              <StaffRoute exact path="/checklistFB" component={Checklist} />
+              <StaffRoute
                 exact
                 path="/checklistNonFB"
                 component={ChecklistNonFB}
               />
-              <PrivateRoute exact path="/directory" component={Directory} />
-              <PrivateRoute
+              <StaffRoute exact path="/directory" component={Directory} />
+              <StaffRoute exact path="/createtenant" component={CreateTenant} />
+
+              <TenantRoute exact path="/tenant" component={TenantHome} />
+              <TenantRoute
                 exact
-                path="/createtenant"
-                component={CreateTenant}
+                path="/tenant/editAudit"
+                component={TenantEditAudit}
               />
             </Switch>
           </div>

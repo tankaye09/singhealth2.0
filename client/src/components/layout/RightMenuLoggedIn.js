@@ -23,7 +23,7 @@ class RightMenu extends Component {
           </Button>
         </Menu.Item>
         <Menu.Item key="app">
-          <a href="">Name of user</a>
+          <a href="">Hello {user.name}</a>
         </Menu.Item>
       </Menu>
     );

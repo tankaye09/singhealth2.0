@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Menu, Icon, Dropdown, Button } from "antd";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import MenuItem from "antd/lib/menu/MenuItem";
 
 const SubMenu = Menu.SubMenu;
@@ -18,7 +20,7 @@ const CreateAuditMenu = (
   </Menu>
 );
 
-class LeftMenu extends Component {
+class StaffLeftMenu extends Component {
   render() {
     return (
       <Menu mode="horizontal">
@@ -46,4 +48,37 @@ class LeftMenu extends Component {
     );
   }
 }
-export default LeftMenu;
+
+class TenantLeftMenu extends Component {
+  render() {
+    return (
+      <Menu mode="horizontal">
+        <Menu.Item key="tenanthome">
+          <NavLink to="/tenant">Tenant Home</NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="editaudit">
+          <NavLink to="/tenant/editaudit">Edit Audit</NavLink>
+        </Menu.Item>
+      </Menu>
+    );
+  }
+}
+
+class LeftMenu extends Component {
+  render() {
+    if (this.props.auth.user.usertype === "staff") {
+      return <StaffLeftMenu />;
+    } else if (this.props.auth.user.usertype === "tenant") {
+      return <TenantLeftMenu />;
+    } else return <div></div>;
+  }
+}
+
+LeftMenu.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps)(LeftMenu);

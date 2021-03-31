@@ -47,9 +47,9 @@ class Register extends Component {
   };
   onFinish = (values) => {
     getStaffKey((data) => {
-      console.log("data is: ", data);
+      // console.log("data is: ", data);
       this.setState({ ...this.state, dbstaffkey: data });
-      console.log("dbstaffkey is: ", this.state.dbstaffkey);
+      // console.log("dbstaffkey is: ", this.state.dbstaffkey);
       if (this.state.staffkey === this.state.dbstaffkey) {
         const newUser = {
           name: values.name,
@@ -58,7 +58,7 @@ class Register extends Component {
           password2: values.password2,
           usertype: "staff",
         };
-        console.log(newUser);
+        // console.log(newUser);
         alert("User created!");
         this.props.registerUser(newUser, this.props.history);
       } else {

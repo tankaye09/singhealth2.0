@@ -9,7 +9,7 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 /* Get Staff Key */
 export const getStaffKey = (onDataReceived) => {
   axios.get("/api/staffkey").then((response) => {
-    console.log("response is:", response.data[0].staffkey);
+    // console.log("response is:", response.data[0].staffkey);
     onDataReceived(response.data[0].staffkey);
   });
 };
@@ -28,6 +28,7 @@ export const registerUser = (userData, history) => (dispatch) => {
 
 // Login - get user token
 export const loginUser = (userData) => (dispatch) => {
+  console.log("loginUser"); // TODO IMMEDIATE: why login must click twice?
   axios
     .post("/api/users/login", userData)
     .then((res) => {
@@ -40,6 +41,7 @@ export const loginUser = (userData) => (dispatch) => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
+      // console.log("decoded is: ", decoded);
       // Set current user
       dispatch(setCurrentUser(decoded));
     })

@@ -22,13 +22,21 @@ class Login extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/auditlist");
+      if (this.props.auth.user.usertype === "staff") {
+        this.props.history.push("/auditlist");
+      } else if (this.props.auth.user.usertype === "tenant") {
+        this.props.history.push("/tenant");
+      }
     }
   }
   // might be deprecated
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/auditlist"); // push user to dashboard when they login
+      if (this.props.auth.user.usertype === "staff") {
+        this.props.history.push("/auditlist"); // push staff to auditlist when they login
+      } else if (this.props.auth.user.usertype === "tenant") {
+        this.props.history.push("/tenant");
+      }
     }
     if (nextProps.errors) {
       this.setState({
@@ -43,7 +51,6 @@ class Login extends Component {
 
   onCheckboxChange = (e) => {
     this.setState({ usertypebool: !this.state.usertypebool });
-    console.log(this.state.usertypebool);
   };
 
   onFinish = (values) => {
@@ -51,18 +58,17 @@ class Login extends Component {
     // Process checkbox boolean to usertype string
     var { usertype } = "";
     if (this.state.usertypebool) {
-      console.log("if");
       usertype = "staff";
     } else {
-      console.log("else");
       usertype = "tenant";
-      console.log(usertype);
     }
     const userData = {
       email: values.email,
       password: values.password,
       usertype: usertype,
     };
+    console.log(values);
+
     this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
   };
   render() {
