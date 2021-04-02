@@ -8,10 +8,15 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
 /* Get Staff Key */
 export const getStaffKey = (onDataReceived) => {
-  axios.get("/api/staffkey").then((response) => {
-    // console.log("response is:", response.data[0].staffkey);
-    onDataReceived(response.data[0].staffkey);
-  });
+  axios
+    .get("/api/staffkey")
+    .then((response) => {
+      // console.log("response is:", response.data[0].staffkey);
+      onDataReceived(response.data[0].staffkey);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const registerUser = (userData, history) => (dispatch) => {
@@ -90,4 +95,17 @@ export const registerTenant = (userData, history) => (dispatch) => {
         payload: err.response.data,
       })
     );
+};
+
+// Get Tenants
+export const getTenants = (onDataReceived) => {
+  axios
+    .get("/api/tenants")
+    .then((response) => {
+      // console.log("response is:", response.data[0].staffkey);
+      onDataReceived(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

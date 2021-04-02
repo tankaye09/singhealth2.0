@@ -13,10 +13,8 @@ class RightMenu extends Component {
     this.props.logoutUser();
   };
   render() {
-    const { user } = this.props.auth;
-
     return (
-      <Menu mode="horizontal">
+      <Menu mode="vertical">
         <Menu.Item key="mail" id="rightmenu1">
           <Link to="/login">Login</Link>
         </Menu.Item>

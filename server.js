@@ -7,6 +7,7 @@ const users = require("./routes/api/users");
 const staffkey = require("./routes/api/staffkey");
 const audits = require("./routes/api/audits");
 const photos = require("./routes/api/photos");
+const tenants = require("./routes/api/tenants");
 
 const app = express();
 
@@ -37,8 +38,7 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/audits", audits);
 app.use("/api/photos", photos);
-
-//TODO: take staffkey from db not working
+app.use("/api/tenants", tenants);
 app.use("/api/staffkey", staffkey);
 
 const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there

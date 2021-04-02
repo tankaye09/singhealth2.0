@@ -23,7 +23,7 @@ const CreateAuditMenu = (
 class StaffLeftMenu extends Component {
   render() {
     return (
-      <Menu mode="horizontal">
+      <Menu mode="vertical">
         <Menu.Item key="audits">
           <NavLink to="/auditlist">Audits</NavLink>
         </Menu.Item>
@@ -52,7 +52,7 @@ class StaffLeftMenu extends Component {
 class TenantLeftMenu extends Component {
   render() {
     return (
-      <Menu mode="horizontal">
+      <Menu mode="vertical">
         <Menu.Item key="tenanthome">
           <NavLink to="/tenant">Tenant Home</NavLink>
         </Menu.Item>

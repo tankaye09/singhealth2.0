@@ -79,8 +79,8 @@ class Login extends Component {
         name="normal_login"
         className="login-register-form"
       >
-        <h1>Welcome to SingHealth Audit</h1>
-        <h2>Enter your username and password to log in </h2>
+        <h2>Welcome to SingHealth Audit</h2>
+        <p>Enter your email and password to log in </p>
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Please input your Email!" }]}
@@ -137,8 +137,7 @@ class Login extends Component {
           >
             Log in
           </Button>
-          Or if you are a new staff member,{" "}
-          <Link to="/Register">register here!</Link>
+          New staff member? <Link to="/Register">Register here!</Link>
         </Form.Item>
       </Form>
     );

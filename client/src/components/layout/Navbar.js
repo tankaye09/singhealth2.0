@@ -43,10 +43,6 @@ class Navbar extends Component {
           />
         </div>
         <div className="menuCon">
-          <div className="leftMenu">
-            <LeftMenu />
-          </div>
-          <div className="rightMenu">{rightMenu}</div>
           <Button className="barsMenu" type="primary" onClick={this.showDrawer}>
             <span className="barsBtn"></span>
           </Button>
@@ -56,8 +52,10 @@ class Navbar extends Component {
             onClose={this.onClose}
             visible={this.state.visible}
           >
-            <LeftMenu />
-            {rightMenu}
+            <p>
+              <LeftMenu />
+            </p>
+            <p>{rightMenu}</p>
           </Drawer>
         </div>
       </nav>

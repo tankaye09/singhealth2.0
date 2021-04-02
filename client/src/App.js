@@ -16,8 +16,8 @@ import Navbar from "./components/layout/Navbar";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 //Staff Flow
-import AuditList from "./components/Audit-list";
-import Directory from "./components/Directory";
+import AuditList from "./components/AuditList";
+import Directory from "./components/TenantList";
 import Checklist from "./components/Checklist";
 import ChecklistNonFB from "./components/ChecklistNonFB";
 import CreateTenant from "./components/auth/RegisterTenant";
