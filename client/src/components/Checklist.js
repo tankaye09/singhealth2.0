@@ -1,10 +1,18 @@
 import "../App.css";
-import { Collapse, Divider, List, Input, Checkbox, Button, Modal, Form, DatePicker } from "antd";
+import {
+  Collapse,
+  Divider,
+  List,
+  Input,
+  Checkbox,
+  Button,
+  Modal,
+  Form,
+  DatePicker,
+} from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
-import PhotoPop from "./photo/PhotoPop.js"
-import { submit, display } from "../actions/auditActions.js"
-import { FB } from '../data/questionsData'
+import { submit, display } from "../actions/auditActions.js";
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
 
@@ -90,7 +98,7 @@ class Checklist extends Component {
     this.showConfirmModal();
   };
 
-  handleUploadOk = e => {
+  handleUploadOk = (e) => {
     console.log(e);
     this.setState({
       visibleConfirm: false,
@@ -187,9 +195,9 @@ class Checklist extends Component {
   };
 
   render() {
-    console.log(this.state.items);
     return (
-      <div className="panels">
+      <div className="table">
+        <h1>FB CheckList</h1>
         {Fb.map((cat, catIndex) => {
           // var catScore = cat.score;
           return (
@@ -254,10 +262,7 @@ class Checklist extends Component {
               name="date"
               rules={[{ required: true, message: "Date of Incident" }]}
             >
-              <DatePicker
-                placeholder="Date"
-                onChange={this.onChangeDate}
-              />
+              <DatePicker placeholder="Date" onChange={this.onChangeDate} />
             </Form.Item>
 
             <Form.Item
@@ -291,23 +296,14 @@ class Checklist extends Component {
               />
             </Form.Item>
           </Form>
-          {/* <Form>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="upload-photo-button"
-              onClick={() => { this.upload(this.state); }}
-            >
-              Upload
-                    </Button>
-          </Form> */}
+
           <Modal
             title="Upload Confirm"
             destroyOnClose={true}
             visible={this.state.visibleConfirm}
             onOk={this.handleUploadOk}
             okButtonProps={{ disabled: false }}
-            cancelButtonProps={{ disabled: true, visible: false, }}
+            cancelButtonProps={{ disabled: true, visible: false }}
           >
             <p>Photo Added!</p>
           </Modal>
@@ -319,9 +315,7 @@ class Checklist extends Component {
         >
           SUBMIT
         </Button>
-        {/* <Button onClick={() => this.updateItems()} className="submit-button" type="primary" htmlType="submit">
-          TEST
-        </Button> */}
+
         <Modal
           title=""
           visible={this.state.visibleAudit}

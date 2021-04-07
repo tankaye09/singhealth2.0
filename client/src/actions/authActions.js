@@ -113,19 +113,3 @@ export const registerTenant = (userData, history) => (dispatch) => {
       })
     );
 };
-
-// Get Tenants
-export const getTenants = (onDataReceived) => (dispatch) => {
-  axios
-    .get("/api/tenants")
-    .then((response) => {
-      // console.log("response is:", response.data[0].staffkey);
-      onDataReceived(response.data);
-    })
-    .catch((err) =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      })
-    );
-};

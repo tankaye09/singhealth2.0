@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Col, Table } from "antd";
-import { getTenants } from "../actions/authActions";
+import { getTenants } from "../actions/tenantActions";
 
 const { Column, ColumnGroup } = Table;
 

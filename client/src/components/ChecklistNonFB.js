@@ -1,19 +1,25 @@
 import "../App.css";
-import { Collapse, Divider, DatePicker, Form, List, Input, Checkbox, Button, Modal } from "antd";
+import {
+  Collapse,
+  Divider,
+  DatePicker,
+  Form,
+  List,
+  Input,
+  Checkbox,
+  Button,
+  Modal,
+} from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
-import PhotoPop from "./photo/PhotoPop.js";
 import { submit } from "../actions/auditActions.js";
-import { uploadPhoto } from "../actions/photoActions";
-import { modalGlobalConfig } from "antd/lib/modal/confirm";
-const fileUpload = require('fuctbase64');
+const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 
 // TODO: Take score from json file => Update the score, replace the json file
 
 class ChecklistNonFB extends Component {
-
   // not exactly dynamic
   state = {
     type: "Non-FB",
@@ -94,7 +100,7 @@ class ChecklistNonFB extends Component {
     });
   };
 
-  handleUploadOk = e => {
+  handleUploadOk = (e) => {
     console.log(e);
     this.setState({
       visibleConfirm: false,
@@ -110,16 +116,15 @@ class ChecklistNonFB extends Component {
     />
   );
 
-  fileSelectedHandler = event => {
+  fileSelectedHandler = (event) => {
     // console.log(event.target.files[0]);
-    fileUpload(event)
-      .then((data) => {
-        // console.log("base64: ", data.base64);
-        this.setState({
-          image: data.base64
-        })
-      })
-  }
+    fileUpload(event).then((data) => {
+      // console.log("base64: ", data.base64);
+      this.setState({
+        image: data.base64,
+      });
+    });
+  };
 
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -153,7 +158,8 @@ class ChecklistNonFB extends Component {
 
   render() {
     return (
-      <div className="panels">
+      <div className="table">
+        <h1>Non-FB CheckList</h1>
         {nonFb.map((cat, catIndex) => {
           // var catScore = cat.score;
           return (
@@ -195,13 +201,7 @@ class ChecklistNonFB extends Component {
             </Collapse>
           );
         })}
-        {/* <Button
-          className="submit-button"
-          type="primary"
-          onClick={this.onFinish}
-        >
-          SUBMIT
-        </Button> */}
+
         <Button type="primary" onClick={this.showFormModal}>
           Upload Photo
         </Button>
@@ -225,10 +225,7 @@ class ChecklistNonFB extends Component {
               name="date"
               rules={[{ required: true, message: "Date of Incident" }]}
             >
-              <DatePicker
-                placeholder="Date"
-                onChange={this.onChangeDate}
-              />
+              <DatePicker placeholder="Date" onChange={this.onChangeDate} />
             </Form.Item>
 
             <Form.Item
@@ -278,7 +275,7 @@ class ChecklistNonFB extends Component {
             visible={this.state.visibleConfirm}
             onOk={this.handleUploadOk}
             okButtonProps={{ disabled: false }}
-            cancelButtonProps={{ disabled: true, visible: false, }}
+            cancelButtonProps={{ disabled: true, visible: false }}
           >
             <p>Photo Added!</p>
           </Modal>
