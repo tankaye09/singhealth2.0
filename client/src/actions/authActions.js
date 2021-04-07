@@ -59,7 +59,7 @@ export const loginUser = (userData, history) => (dispatch) => {
       // console.log("decoded is: ", decoded);
       // Set current user
       dispatch(setCurrentUser(decoded));
-      history.push("/auditlist");
+      history.push("/");
     })
     .catch((err) =>
       dispatch({

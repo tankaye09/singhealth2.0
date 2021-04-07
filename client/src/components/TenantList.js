@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Col, Table } from "antd";
+import { connect } from "react-redux";
 import { getTenants } from "../actions/tenantActions";
+import PropTypes from "prop-types";
 
 const { Column, ColumnGroup } = Table;
 
@@ -23,14 +25,19 @@ const { Column, ColumnGroup } = Table;
 //     __v: 0,
 //   },
 // ];
-export default class Directory extends Component {
-  state = {
-    tenantData: [],
-  };
+class Directory extends Component {
+  constructor() {
+    super();
+    this.state = {
+      tenantData: [],
+    };
+  }
 
   // TODO: can't get data to assign to state before rendering
   componentDidMount() {
-    getTenants((data) => {
+    console.log("data");
+
+    this.props.getTenants((data) => {
       this.setState({ tenantData: data });
       console.log(this.state.tenantData);
     });
@@ -67,3 +74,12 @@ export default class Directory extends Component {
     // }
   }
 }
+
+Directory.propTypes = {
+  getTenants: PropTypes.func.isRequired,
+  tenantData: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  tenantData: state.tenantData,
+});
+export default connect(mapStateToProps, { getTenants })(Directory);

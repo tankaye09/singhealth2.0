@@ -30,7 +30,7 @@ class Login extends Component {
     }
   }
   // might be deprecated
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       if (this.props.auth.user.usertype === "staff") {
         this.props.history.push("/auditlist"); // push staff to auditlist when they login
