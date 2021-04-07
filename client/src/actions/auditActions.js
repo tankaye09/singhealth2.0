@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const submit = (data) => {
+    console.log(data);
     axios
         .post("/api/audits/add", data)
 };

@@ -35,6 +35,22 @@ const AuditSchema = new Schema({
         type: Number,
         required: true,
     },
+    image: {
+        type: String,
+        required: true,
+    },
+    date: {
+        type: Date,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    location: {
+        type: String,
+        required: true,
+    },
 });
 
 const Audit = mongoose.model("audits", AuditSchema);

@@ -51,6 +51,7 @@ class Register extends Component {
 
   onFinish = (values) => {
     const newUser = {
+      name: values.name,
       email: values.email,
       address: values.address,
       institution: values.institution,
@@ -82,6 +83,30 @@ class Register extends Component {
         {/* No name, replace with id for annonymity */}
 
         <Form.Item
+          label="Tenant Name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              type: "string",
+              message: "Please input a valid Name!",
+            },
+          ]}
+        >
+          <Input
+            placeholder="Tenant Name"
+            onChange={this.onChange}
+            value={this.state.name}
+            error={errors.name}
+            id="name"
+            type="name"
+          // className={classnames("", {
+          //   invalid: errors.email,
+          // })}
+          />
+        </Form.Item>
+
+        <Form.Item
           label="Email"
           name="email"
           rules={[
@@ -99,9 +124,9 @@ class Register extends Component {
             error={errors.email}
             id="email"
             type="email"
-            // className={classnames("", {
-            //   invalid: errors.email,
-            // })}
+          // className={classnames("", {
+          //   invalid: errors.email,
+          // })}
           />
         </Form.Item>
 
@@ -123,9 +148,9 @@ class Register extends Component {
             error={errors.address}
             id="address"
             type="address"
-            // className={classnames("", {
-            //   invalid: errors.email,
-            // })}
+          // className={classnames("", {
+          //   invalid: errors.email,
+          // })}
           />
         </Form.Item>
 

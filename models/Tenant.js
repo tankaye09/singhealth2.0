@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const TenantSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
