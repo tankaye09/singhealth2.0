@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
-const toast = require("react-toastify");
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -169,17 +168,16 @@ router.post("/createtenant", (req, res) => {
             });
 
             // save in database
-            newTenant.save().catch((err) => {
-              console.log(err);
-              alert(
-                "Could not create new tenant, the tenant email is already in use"
-              );
-            });
-            alert(message);
+            newTenant
+              .save()
+              .then()
+              .catch((err) => {
+                console.log(err);
+              });
           });
         })
         .catch((message) => {
-          alert(message);
+          console.log(message);
         });
     }
   });

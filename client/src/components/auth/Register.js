@@ -66,8 +66,6 @@ class Register extends Component {
           institution: values.institution,
           usertype: "staff",
         };
-        // console.log(newUser);
-        alert("User created!");
         this.props.registerUser(newUser, this.props.history);
       } else {
         alert("Staff Key is incorrect!");

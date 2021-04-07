@@ -38,9 +38,10 @@ export default class AuditList extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:5000/audits")
+      .get("http://localhost:5000/api/audits")
       .then((response) => {
         this.setState({ audits: response.data });
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

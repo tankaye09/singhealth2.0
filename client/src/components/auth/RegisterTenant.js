@@ -7,8 +7,6 @@ import classnames from "classnames";
 import { Form, Input, Button, Message, Select, message } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
 import institutionsData from "../../data/institutions.json";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 // TODO: this should be taken from db
 const institutions = institutionsData;

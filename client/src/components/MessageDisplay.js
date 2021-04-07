@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { clearErrors } from "./../actions/errorActions";
+import { clearMessages } from "./../actions/errorActions";
 
 import { Alert } from "antd";
 
-class ErrorDisplay extends Component {
+class MessageDisplay extends Component {
   constructor() {
     super();
     this.state = {
       errors: {},
-      visible: true,
+      messages: {},
     };
   }
 
@@ -18,6 +20,7 @@ class ErrorDisplay extends Component {
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors,
+        messages: nextProps.messages,
       });
     }
   }
@@ -25,17 +28,15 @@ class ErrorDisplay extends Component {
   onClose = () => {
     this.setState({
       errors: {},
+      messages: {},
     });
-  };
-
-  handleClose = () => {
-    this.setState({
-      visible: false,
-    });
+    this.props.clearErrors();
+    this.props.clearMessages();
   };
 
   render() {
     const { errors } = this.state;
+    const { messages } = this.state;
     return (
       <div>
         {Object.keys(errors).length !== 0 ? (
@@ -45,9 +46,20 @@ class ErrorDisplay extends Component {
             className="error-message"
             closable
             onClose={this.onClose}
-            afterClose={this.handleClose}
             banner
           /> // Error shown when redux state errors is not empty
+        ) : (
+          ""
+        )}
+        {Object.keys(messages).length !== 0 ? (
+          <Alert
+            message={Object.values(messages)}
+            type="success"
+            className="error-message"
+            closable
+            onClose={this.onClose}
+            banner
+          /> // Message shown when redux state messages is not empty
         ) : (
           ""
         )}
@@ -55,10 +67,16 @@ class ErrorDisplay extends Component {
     );
   }
 }
-ErrorDisplay.propTypes = {
+MessageDisplay.propTypes = {
+  clearErrors: PropTypes.func.isRequired,
+  clearMessages: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
+  messages: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   errors: state.errors,
+  messages: state.messages,
 });
-export default connect(mapStateToProps)(ErrorDisplay);
+export default connect(mapStateToProps, { clearErrors, clearMessages })(
+  MessageDisplay
+);
