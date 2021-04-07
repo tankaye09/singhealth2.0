@@ -1,18 +1,17 @@
-import React, { Component } from "react";
+import React, { ReactDOM, Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerTenant } from "../../actions/authActions";
 import classnames from "classnames";
-import { Form, Input, Button, Checkbox, Select } from "antd";
+import { Form, Input, Button, Message, Select, message } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
+import institutionsData from "../../data/institutions.json";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // TODO: this should be taken from db
-const institutions = [
-  { label: "CGH", value: "CGH" },
-  { label: "SGH", value: "SGH" },
-  { label: "KKH", value: "KKH" },
-];
+const institutions = institutionsData;
 
 class Register extends Component {
   constructor() {
@@ -56,7 +55,7 @@ class Register extends Component {
       institution: values.institution,
       auditor: values.auditor,
     };
-    console.log(newUser);
+    // console.log(newUser);
     this.props.registerTenant(newUser, this.props.history);
   };
 
@@ -66,7 +65,6 @@ class Register extends Component {
     const layout = {
       labelCol: { span: 3 },
     };
-
     return (
       <Form
         {...layout}

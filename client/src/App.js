@@ -24,6 +24,8 @@ import CreateTenant from "./components/auth/RegisterTenant";
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
 import TenantEditAudit from "./components/tenant/EditAudit";
+//Error warning
+import ErrorDisplay from "./components/ErrorDisplay";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -50,6 +52,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
+        <ErrorDisplay />
         <Router>
           <div className="App">
             <Navbar />

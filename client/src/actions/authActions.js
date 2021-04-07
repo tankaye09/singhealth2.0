@@ -88,7 +88,9 @@ export const logoutUser = () => (dispatch) => {
 export const registerTenant = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/createtenant", userData)
-    .then((res) => history.push("/createtenant")) // TODO: set up ViewTenants{AuditorName} or sth
+    .then((res) => {
+      history.push("/createtenant");
+    }) // TODO: set up ViewTenants{AuditorName} or sth
     .catch((err) =>
       dispatch({
         type: GET_ERRORS,
@@ -98,14 +100,17 @@ export const registerTenant = (userData, history) => (dispatch) => {
 };
 
 // Get Tenants
-export const getTenants = (onDataReceived) => {
+export const getTenants = (onDataReceived) => (dispatch) => {
   axios
     .get("/api/tenants")
     .then((response) => {
       // console.log("response is:", response.data[0].staffkey);
       onDataReceived(response.data);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      })
+    );
 };

@@ -5,13 +5,16 @@ import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
 import { getStaffKey } from "../../actions/authActions";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, Select } from "antd";
 import {
   MailOutlined,
   UserOutlined,
   LockOutlined,
   SketchOutlined,
 } from "@ant-design/icons";
+import institutionsData from "../../data/institutions.json";
+
+const institutions = institutionsData;
 
 class Register extends Component {
   constructor() {
@@ -21,6 +24,7 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
+      institution: "",
       staffkey: "",
       dbstaffkey: "",
       errors: {},
@@ -45,6 +49,9 @@ class Register extends Component {
   onChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   };
+
+  onDropdownChange = (e, { value }) => this.setState({ value });
+
   onFinish = (values) => {
     getStaffKey((data) => {
       // console.log("data is: ", data);
@@ -56,6 +63,7 @@ class Register extends Component {
           email: values.email,
           password: values.password,
           password2: values.password2,
+          institution: values.institution,
           usertype: "staff",
         };
         // console.log(newUser);
@@ -176,7 +184,6 @@ class Register extends Component {
             prefix={<SketchOutlined className="site-form-item-icon" />}
             placeholder="Staff Key"
             onChange={this.onChange}
-            onCh
             value={this.state.staffkey}
             error={errors.staffkey}
             id="staffkey"
@@ -184,6 +191,28 @@ class Register extends Component {
             className={classnames("", {
               invalid: errors.key || errors.keyincorrect,
             })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="institution"
+          rules={[
+            {
+              required: true,
+              message: "Please select an institution!",
+            },
+          ]}
+        >
+          <Select
+            className="dropdown"
+            icon={MailOutlined}
+            placeholder="Institution"
+            options={institutions}
+            onChange={this.onDropdownChange}
+            id="institution"
+            type="institution"
+            value={this.state.institution}
+            error={errors.institution}
           />
         </Form.Item>
 

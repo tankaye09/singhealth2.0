@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
-import { Form, Input, Button, Checkbox, Radio } from "antd";
+import { Form, Input, Button, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 class Login extends Component {
@@ -74,72 +74,74 @@ class Login extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <Form
-        onFinish={this.onFinish}
-        name="normal_login"
-        className="login-register-form"
-      >
-        <h2>Welcome to SingHealth Audit</h2>
-        <p>Enter your email and password to log in </p>
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please input your Email!" }]}
+      <div>
+        <Form
+          onFinish={this.onFinish}
+          name="normal_login"
+          className="login-register-form"
         >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Email"
-            onChange={this.onChange}
-            value={this.state.email}
-            error={errors.email}
-            id="email"
-            type="email"
-            className={classnames("", {
-              invalid: errors.email || errors.emailnotfound,
-            })}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
-          <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            placeholder="Password"
-            onChange={this.onChange}
-            value={this.state.password}
-            error={errors.password}
-            id="password"
-            type="password"
-            className={classnames("", {
-              invalid: errors.password || errors.passwordincorrect,
-            })}
-          />
-        </Form.Item>
-
-        <Form.Item name="usertypebool">
-          <Checkbox
-            onChange={this.onCheckboxChange}
-            value={this.state.usertypebool}
-            error={errors.usertypebool}
-            id="usertypebool"
+          <h2>Welcome to SingHealth Audit</h2>
+          <p>Enter your email and password to log in </p>
+          <Form.Item
+            name="email"
+            rules={[{ required: true, message: "Please input your Email!" }]}
           >
-            Singhealth Staff Member?
-          </Checkbox>
-        </Form.Item>
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+              onChange={this.onChange}
+              value={this.state.email}
+              error={errors.email}
+              id="email"
+              type="email"
+              className={classnames("", {
+                invalid: errors.email || errors.emailnotfound,
+              })}
+            />
+          </Form.Item>
 
-        <Form.Item>
-          <Button
-            id="login-button"
-            type="primary"
-            htmlType="submit"
-            className="login-register-form-button"
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your Password!" }]}
           >
-            Log in
-          </Button>
-          New staff member? <Link to="/Register">Register here!</Link>
-        </Form.Item>
-      </Form>
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              placeholder="Password"
+              onChange={this.onChange}
+              value={this.state.password}
+              error={errors.password}
+              id="password"
+              type="password"
+              className={classnames("", {
+                invalid: errors.password || errors.passwordincorrect,
+              })}
+            />
+          </Form.Item>
+
+          <Form.Item name="usertypebool">
+            <Checkbox
+              onChange={this.onCheckboxChange}
+              value={this.state.usertypebool}
+              error={errors.usertypebool}
+              id="usertypebool"
+            >
+              Singhealth Staff Member?
+            </Checkbox>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              id="login-button"
+              type="primary"
+              htmlType="submit"
+              className="login-register-form-button"
+            >
+              Log in
+            </Button>
+            New staff member? <Link to="/Register">Register here!</Link>
+          </Form.Item>
+        </Form>
+      </div>
     );
   }
 }

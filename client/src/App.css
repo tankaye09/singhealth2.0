@@ -317,6 +317,12 @@ div.form {
   text-align: left;
 }
 
+/* Error Message */
+.error-message {
+  text-align: center;
+  font-weight: bold;
+}
+
 /* OVERRIDES */
 #nav-drawer .ant-drawer-body {
   background-color: #ffffff !important;
