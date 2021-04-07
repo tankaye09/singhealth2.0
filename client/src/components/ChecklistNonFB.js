@@ -1,48 +1,39 @@
 import "../App.css";
-import { Collapse, Divider, List, Input, Checkbox, Button, Modal } from "antd";
+import { Collapse, Divider, DatePicker, Form, List, Input, Checkbox, Button, Modal } from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import PhotoPop from "./photo/PhotoPop.js";
 import { submit } from "../actions/auditActions.js";
+import { uploadPhoto } from "../actions/photoActions";
+import { modalGlobalConfig } from "antd/lib/modal/confirm";
+const fileUpload = require('fuctbase64');
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 
 // TODO: Take score from json file => Update the score, replace the json file
 
 class ChecklistNonFB extends Component {
-  // componentWillMount = () => {
-  //   this.selectedCheckboxes = new Set();
-  // };
 
-  // toggleCheckbox = (label) => {
-  //   if (this.selectedCheckboxes.has(label)) {
-  //     this.selectedCheckboxes.delete(label);
-  //   } else {
-  //     this.selectedCheckboxes.add(label);
-  //   }
-  // };
-
-  // handleFormSubmit = (formSubmitEvent) => {
-  //   formSubmitEvent.preventDefault();
-
-  //   for (const checkbox of this.selectedCheckboxes) {
-  //     console.log(checkbox, "is selected.");
-  //   }
-  // };
-
-  // onFinish = () => {
-  //   var newState = [];
-  //   for (var i = 0; i < this.state.catCounts.length; i++) {
-  //     newState.push(this.state.catCounts[i] / 2);
-  //   }
-  //   const submitData = {
-  //     catCounts: newState,
-  //   };
-
-  //   console.log(submitData);
-  // };
+  // not exactly dynamic
+  state = {
+    type: "Non-FB",
+    checked: false,
+    catCounts: [0, 0, 0],
+    // counts[0]: for Professionalism & Staff Hygiene (20%),
+    //counts[1]: for Housekeeping & General Cleanliness (40%)
+    //counts[2]: for Workplace Safety & Health (40%)
+    total_score: 0,
+    image: null,
+    date: null,
+    description: "",
+    location: "",
+    visibleForm: false,
+    visibleConfirm: false,
+    visibleAudit: false,
+  };
 
   submitAudit = () => {
+    console.log(this.state);
     submit({
       type: "Non-FB",
       catCounts: this.state.catCounts,
@@ -50,41 +41,63 @@ class ChecklistNonFB extends Component {
         this.state.catCounts[0] +
         this.state.catCounts[1] +
         this.state.catCounts[2],
+      image: this.state.image,
+      date: this.state.date,
+      description: this.state.description,
+      location: this.state.location,
     });
-    this.showModal2();
+    this.showAuditModal();
   };
 
-  showModal = () => {
+  onChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onChangeDate = (date, dateString) => {
+    this.setState({ date: date });
+  };
+
+  showFormModal = () => {
     this.setState({
-      visible: true,
+      visibleForm: true,
     });
   };
 
-  showModal2 = () => {
+  showAuditModal = () => {
     this.setState({
-      visible2: true,
+      visibleAudit: true,
     });
   };
 
-  handleOk = (e) => {
+  showConfirmModal = () => {
+    this.setState({
+      visibleConfirm: true,
+    });
+  };
+
+  handleFormOk = (e) => {
+    console.log(e);
+    this.showConfirmModal();
+  };
+
+  handleAuditOk = (e) => {
     console.log(e);
     this.setState({
-      visible: false,
-    });
-  };
-
-  handleOk2 = (e) => {
-    console.log(e);
-    this.setState({
-      visible2: false,
-      visible: false,
+      visibleAudit: false,
     });
   };
 
   handleCancel = (e) => {
     console.log(e);
     this.setState({
-      visible: false,
+      visibleForm: false,
+    });
+  };
+
+  handleUploadOk = e => {
+    console.log(e);
+    this.setState({
+      visibleConfirm: false,
     });
   };
 
@@ -97,16 +110,17 @@ class ChecklistNonFB extends Component {
     />
   );
 
-  // not exactly dynamic
-  state = {
-    type: "Non-FB",
-    checked: false,
-    catCounts: [0, 0, 0],
-    // counts[0]: for Professionalism & Staff Hygiene (20%),
-    //counts[1]: for Housekeeping & General Cleanliness (40%)
-    //counts[2]: for Workplace Safety & Health (40%)
-    total_score: 0,
-  };
+  fileSelectedHandler = event => {
+    // console.log(event.target.files[0]);
+    fileUpload(event)
+      .then((data) => {
+        // console.log("base64: ", data.base64);
+        this.setState({
+          image: data.base64
+        })
+      })
+  }
+
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
     switch (catIndex) {
@@ -188,18 +202,86 @@ class ChecklistNonFB extends Component {
         >
           SUBMIT
         </Button> */}
-        <Button type="primary" onClick={this.showModal}>
+        <Button type="primary" onClick={this.showFormModal}>
           Upload Photo
         </Button>
         <Modal
           title="Upload Photo"
-          visible={this.state.visible}
-          onOk={this.handleOk}
+          visible={this.state.visibleForm}
+          onOk={this.handleFormOk}
           onCancel={this.handleCancel}
-          okButtonProps={{ disabled: true }}
+          okButtonProps={{ disabled: false }}
           cancelButtonProps={{ disabled: false }}
         >
-          <PhotoPop />
+          <Form
+            name="photo_upload"
+            className="photo-upload"
+            onFinish={this.onFinish}
+          >
+            <Form.Item>
+              <Input type="file" onChange={this.fileSelectedHandler} />
+            </Form.Item>
+            <Form.Item
+              name="date"
+              rules={[{ required: true, message: "Date of Incident" }]}
+            >
+              <DatePicker
+                placeholder="Date"
+                onChange={this.onChangeDate}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Description",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Description"
+                onChange={this.onChange}
+                value={this.state.description}
+                id="description"
+                type="description"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="location"
+              rules={[{ required: true, message: "Location of Incident" }]}
+            >
+              <Input
+                placeholder="Location"
+                onChange={this.onChange}
+                value={this.state.location}
+                id="location"
+                type="location"
+              />
+            </Form.Item>
+          </Form>
+          {/* <Form>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="upload-photo-button"
+              onClick={() => { this.upload(this.state); }}
+            >
+              Upload
+                    </Button>
+          </Form> */}
+          <Modal
+            title="Upload Confirm"
+            destroyOnClose={true}
+            visible={this.state.visibleConfirm}
+            onOk={this.handleUploadOk}
+            okButtonProps={{ disabled: false }}
+            cancelButtonProps={{ disabled: true, visible: false, }}
+          >
+            <p>Photo Added!</p>
+          </Modal>
         </Modal>
         <Button
           onClick={() => this.submitAudit()}
@@ -214,8 +296,8 @@ class ChecklistNonFB extends Component {
         </Button> */}
         <Modal
           title=""
-          visible={this.state.visible2}
-          onOk={this.handleOk2}
+          visible={this.state.visibleAudit}
+          onOk={this.handleAuditOk}
           okButtonProps={{ disabled: false }}
           cancelButtonProps={{ disabled: true, visible: false }}
         >

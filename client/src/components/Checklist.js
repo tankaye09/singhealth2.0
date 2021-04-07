@@ -1,5 +1,5 @@
 import "../App.css";
-import { Collapse, Divider, List, Input, Checkbox, Button, Modal } from "antd";
+import { Collapse, Divider, List, Input, Checkbox, Button, Modal, Form, DatePicker } from "antd";
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import PhotoPop from "./photo/PhotoPop.js"
@@ -31,16 +31,70 @@ class Checklist extends Component {
   //   }
   // };
 
-  onFinish = () => {
-    var newState = [];
-    for (var i = 0; i < this.state.catCounts.length; i++) {
-      newState.push(this.state.catCounts[i] / 2);
-    }
-    const submitData = {
-      catCounts: newState,
-    };
+  // onFinish = () => {
+  //   var newState = [];
+  //   for (var i = 0; i < this.state.catCounts.length; i++) {
+  //     newState.push(this.state.catCounts[i] / 2);
+  //   }
+  //   const submitData = {
+  //     catCounts: newState,
+  //   };
 
-    console.log(submitData);
+  //   console.log(submitData);
+  // };
+
+  submitAudit = () => {
+    console.log(this.state);
+    submit({
+      type: "Non-FB",
+      catCounts: this.state.catCounts,
+      total_score:
+        this.state.catCounts[0] +
+        this.state.catCounts[1] +
+        this.state.catCounts[2],
+      image: this.state.image,
+      date: this.state.date,
+      description: this.state.description,
+      location: this.state.location,
+    });
+    this.showAuditModal();
+  };
+
+  showAuditModal = () => {
+    this.setState({
+      visibleAudit: true,
+    });
+  };
+
+  showFormModal = () => {
+    this.setState({
+      visibleForm: true,
+    });
+  };
+
+  showConfirmModal = () => {
+    this.setState({
+      visibleConfirm: true,
+    });
+  };
+
+  handleAuditOk = (e) => {
+    console.log(e);
+    this.setState({
+      visibleAudit: false,
+    });
+  };
+
+  handleFormOk = (e) => {
+    console.log(e);
+    this.showConfirmModal();
+  };
+
+  handleUploadOk = e => {
+    console.log(e);
+    this.setState({
+      visibleConfirm: false,
+    });
   };
 
   createCheckbox = (label, catIndex) => (
@@ -81,6 +135,13 @@ class Checklist extends Component {
   state = {
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
+    image: null,
+    date: null,
+    description: "",
+    location: "",
+    visibleForm: false,
+    visibleConfirm: false,
+    visibleAudit: false,
   };
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -170,10 +231,91 @@ class Checklist extends Component {
             </Collapse>
           );
         })}
+        <Button type="primary" onClick={this.showFormModal}>
+          Upload Photo
+        </Button>
+        <Modal
+          title="Upload Photo"
+          visible={this.state.visibleForm}
+          onOk={this.handleFormOk}
+          onCancel={this.handleCancel}
+          okButtonProps={{ disabled: false }}
+          cancelButtonProps={{ disabled: false }}
+        >
+          <Form
+            name="photo_upload"
+            className="photo-upload"
+            onFinish={this.onFinish}
+          >
+            <Form.Item>
+              <Input type="file" onChange={this.fileSelectedHandler} />
+            </Form.Item>
+            <Form.Item
+              name="date"
+              rules={[{ required: true, message: "Date of Incident" }]}
+            >
+              <DatePicker
+                placeholder="Date"
+                onChange={this.onChangeDate}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Description",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Description"
+                onChange={this.onChange}
+                value={this.state.description}
+                id="description"
+                type="description"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="location"
+              rules={[{ required: true, message: "Location of Incident" }]}
+            >
+              <Input
+                placeholder="Location"
+                onChange={this.onChange}
+                value={this.state.location}
+                id="location"
+                type="location"
+              />
+            </Form.Item>
+          </Form>
+          {/* <Form>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="upload-photo-button"
+              onClick={() => { this.upload(this.state); }}
+            >
+              Upload
+                    </Button>
+          </Form> */}
+          <Modal
+            title="Upload Confirm"
+            destroyOnClose={true}
+            visible={this.state.visibleConfirm}
+            onOk={this.handleUploadOk}
+            okButtonProps={{ disabled: false }}
+            cancelButtonProps={{ disabled: true, visible: false, }}
+          >
+            <p>Photo Added!</p>
+          </Modal>
+        </Modal>
         <Button
           className="submit-button"
           type="primary"
-          onClick={this.onFinish}
+          onClick={() => this.submitAudit()}
         >
           SUBMIT
         </Button>
@@ -182,8 +324,8 @@ class Checklist extends Component {
         </Button> */}
         <Modal
           title=""
-          visible={this.state.visible2}
-          onOk={this.handleOk2}
+          visible={this.state.visibleAudit}
+          onOk={this.handleAuditOk}
           okButtonProps={{ disabled: false }}
           cancelButtonProps={{ disabled: true, visible: false }}
         >

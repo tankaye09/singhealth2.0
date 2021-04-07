@@ -35,8 +35,7 @@ export default class PhotoPop extends Component {
 
     upload = (values) => {
         // console.log(values);
-        uploadPhoto(values);
-        this.showModal();
+        this.showModal2();
     }
 
     showModal = () => {
@@ -45,7 +44,13 @@ export default class PhotoPop extends Component {
         });
     };
 
-    handleOk = e => {
+    showModal2 = () => {
+        this.setState({
+            visible2: true,
+        });
+    };
+
+    handleUploadOk = e => {
         console.log(e);
         this.setState({
             visible: false,
@@ -116,8 +121,8 @@ export default class PhotoPop extends Component {
                 </Form>
                 <Modal
                     title=""
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
+                    visible={this.state.visible2}
+                    onOk={this.handleUploadOk}
                     okButtonProps={{ disabled: false }}
                     cancelButtonProps={{ disabled: true, visible: false, }}
                 >

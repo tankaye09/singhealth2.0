@@ -20,7 +20,7 @@ import AuditList from "./components/AuditList";
 import Directory from "./components/TenantList";
 import Checklist from "./components/Checklist";
 import ChecklistNonFB from "./components/ChecklistNonFB";
-import CreateTenant from "./components/auth/RegisterTenant";
+import CreateTenant from "./components/auth/CreateTenant";
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
 import TenantEditAudit from "./components/tenant/EditAudit";
