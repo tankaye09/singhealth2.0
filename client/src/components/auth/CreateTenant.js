@@ -1,23 +1,20 @@
-import React, { Component } from "react";
+import React, { ReactDOM, Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerTenant } from "../../actions/authActions";
-import classnames from "classnames";
-import { Form, Input, Button, Checkbox, Select } from "antd";
+import { Form, Input, Button, Message, Select, message } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
+import institutionsData from "../../data/institutions.json";
 
 // TODO: this should be taken from db
-const institutions = [
-  { label: "CGH", value: "CGH" },
-  { label: "SGH", value: "SGH" },
-  { label: "KKH", value: "KKH" },
-];
+const institutions = institutionsData;
 
-class Register extends Component {
+class CreateTenant extends Component {
   constructor() {
     super();
     this.state = {
+      name: "",
       email: "",
       address: "",
       institution: "",
@@ -33,7 +30,7 @@ class Register extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors,
@@ -67,7 +64,6 @@ class Register extends Component {
     const layout = {
       labelCol: { span: 3 },
     };
-
     return (
       <Form
         {...layout}
@@ -100,9 +96,9 @@ class Register extends Component {
             error={errors.name}
             id="name"
             type="name"
-          // className={classnames("", {
-          //   invalid: errors.email,
-          // })}
+            // className={classnames("", {
+            //   invalid: errors.email,
+            // })}
           />
         </Form.Item>
 
@@ -124,9 +120,9 @@ class Register extends Component {
             error={errors.email}
             id="email"
             type="email"
-          // className={classnames("", {
-          //   invalid: errors.email,
-          // })}
+            // className={classnames("", {
+            //   invalid: errors.email,
+            // })}
           />
         </Form.Item>
 
@@ -148,9 +144,9 @@ class Register extends Component {
             error={errors.address}
             id="address"
             type="address"
-          // className={classnames("", {
-          //   invalid: errors.email,
-          // })}
+            // className={classnames("", {
+            //   invalid: errors.email,
+            // })}
           />
         </Form.Item>
 
@@ -206,7 +202,7 @@ class Register extends Component {
   }
 }
 // Props stands for properties and is being used for passing data from one component to another
-Register.propTypes = {
+CreateTenant.propTypes = {
   registerTenant: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
@@ -219,5 +215,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { registerTenant })(
-  withRouter(Register)
+  withRouter(CreateTenant)
 );

@@ -267,14 +267,6 @@ div.form {
 
 @import "~antd/dist/antd.css";
 
-.panels {
-  width: 90%;
-  max-width: 767px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 100px;
-}
-
 .ant-checkbox .ant-checkbox-inner {
   border-color: black;
 }
@@ -317,6 +309,12 @@ div.form {
   text-align: left;
 }
 
+/* Error Message */
+.error-message {
+  text-align: center;
+  font-weight: bold;
+}
+
 /* OVERRIDES */
 #nav-drawer .ant-drawer-body {
   background-color: #ffffff !important;
@@ -333,4 +331,44 @@ div.form {
 }
 .total_score{
   margin-left: auto;
+}
+
+.score {
+  font-size: 100px;
+  font-style: italic;
+}
+
+.upon {
+  font-size: 50px;
+  font-style: italic;
+}
+
+.addComment {
+  height: 50px;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  margin-left: 10%;
+  width: 40%;
+}
+
+.comment {
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 50%;
+  text-align: left;
+}
+
+.name {
+  font-size: 30px;
+  font-style: italic;
+}
+
+.name2 {
+  font-size: 20px;
+  font-style: italic;
+}
+
+.image {
+  left: 0px;
+  width: 33%;
 }

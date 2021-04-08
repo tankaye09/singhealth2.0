@@ -2,7 +2,12 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+import {
+  GET_ERRORS,
+  GET_MESSAGE,
+  SET_CURRENT_USER,
+  USER_LOADING,
+} from "./types";
 
 // Register User
 
@@ -22,7 +27,13 @@ export const getStaffKey = (onDataReceived) => {
 export const registerUser = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/register", userData)
-    .then((res) => history.push("/login")) // re-direct to login on successful register
+    .then((res) => {
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "User Created",
+      });
+      history.push("/login");
+    }) // re-direct to login on successful register
     .catch((err) =>
       dispatch({
         type: GET_ERRORS,
@@ -32,8 +43,7 @@ export const registerUser = (userData, history) => (dispatch) => {
 };
 
 // Login - get user token
-export const loginUser = (userData) => (dispatch) => {
-  console.log("loginUser"); // TODO IMMEDIATE: why login must click twice?
+export const loginUser = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/login", userData)
     .then((res) => {
@@ -49,6 +59,7 @@ export const loginUser = (userData) => (dispatch) => {
       // console.log("decoded is: ", decoded);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      history.push("/");
     })
     .catch((err) =>
       dispatch({
@@ -88,24 +99,17 @@ export const logoutUser = () => (dispatch) => {
 export const registerTenant = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/createtenant", userData)
-    .then((res) => history.push("/createtenant")) // TODO: set up ViewTenants{AuditorName} or sth
+    .then((res) => {
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Tenant Created",
+      });
+      history.push("/createtenant");
+    }) // TODO: set up ViewTenants{AuditorName} or sth
     .catch((err) =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
       })
     );
-};
-
-// Get Tenants
-export const getTenants = (onDataReceived) => {
-  axios
-    .get("/api/tenants")
-    .then((response) => {
-      // console.log("response is:", response.data[0].staffkey);
-      onDataReceived(response.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 };
