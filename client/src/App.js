@@ -8,15 +8,26 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Login from "./components/auth/Login";
-import Navbar from "./components/layout/Navbar";
-import Register from "./components/auth/Register";
-import PrivateRoute from "./components/private-route/PrivateRoute";
-import Dashboard from "./components/dashboard/Dashboard";
-import AuditList from "./components/audit-list.component";
-import ChecklistNonFB from "./components/ChecklistNonFB.component";
+import StaffRoute from "./components/private-route/StaffRoute";
+import TenantRoute from "./components/private-route/TenantRoute";
 
-// Check fo token to keep user logged in
+import Navbar from "./components/layout/Navbar";
+// Login Flow
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+//Staff Flow
+import AuditList from "./components/AuditList";
+import Directory from "./components/TenantList";
+import Checklist from "./components/Checklist";
+import ChecklistNonFB from "./components/ChecklistNonFB";
+import CreateTenant from "./components/auth/CreateTenant";
+//Tenant Flow
+import TenantHome from "./components/tenant/TenantHome";
+import TenantEditAudit from "./components/tenant/EditAudit";
+//Error warning
+import MessageDisplay from "./components/MessageDisplay";
+
+// Check for token to keep user logged in
 if (localStorage.jwtToken) {
   // Set auth token header auth
   const token = localStorage.jwtToken;
@@ -41,6 +52,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
+        <MessageDisplay />
         <Router>
           <div className="App">
             <Navbar />
@@ -48,12 +60,21 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-              <PrivateRoute exact path="/auditlist" component={AuditList} />
-              <PrivateRoute
+              <StaffRoute exact path="/auditlist" component={AuditList} />
+              <StaffRoute exact path="/checklistFB" component={Checklist} />
+              <StaffRoute
                 exact
-                path="/checklist"
+                path="/checklistNonFB"
                 component={ChecklistNonFB}
+              />
+              <StaffRoute exact path="/directory" component={Directory} />
+              <StaffRoute exact path="/createtenant" component={CreateTenant} />
+
+              <TenantRoute exact path="/tenant" component={TenantHome} />
+              <TenantRoute
+                exact
+                path="/tenant/editAudit"
+                component={TenantEditAudit}
               />
             </Switch>
           </div>

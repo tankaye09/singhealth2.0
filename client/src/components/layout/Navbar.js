@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import RightMenuLoggedIn from "./RightMenuLoggedIn";
-import { Drawer, Button } from "antd";
+import { Drawer, Button, Divider } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 // import Logo from "SingHealthLogo.png";
@@ -43,22 +43,20 @@ class Navbar extends Component {
           />
         </div>
         <div className="menuCon">
-          <div className="leftMenu">
-            <LeftMenu />
-          </div>
-          <div className="rightMenu">{rightMenu}</div>
           <Button className="barsMenu" type="primary" onClick={this.showDrawer}>
             <span className="barsBtn"></span>
           </Button>
           <Drawer
-            title="Basic Drawer"
             placement="right"
             closable={false}
             onClose={this.onClose}
             visible={this.state.visible}
           >
-            <LeftMenu />
-            <RightMenu />
+            <p>
+              <LeftMenu />
+            </p>
+            <Divider />
+            <p>{rightMenu}</p>
           </Drawer>
         </div>
       </nav>

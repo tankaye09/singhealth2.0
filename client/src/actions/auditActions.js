@@ -1,0 +1,20 @@
+import axios from "axios";
+
+export const submit = (data) => {
+  console.log(data);
+  axios.post("/api/audits/add", data).catch((err) => console.log(err));
+};
+
+export const display = (onDataReceived) => {
+  axios
+    .get("/api/audits")
+    .then((response) => {
+      const data = response.data;
+      // console.log(data);
+      // console.log(data.length);
+      onDataReceived(data);
+    })
+    .catch(() => {
+      alert("Error");
+    });
+};

@@ -2,13 +2,38 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+import {
+  GET_ERRORS,
+  GET_MESSAGE,
+  SET_CURRENT_USER,
+  USER_LOADING,
+} from "./types";
 
 // Register User
+
+/* Get Staff Key */
+export const getStaffKey = (onDataReceived) => {
+  axios
+    .get("/api/staffkey")
+    .then((response) => {
+      // console.log("response is:", response.data[0].staffkey);
+      onDataReceived(response.data[0].staffkey);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 export const registerUser = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/register", userData)
-    .then((res) => history.push("/login")) // re-direct to login on successful register
+    .then((res) => {
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "User Created",
+      });
+      history.push("/login");
+    }) // re-direct to login on successful register
     .catch((err) =>
       dispatch({
         type: GET_ERRORS,
@@ -18,7 +43,7 @@ export const registerUser = (userData, history) => (dispatch) => {
 };
 
 // Login - get user token
-export const loginUser = (userData) => (dispatch) => {
+export const loginUser = (userData, history) => (dispatch) => {
   axios
     .post("/api/users/login", userData)
     .then((res) => {
@@ -31,8 +56,10 @@ export const loginUser = (userData) => (dispatch) => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
+      // console.log("decoded is: ", decoded);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      history.push("/");
     })
     .catch((err) =>
       dispatch({
@@ -65,4 +92,24 @@ export const logoutUser = () => (dispatch) => {
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticaed to false
   dispatch(setCurrentUser({}));
+};
+
+/* Tenant */
+// Register Tenant
+export const registerTenant = (userData, history) => (dispatch) => {
+  axios
+    .post("/api/users/createtenant", userData)
+    .then((res) => {
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Tenant Created",
+      });
+      history.push("/createtenant");
+    }) // TODO: set up ViewTenants{AuditorName} or sth
+    .catch((err) =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      })
+    );
 };

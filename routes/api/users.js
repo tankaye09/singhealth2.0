@@ -15,92 +15,174 @@ const User = require("../../models/User");
 // @desc Register user
 // @access Public
 router.post("/register", (req, res) => {
-    // Form validation
-    const { errors, isValid } = validateRegisterInput(req.body);
-    
-    // Check validation
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }User.findOne({ email: req.body.email }).then(user => {
-      if (user) {
-        return res.status(400).json({ email: "Email already exists" });
-      } else {
-        const newUser = new User({
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password
+  // Form validation
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+  User.findOne({ email: req.body.email }).then((user) => {
+    if (user) {
+      return res.status(400).json({ email: "Email already exists" });
+    } else {
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        institution: req.body.institution,
+        usertype: req.body.usertype,
+      });
+
+      // Hash password before saving in database
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser
+            .save()
+            .then((user) => res.json(user))
+            .catch((err) => console.log(err));
         });
-        
-        // Hash password before saving in database
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser
-              .save()
-              .then(user => res.json(user))
-              .catch(err => console.log(err));
-          });
-        });
-      }
-    });
+      });
+    }
   });
+});
 
 // @route POST api/users/login
 // @desc Login user and return JWT token
 // @access Public
 router.post("/login", (req, res) => {
-    // Form validation
+  // Form validation
 
-    const { errors, isValid } = validateLoginInput(req.body);
-    
-    // Check validation
-    if (!isValid) {
-        return res.status(400).json(errors);
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+  const email = req.body.email;
+  const password = req.body.password;
+  const usertype = req.body.usertype;
+
+  // Find user by email
+  User.findOne({ email, usertype: usertype }).then((user) => {
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ emailnotfound: "Email not found" });
     }
-    const email = req.body.email;
-    const password = req.body.password;
-    
-    // Find user by email
-    User.findOne({ email }).then(user => {
 
-        // Check if user exists
-        if (!user) {
-            return res.status(404).json({ emailnotfound: "Email not found" });
-        }
-        
-        // Check password
-        bcrypt.compare(password, user.password).then(isMatch => {
-            if (isMatch) {
+    // Check password
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        // User matched
+        // Create JWT Payload
+        const payload = {
+          id: user.id,
+          name: user.name,
+          institution: user.institution,
+          usertype: user.usertype,
+        };
 
-                // User matched
-                // Create JWT Payload
-                const payload = {
-                    id: user.id,
-                    name: user.name
-                };
-                
-                // Sign token
-                jwt.sign(
-                    payload,
-                    keys.secretOrKey,
-                    {
-                        expiresIn: 31556926 // 1 year in seconds
-                    },
-                    (err, token) => {
-                        res.json({
-                            success: true,
-                            token: "Bearer " + token
-                        });
-                    }
-                );
-            } else {
-                return res
-                    .status(400)
-                    .json({ passwordincorrect: "Password incorrect" });
-            }
-        });
+        // Sign token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          {
+            expiresIn: 31556926, // 1 year in seconds
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer " + token,
+            });
+          }
+        );
+      } else {
+        return res
+          .status(400)
+          .json({ passwordincorrect: "Password incorrect" });
+      }
     });
+  });
+});
+
+// Load Tenant model
+const Tenant = require("../../models/Tenant");
+
+// @route POST api/users/registerTenant
+// @desc Register tenant
+// @access Public -> TODO: make
+router.post("/createtenant", (req, res) => {
+  // var resJsonUser;
+  // var resJsonTenant;
+  console.log("inside router.post");
+
+  User.findOne({ email: req.body.email }).then((user) => {
+    if (user) {
+      return res.status(400).json({ email: "Email already exists" });
+    } else {
+      //create User entry
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: "autogenerated", // TODO password maker that only informs tenant via email
+        institution: req.body.institution,
+        usertype: "tenant",
+      });
+
+      let promise = new Promise((resolve, reject) => {
+        let createdUser = 0;
+
+        // Hash password before saving in database
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) {
+              reject(err);
+              throw err;
+            }
+            newUser.password = hash;
+            newUser
+              .save()
+              .then((user) => res.json(user))
+              .catch((err) => console.log(err));
+            createdUser = 1;
+            if (createdUser == 1) {
+              resolve("User Creation Success");
+            } else {
+              reject("User Creation Failed");
+            }
+          });
+        });
+      });
+
+      promise
+        .then((message) => {
+          console.log(message);
+          User.findOne({ email: req.body.email }).then((newlyCreatedUser) => {
+            //create Tenant entry
+            const newTenant = new Tenant({
+              userId: newlyCreatedUser._id,
+              address: req.body.address,
+              institution: req.body.institution,
+              auditor: req.body.auditor,
+              type: req.body.type,
+            });
+
+            // save in database
+            newTenant
+              .save()
+              .then()
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        })
+        .catch((message) => {
+          console.log(message);
+        });
+    }
+  });
 });
 
 module.exports = router;
