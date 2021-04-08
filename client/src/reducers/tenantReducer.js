@@ -8,7 +8,7 @@ export default function (state = initialState, action) {
   console.log("in reducer");
   switch (action.type) {
     case SET_SELECTED_TENANT:
-      return action.payload;
+      return { ...state }, action.payload;
     default:
       return state;
   }

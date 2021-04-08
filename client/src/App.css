@@ -331,6 +331,18 @@ div.form {
   padding: 0;
 }
 
+.commentBox {
+  margin-left: auto;
+  width: 40%;
+}
+
+.auditDate {
+  margin-left: auto;
+}
+.total_score{
+  margin-left: auto;
+}
+
 .score {
   font-size: 100px;
   font-style: italic;
@@ -364,4 +376,9 @@ div.form {
 .name2 {
   font-size: 20px;
   font-style: italic;
+}
+
+.image {
+  left: 0px;
+  width: 33%;
 }

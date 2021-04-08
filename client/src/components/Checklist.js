@@ -15,9 +15,19 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
+import dateformat from "dateformat";
 const fileUpload = require("fuctbase64");
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
+
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
 
 // TODO: Take score from json file => Update the score, replace the json file
 
@@ -67,8 +77,9 @@ class Checklist extends Component {
         this.state.catCounts[4],
       image: this.state.image,
       date: this.state.date,
-      description: this.state.description,
+      comment: this.state.comment,
       location: this.state.location,
+      tenantID: this.props.tenantInfo.record._id,
     });
     this.showAuditModal();
   };
@@ -77,16 +88,28 @@ class Checklist extends Component {
     this.setState({ [e.target.id]: e.target.value });
   };
 
+  onChangeComment = (comment) => {
+    this.setState({ comment: [{ "content": comment.nativeEvent.explicitOriginalTarget.value, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), }] });
+  };
+
+  onChangeCaption = (caption) => {
+    console.log(this.state);
+    this.setState({
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value
+    });
+  };
+
   onChangeDate = (date, dateString) => {
-    this.setState({ date: date });
+    this.setState({ date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") });
   };
 
   fileSelectedHandler = (event) => {
-    // console.log(event.target.files[0]);
+    console.log(event.target.files[0]);
     fileUpload(event).then((data) => {
-      // console.log("base64: ", data.base64);
+      console.log("base64: ", data.base64);
       this.setState({
-        image: data.base64,
+        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
+        tempImageBase64: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") }]
       });
     });
   };
@@ -123,7 +146,9 @@ class Checklist extends Component {
 
   handleUploadOk = (e) => {
     console.log(e);
+    console.log(this.state);
     this.setState({
+      image: [{ "base64": this.state.tempImageBase64[0].base64, "date": this.state.tempImageBase64[0].date, "caption": this.state.tempImageCaption }],
       visibleConfirm: false,
     });
   };
@@ -174,8 +199,10 @@ class Checklist extends Component {
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     image: null,
+    tempImageBase64: [],
+    tempImageCaption: null,
     date: null,
-    description: "",
+    comment: null,
     location: "",
     visibleForm: false,
     visibleConfirm: false,
@@ -183,6 +210,7 @@ class Checklist extends Component {
     tenantInfo: {},
     type: "FB",
   };
+
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
     switch (catIndex) {
@@ -224,7 +252,9 @@ class Checklist extends Component {
       default:
         break;
     }
+
   };
+
 
   render() {
     return (
@@ -294,40 +324,129 @@ class Checklist extends Component {
           okButtonProps={{ disabled: false }}
           cancelButtonProps={{ disabled: false }}
         >
-          <Form
-            name="photo_upload"
-            className="photo-upload"
-            onFinish={this.onFinish}
+          <Form.Item
+            name="date"
+            label="Date"
+            rules={[{ required: true, message: "Date of Incident" }]}
           >
-            <Form.Item>
-              <Input type="file" onChange={this.fileSelectedHandler} />
-            </Form.Item>
-            <Form.Item
+            <DatePicker className="auditDate"
+              placeholder="Date"
+              onChange={this.onChangeDate}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="Comment"
+            label="Comment"
+            rules={[
+              {
+                required: false,
+                message: "Description",
+              },
+            ]}
+          >
+            <Input className="commentBox"
+              //placeholder="Comment"
+              onChange={this.onChangeComment}
+              value={this.state.comment}
+              id="comment"
+              type="comment"
+            />
+          </Form.Item>
+          <Form.Item label="Total Score: ">
+            <span className="total_score">{(this.state.catCounts[0] + this.state.catCounts[1] + this.state.catCounts[2] + this.state.catCounts[3] + this.state.catCounts[4]) / 2}</span>
+          </Form.Item>
+        </Modal>
+        <div className="panels">
+          {Fb.map((cat, catIndex) => {
+            // var catScore = cat.score;
+            return (
+              // Category
+              <Collapse defaultActiveKey={["1"]}>
+                <Panel
+                  header={<div catIndex={catIndex}>{cat.name}</div>}
+                  key={catIndex + 1}
+                  className="bg-orange"
+                >
+                  <div catIndex={catIndex}>
+                    {cat.subcategories.map((subCat, subCatIndex) => {
+                      return (
+                        // SubCategory
+                        <Collapse defaultActiveKey={["1"]}>
+                          <Panel
+                            header={
+                              <div subCatIndex={subCatIndex}>{subCat.name}</div>
+                            }
+                            key={subCatIndex + 1}
+                            className="bg-orange"
+                          >
+                            <List
+                              dataSource={subCat.questions} // Questions
+                              renderItem={(item) => (
+                                <List.Item>
+                                  <div className="create-audit-row">{item}</div>
+                                  <div>{this.createCheckbox(item, catIndex)}</div>
+                                </List.Item>
+                              )}
+                            />
+                          </Panel>
+                        </Collapse>
+                      );
+                    })}
+                  </div>
+                  <div>Score: {this.state.catCounts[catIndex] / 2}</div>
+                </Panel>
+              </Collapse>
+            );
+          })}
+          <Button type="primary" onClick={this.showFormModal}>
+            Upload Photo
+        </Button>
+          <Modal
+            title="Upload Photo"
+            visible={this.state.visibleForm}
+            onOk={this.handleFormOk}
+            onCancel={this.handleCancel}
+            okButtonProps={{ disabled: false }}
+            cancelButtonProps={{ disabled: false }}
+          >
+            <Form
+              name="photo_upload"
+              className="photo-upload"
+              onFinish={this.onFinish}
+            >
+              <Form.Item>
+                <Input type="file" onChange={this.fileSelectedHandler} />
+              </Form.Item>
+              {/* <Form.Item
               name="date"
               rules={[{ required: true, message: "Date of Incident" }]}
             >
-              <DatePicker placeholder="Date" onChange={this.onChangeDate} />
-            </Form.Item>
-
-            <Form.Item
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Description",
-                },
-              ]}
-            >
-              <Input
-                placeholder="Description"
-                onChange={this.onChange}
-                value={this.state.description}
-                id="description"
-                type="description"
+              <DatePicker
+                placeholder="Date"
+                onChange={this.onChangeDate}
               />
-            </Form.Item>
+            </Form.Item> */}
 
-            <Form.Item
+              <Form.Item
+                name="caption"
+                rules={[
+                  {
+                    required: true,
+                    message: "Description",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Caption"
+                  onChange={this.onChangeCaption}
+                  value={this.state.caption}
+                  id="caption"
+                  type="capyion"
+                />
+              </Form.Item>
+
+              {/* <Form.Item
               name="location"
               rules={[{ required: true, message: "Location of Incident" }]}
             >
@@ -338,40 +457,42 @@ class Checklist extends Component {
                 id="location"
                 type="location"
               />
-            </Form.Item>
-          </Form>
+            </Form.Item> */}
+            </Form>
+
+            <Modal
+              title="Upload Confirm"
+              destroyOnClose={true}
+              visible={this.state.visibleConfirm}
+              onOk={this.handleUploadOk}
+              okButtonProps={{ disabled: false }}
+              cancelButtonProps={{ disabled: true, visible: false }}
+            >
+              <p>Photo Added!</p>
+            </Modal>
+          </Modal>
+          <Button
+            className="submit-button"
+            type="primary"
+            onClick={() => this.submitAudit()}
+          >
+            SUBMIT
+        </Button>
 
           <Modal
-            title="Upload Confirm"
-            destroyOnClose={true}
-            visible={this.state.visibleConfirm}
-            onOk={this.handleUploadOk}
+            title=""
+            visible={this.state.visibleAudit}
+            onOk={this.handleAuditOk}
             okButtonProps={{ disabled: false }}
             cancelButtonProps={{ disabled: true, visible: false }}
           >
-            <p>Photo Added!</p>
+            <p>Audit Uploaded!</p>
           </Modal>
-        </Modal>
-        <Button
-          className="submit-button"
-          type="primary"
-          onClick={() => this.submitAudit()}
-        >
-          SUBMIT
-        </Button>
-
-        <Modal
-          title=""
-          visible={this.state.visibleAudit}
-          onOk={this.handleAuditOk}
-          okButtonProps={{ disabled: false }}
-          cancelButtonProps={{ disabled: true, visible: false }}
-        >
-          <p>Audit Uploaded!</p>
-        </Modal>
+        </div>
       </div>
     );
   }
+
 }
 
 Checklist.propTypes = {

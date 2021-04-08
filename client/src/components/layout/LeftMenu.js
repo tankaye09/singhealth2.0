@@ -64,6 +64,10 @@ class TenantLeftMenu extends Component {
         <Menu.Item key="editaudit">
           <NavLink to="/tenant/editaudit">Edit Audit</NavLink>
         </Menu.Item>
+
+        <Menu.Item key="viewaudittenant">
+          <NavLink to="/viewaudittenant">View Audit</NavLink>
+        </Menu.Item>
       </Menu>
     );
   }
