@@ -271,11 +271,6 @@ div.form {
   border-color: black;
 }
 
-.create-audit-row {
-  text-align: left;
-  padding-right: 5px;
-}
-
 .text-white {
   color: #fff;
 }
@@ -302,6 +297,20 @@ div.form {
   margin-bottom: 50px;
   width: 100%;
   font-weight: bold;
+}
+
+.create-audit-row {
+  text-align: left;
+  padding-right: 5px;
+  float: left;
+}
+
+.checklist-checkbox {
+  float: right;
+}
+
+.checklist-item {
+  display: inline-flex;
 }
 
 /* Dropdown */

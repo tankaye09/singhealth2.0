@@ -186,8 +186,12 @@ class ChecklistNonFB extends Component {
                             dataSource={subCat.questions} // Questions
                             renderItem={(item) => (
                               <List.Item>
-                                <div className="create-audit-row">{item}</div>
-                                <div>{this.createCheckbox(item, catIndex)}</div>
+                                <div className="checklist-item">
+                                  <div className="create-audit-row">{item}</div>
+                                  <div className="checklist-checkbox">
+                                    {this.createCheckbox(item, catIndex)}
+                                  </div>
+                                </div>
                               </List.Item>
                             )}
                           />
