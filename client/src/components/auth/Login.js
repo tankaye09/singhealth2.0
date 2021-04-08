@@ -9,6 +9,8 @@ import { Form, Input, Button, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import ReCAPTCHA from "react-google-recaptcha";
+const recaptchaRef = React.createRef();
+const grecaptchaObject = window.grecaptcha;
 
 class Login extends Component {
   constructor() {
@@ -141,6 +143,16 @@ class Login extends Component {
               Log in
             </Button>
             New staff member? <Link to="/Register">Register here!</Link>
+          </Form.Item>
+
+          <Form.Item
+            name="recaptcha">
+            <ReCAPTCHA
+              ref={(r) => this.recaptcha = r}
+              size="invisible"
+              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              onChange={this.onChange}
+            />
           </Form.Item>
         </Form>
       </div>
