@@ -117,7 +117,7 @@ class ChecklistNonFB extends Component {
   );
 
   fileSelectedHandler = (event) => {
-    // console.log(event.target.files[0]);
+    console.log(event.target.files[0]);
     fileUpload(event).then((data) => {
       // console.log("base64: ", data.base64);
       this.setState({

@@ -355,3 +355,8 @@ div.form {
   font-size: 20px;
   font-style: italic;
 }
+
+.image {
+  left: 0px;
+  width: 33%;
+}
