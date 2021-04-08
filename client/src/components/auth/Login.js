@@ -8,6 +8,8 @@ import classnames from "classnames";
 import { Form, Input, Button, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
+import ReCAPTCHA from "react-google-recaptcha";
+
 class Login extends Component {
   constructor() {
     super();

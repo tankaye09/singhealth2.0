@@ -13,6 +13,7 @@ import {
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
+const fileUpload = require("fuctbase64");
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
 
@@ -54,18 +55,38 @@ class Checklist extends Component {
   submitAudit = () => {
     console.log(this.state);
     submit({
-      type: "Non-FB",
+      type: "FB",
       catCounts: this.state.catCounts,
       total_score:
         this.state.catCounts[0] +
         this.state.catCounts[1] +
-        this.state.catCounts[2],
+        this.state.catCounts[2] +
+        this.state.catCounts[3] +
+        this.state.catCounts[4],
       image: this.state.image,
       date: this.state.date,
       description: this.state.description,
       location: this.state.location,
     });
     this.showAuditModal();
+  };
+
+  onChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onChangeDate = (date, dateString) => {
+    this.setState({ date: date });
+  };
+
+  fileSelectedHandler = (event) => {
+    // console.log(event.target.files[0]);
+    fileUpload(event).then((data) => {
+      // console.log("base64: ", data.base64);
+      this.setState({
+        image: data.base64,
+      });
+    });
   };
 
   showAuditModal = () => {
@@ -102,6 +123,13 @@ class Checklist extends Component {
     console.log(e);
     this.setState({
       visibleConfirm: false,
+    });
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visibleForm: false,
     });
   };
 
