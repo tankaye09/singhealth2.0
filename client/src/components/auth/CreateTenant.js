@@ -117,6 +117,7 @@ class CreateTenant extends Component {
           ]}
         >
           <Select
+            showSearch
             className="dropdown"
             placeholder="F&B or Non-F&B"
             options={tenantTypes}

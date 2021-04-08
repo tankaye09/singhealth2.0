@@ -8,7 +8,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "image-to-base64": "^2.1.1",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.3.2",
     "mongoose": "^5.11.19",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -46,6 +48,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
+    "chai": "^4.3.4",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",

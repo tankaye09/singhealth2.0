@@ -14,7 +14,7 @@ class Login extends Component {
     super();
     this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
-      isVerified: false,
+      isVerified: true,
       email: "",
       password: "",
       usertypebool: false,
@@ -80,10 +80,6 @@ class Login extends Component {
     }
   };
 
-  recaptchaLoaded() {
-    console.log("captcha loaded");
-  }
-
   verifyCallback(response) {
     if (response) {
       this.setState({ isVerified: true });
@@ -93,7 +89,6 @@ class Login extends Component {
     const { errors } = this.state;
     return (
       <div>
-        <div>{this.state.isVerified.toString()}</div>
         <Form
           onFinish={this.onFinish}
           name="normal_login"
@@ -160,11 +155,11 @@ class Login extends Component {
             New staff member? <Link to="/Register">Register here!</Link>
           </Form.Item>
         </Form>
-        <Recaptcha
+        {/* <Recaptcha
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           render="explicit"
           verifyCallback={this.verifyCallback}
-        />
+        /> */}
       </div>
     );
   }
