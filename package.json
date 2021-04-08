@@ -34,11 +34,8 @@
     "passport-jwt": "^4.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-<<<<<<< HEAD
     "react-highlight-words": "^0.17.0",
-=======
     "react-google-recaptcha": "^2.1.0",
->>>>>>> origin/clemweek11
     "react-scripts": "^4.0.3",
     "react-toastify": "^7.0.3",
     "reactjs-popup": "^2.0.4",

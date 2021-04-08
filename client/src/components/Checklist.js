@@ -63,10 +63,6 @@ class Checklist extends Component {
         this.state.catCounts[2] +
         this.state.catCounts[3] +
         this.state.catCounts[4],
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/clemweek11
       image: this.state.image,
       date: this.state.date,
       description: this.state.description,
