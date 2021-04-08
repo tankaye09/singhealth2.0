@@ -322,3 +322,15 @@ div.form {
   background-color: #ffffff !important;
   padding: 0;
 }
+
+.commentBox {
+  margin-left: auto;
+  width: 40%;
+}
+
+.auditDate {
+  margin-left: auto;
+}
+.total_score{
+  margin-left: auto;
+}

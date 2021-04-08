@@ -8,6 +8,15 @@ import { FB } from '../data/questionsData'
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
 
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+
 // TODO: Take score from json file => Update the score, replace the json file
 
 class Checklist extends Component {
@@ -46,7 +55,7 @@ class Checklist extends Component {
   submitAudit = () => {
     console.log(this.state);
     submit({
-      type: "Non-FB",
+      type: "FB",
       catCounts: this.state.catCounts,
       total_score:
         this.state.catCounts[0] +
@@ -142,6 +151,7 @@ class Checklist extends Component {
     visibleForm: false,
     visibleConfirm: false,
     visibleAudit: false,
+    i: 0,
   };
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -184,11 +194,53 @@ class Checklist extends Component {
       default:
         break;
     }
+    
   };
+  
 
   render() {
     console.log(this.state.items);
     return (
+      <div>
+        <h1>FB Checlist</h1>
+        <Form {...layout}
+                    name="Non-FB Checklist"
+                    className="nonfb_checklist"
+                    onFinish={this.onFinish}
+                >
+                    <Form.Item
+                        name="date"
+                        label = "Date"
+                        rules={[{ required: true, message: "Date of Incident" }]}
+                    >
+                        <DatePicker className="auditDate"
+                            placeholder="Date"
+                            onChange={this.onChangeDate}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="Comment"
+                        label = "Comment"
+                        rules={[
+                            {
+                                required: false,
+                                message: "Description",
+                            },
+                        ]}
+                    >
+                        <Input className="commentBox"
+                            //placeholder="Comment"
+                            onChange={this.onChange}
+                            value={this.state.description}
+                            id="comment"
+                            type="comment"
+                        />
+                    </Form.Item>
+                    <Form.Item label="Total Score: ">
+          <span className="total_score">{(this.state.catCounts[0]+this.state.catCounts[1]+this.state.catCounts[2]+this.state.catCounts[3]+this.state.catCounts[4])/2}</span>
+        </Form.Item>
+                </Form>
       <div className="panels">
         {Fb.map((cat, catIndex) => {
           // var catScore = cat.score;
@@ -250,7 +302,7 @@ class Checklist extends Component {
             <Form.Item>
               <Input type="file" onChange={this.fileSelectedHandler} />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="date"
               rules={[{ required: true, message: "Date of Incident" }]}
             >
@@ -258,7 +310,7 @@ class Checklist extends Component {
                 placeholder="Date"
                 onChange={this.onChangeDate}
               />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               name="description"
@@ -278,7 +330,7 @@ class Checklist extends Component {
               />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               name="location"
               rules={[{ required: true, message: "Location of Incident" }]}
             >
@@ -289,7 +341,7 @@ class Checklist extends Component {
                 id="location"
                 type="location"
               />
-            </Form.Item>
+            </Form.Item> */}
           </Form>
           {/* <Form>
             <Button
@@ -332,7 +384,9 @@ class Checklist extends Component {
           <p>Audit Uploaded!</p>
         </Modal>
       </div>
+      </div>
     );
   }
+
 }
 export default Checklist;

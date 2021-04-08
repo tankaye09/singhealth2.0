@@ -10,6 +10,15 @@ const fileUpload = require('fuctbase64');
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+
 // TODO: Take score from json file => Update the score, replace the json file
 
 class ChecklistNonFB extends Component {
@@ -151,9 +160,55 @@ class ChecklistNonFB extends Component {
     }
   };
 
+
+
+
   render() {
     return (
-      <div className="panels">
+      <div>
+        
+        <h1>Non-FB Checlist</h1>
+        <Form {...layout}
+                    name="Non-FB Checklist"
+                    className="nonfb_checklist"
+                    onFinish={this.onFinish}
+                >
+                    <Form.Item
+                        name="date"
+                        label = "Date"
+                        rules={[{ required: true, message: "Date of Incident" }]}
+                    >
+                        <DatePicker className="auditDate"
+                            placeholder="Date"
+                            onChange={this.onChangeDate}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="Comment"
+                        label = "Comment"
+                        rules={[
+                            {
+                                required: false,
+                                message: "Description",
+                            },
+                        ]}
+                    >
+                        <Input className="commentBox"
+                            //placeholder="Comment"
+                            onChange={this.onChange}
+                            value={this.state.description}
+                            id="comment"
+                            type="comment"
+                        />
+                    </Form.Item>
+                    <Form.Item label="Total Score: ">
+          <span className="total_score">{(this.state.catCounts[0]+this.state.catCounts[1]+this.state.catCounts[2])/2}</span>
+        </Form.Item>
+                </Form>
+
+      <div 
+      className="panels">
         {nonFb.map((cat, catIndex) => {
           // var catScore = cat.score;
           return (
@@ -221,7 +276,7 @@ class ChecklistNonFB extends Component {
             <Form.Item>
               <Input type="file" onChange={this.fileSelectedHandler} />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="date"
               rules={[{ required: true, message: "Date of Incident" }]}
             >
@@ -229,7 +284,7 @@ class ChecklistNonFB extends Component {
                 placeholder="Date"
                 onChange={this.onChangeDate}
               />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               name="description"
@@ -249,7 +304,7 @@ class ChecklistNonFB extends Component {
               />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               name="location"
               rules={[{ required: true, message: "Location of Incident" }]}
             >
@@ -260,7 +315,7 @@ class ChecklistNonFB extends Component {
                 id="location"
                 type="location"
               />
-            </Form.Item>
+            </Form.Item> */}
           </Form>
           {/* <Form>
             <Button
@@ -303,6 +358,7 @@ class ChecklistNonFB extends Component {
         >
           <p>Audit Uploaded!</p>
         </Modal>
+      </div>
       </div>
     );
   }

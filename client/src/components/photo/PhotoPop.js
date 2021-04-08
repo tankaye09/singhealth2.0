@@ -68,7 +68,7 @@ export default class PhotoPop extends Component {
                     <Form.Item>
                         <Input type="file" onChange={this.fileSelectedHandler} />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         name="date"
                         rules={[{ required: true, message: "Date of Incident" }]}
                     >
@@ -76,7 +76,7 @@ export default class PhotoPop extends Component {
                             placeholder="Date"
                             onChange={this.onChangeDate}
                         />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item
                         name="description"
@@ -96,7 +96,7 @@ export default class PhotoPop extends Component {
                         />
                     </Form.Item>
 
-                    <Form.Item
+                    {/* <Form.Item
                         name="location"
                         rules={[{ required: true, message: "Location of Incident" }]}
                     >
@@ -107,7 +107,7 @@ export default class PhotoPop extends Component {
                             id="location"
                             type="location"
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
                 <Form>
                     <Button
