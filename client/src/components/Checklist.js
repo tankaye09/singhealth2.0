@@ -89,18 +89,27 @@ class Checklist extends Component {
   };
 
   onChangeComment = (comment) => {
-    this.setState({ comment: [{ "content": comment.nativeEvent.explicitOriginalTarget.value, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), }] });
+    this.setState({
+      comment: [
+        {
+          content: comment.nativeEvent.explicitOriginalTarget.value,
+          date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+        },
+      ],
+    });
   };
 
   onChangeCaption = (caption) => {
     console.log(this.state);
     this.setState({
-      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value,
     });
   };
 
   onChangeDate = (date, dateString) => {
-    this.setState({ date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") });
+    this.setState({
+      date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+    });
   };
 
   fileSelectedHandler = (event) => {
@@ -109,7 +118,12 @@ class Checklist extends Component {
       console.log("base64: ", data.base64);
       this.setState({
         // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
-        tempImageBase64: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") }]
+        tempImageBase64: [
+          {
+            base64: data.base64,
+            date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          },
+        ],
       });
     });
   };
@@ -148,7 +162,13 @@ class Checklist extends Component {
     console.log(e);
     console.log(this.state);
     this.setState({
-      image: [{ "base64": this.state.tempImageBase64[0].base64, "date": this.state.tempImageBase64[0].date, "caption": this.state.tempImageCaption }],
+      image: [
+        {
+          base64: this.state.tempImageBase64[0].base64,
+          date: this.state.tempImageBase64[0].date,
+          caption: this.state.tempImageCaption,
+        },
+      ],
       visibleConfirm: false,
     });
   };
@@ -252,9 +272,7 @@ class Checklist extends Component {
       default:
         break;
     }
-
   };
-
 
   render() {
     return (
@@ -262,9 +280,11 @@ class Checklist extends Component {
         <h3>
           F&B Audit for Tenant at Address:{" "}
           <b>
-            {this.props.tenantInfo !== null ? this.props.tenantInfo.record._id !== null
-              ? this.props.tenantInfo.record._id
-              : "" : ""}
+            {this.props.tenantInfo !== null
+              ? this.props.tenantInfo.record._id !== null
+                ? this.props.tenantInfo.record._id
+                : ""
+              : ""}
           </b>
         </h3>
 
@@ -329,7 +349,8 @@ class Checklist extends Component {
             label="Date"
             rules={[{ required: true, message: "Date of Incident" }]}
           >
-            <DatePicker className="auditDate"
+            <DatePicker
+              className="auditDate"
               placeholder="Date"
               onChange={this.onChangeDate}
             />
@@ -345,7 +366,8 @@ class Checklist extends Component {
               },
             ]}
           >
-            <Input className="commentBox"
+            <Input
+              className="commentBox"
               //placeholder="Comment"
               onChange={this.onChangeComment}
               value={this.state.comment}
@@ -354,7 +376,14 @@ class Checklist extends Component {
             />
           </Form.Item>
           <Form.Item label="Total Score: ">
-            <span className="total_score">{(this.state.catCounts[0] + this.state.catCounts[1] + this.state.catCounts[2] + this.state.catCounts[3] + this.state.catCounts[4]) / 2}</span>
+            <span className="total_score">
+              {(this.state.catCounts[0] +
+                this.state.catCounts[1] +
+                this.state.catCounts[2] +
+                this.state.catCounts[3] +
+                this.state.catCounts[4]) /
+                2}
+            </span>
           </Form.Item>
         </Modal>
         <div className="panels">
@@ -385,7 +414,9 @@ class Checklist extends Component {
                               renderItem={(item) => (
                                 <List.Item>
                                   <div className="create-audit-row">{item}</div>
-                                  <div>{this.createCheckbox(item, catIndex)}</div>
+                                  <div>
+                                    {this.createCheckbox(item, catIndex)}
+                                  </div>
                                 </List.Item>
                               )}
                             />
@@ -401,7 +432,7 @@ class Checklist extends Component {
           })}
           <Button type="primary" onClick={this.showFormModal}>
             Upload Photo
-        </Button>
+          </Button>
           <Modal
             title="Upload Photo"
             visible={this.state.visibleForm}
@@ -477,7 +508,7 @@ class Checklist extends Component {
             onClick={() => this.submitAudit()}
           >
             SUBMIT
-        </Button>
+          </Button>
 
           <Modal
             title=""
@@ -492,7 +523,6 @@ class Checklist extends Component {
       </div>
     );
   }
-
 }
 
 Checklist.propTypes = {

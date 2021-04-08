@@ -30,10 +30,13 @@ const layout = {
   },
 };
 
+const mapDispatchToProps = {
+  submit,
+};
+
 // TODO: Take score from json file => Update the score, replace the json file
 
 class ChecklistNonFB extends Component {
-
   // not exactly dynamic
   state = {
     tenantInfo: {},
@@ -59,7 +62,7 @@ class ChecklistNonFB extends Component {
     console.log(this.state);
     console.log(typeof this.state.date);
     console.log(typeof this.props.tenantInfo.record._id);
-    submit({
+    this.props.submit({
       type: "Non-FB",
       catCounts: this.state.catCounts,
       total_score:
@@ -80,18 +83,27 @@ class ChecklistNonFB extends Component {
   };
 
   onChangeComment = (comment) => {
-    this.setState({ comment: [{ "content": comment.nativeEvent.explicitOriginalTarget.value, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), }] });
+    this.setState({
+      comment: [
+        {
+          content: comment.nativeEvent.explicitOriginalTarget.value,
+          date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+        },
+      ],
+    });
   };
 
   onChangeCaption = (caption) => {
     console.log(this.state);
     this.setState({
-      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value,
     });
   };
 
   onChangeDate = (date, dateString) => {
-    this.setState({ date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") });
+    this.setState({
+      date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+    });
   };
 
   showFormModal = () => {
@@ -135,7 +147,13 @@ class ChecklistNonFB extends Component {
     console.log(e);
     console.log(this.state);
     this.setState({
-      image: [{ "base64": this.state.tempImageBase64[0].base64, "date": this.state.tempImageBase64[0].date, "caption": this.state.tempImageCaption }],
+      image: [
+        {
+          base64: this.state.tempImageBase64[0].base64,
+          date: this.state.tempImageBase64[0].date,
+          caption: this.state.tempImageCaption,
+        },
+      ],
       visibleConfirm: false,
     });
   };
@@ -155,7 +173,12 @@ class ChecklistNonFB extends Component {
       console.log("base64: ", data.base64);
       this.setState({
         // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
-        tempImageBase64: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") }]
+        tempImageBase64: [
+          {
+            base64: data.base64,
+            date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          },
+        ],
       });
     });
   };
@@ -203,7 +226,8 @@ class ChecklistNonFB extends Component {
         </h3>
 
         <h1>Non-FB Checklist</h1>
-        <Form {...layout}
+        <Form
+          {...layout}
           name="Non-FB Checklist"
           className="nonfb_checklist"
           onFinish={this.onFinish}
@@ -213,7 +237,8 @@ class ChecklistNonFB extends Component {
             label="Date"
             rules={[{ required: true, message: "Date of Incident" }]}
           >
-            <DatePicker className="auditDate"
+            <DatePicker
+              className="auditDate"
               placeholder="Date"
               onChange={this.onChangeDate}
             />
@@ -229,7 +254,8 @@ class ChecklistNonFB extends Component {
               },
             ]}
           >
-            <Input className="commentBox"
+            <Input
+              className="commentBox"
               //placeholder="Comment"
               onChange={this.onChangeComment}
               value={this.state.comment}
@@ -238,12 +264,16 @@ class ChecklistNonFB extends Component {
             />
           </Form.Item>
           <Form.Item label="Total Score: ">
-            <span className="total_score">{(this.state.catCounts[0] + this.state.catCounts[1] + this.state.catCounts[2]) / 2}</span>
+            <span className="total_score">
+              {(this.state.catCounts[0] +
+                this.state.catCounts[1] +
+                this.state.catCounts[2]) /
+                2}
+            </span>
           </Form.Item>
         </Form>
 
-        <div
-          className="panels">
+        <div className="panels">
           {nonFb.map((cat, catIndex) => {
             // var catScore = cat.score;
             return (
@@ -271,7 +301,9 @@ class ChecklistNonFB extends Component {
                               renderItem={(item) => (
                                 <List.Item>
                                   <div className="create-audit-row">{item}</div>
-                                  <div>{this.createCheckbox(item, catIndex)}</div>
+                                  <div>
+                                    {this.createCheckbox(item, catIndex)}
+                                  </div>
                                 </List.Item>
                               )}
                             />
@@ -288,7 +320,7 @@ class ChecklistNonFB extends Component {
 
           <Button type="primary" onClick={this.showFormModal}>
             Upload Photo
-        </Button>
+          </Button>
           <Modal
             title="Upload Photo"
             visible={this.state.visibleForm}
@@ -374,11 +406,11 @@ class ChecklistNonFB extends Component {
             htmlType="submit"
           >
             SUBMIT
-        </Button>
+          </Button>
           {/* <Button onClick={() => this.updateItems()} className="submit-button" type="primary" htmlType="submit">
           TEST
         </Button> */}
-          <Modal
+          {/* <Modal
             title=""
             visible={this.state.visibleAudit}
             onOk={this.handleAuditOk}
@@ -386,7 +418,7 @@ class ChecklistNonFB extends Component {
             cancelButtonProps={{ disabled: true, visible: false }}
           >
             <p>Audit Uploaded!</p>
-          </Modal>
+          </Modal> */}
         </div>
       </div>
     );
@@ -398,4 +430,4 @@ ChecklistNonFB.propTypes = {
 const mapStateToProps = (state) => ({
   tenantInfo: state.tenantInfo,
 });
-export default connect(mapStateToProps)(ChecklistNonFB);
+export default connect(mapStateToProps, mapDispatchToProps)(ChecklistNonFB);
