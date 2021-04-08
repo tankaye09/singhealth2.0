@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const submit = (data) => {
   console.log(data);
-  axios.post("/api/audits/add", data);
+  axios.post("/api/audits/add", data).catch((err) => console.log(err));
 };
 
 export const display = (onDataReceived) => {

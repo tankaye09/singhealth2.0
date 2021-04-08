@@ -6,15 +6,18 @@ import { registerTenant } from "../../actions/authActions";
 import { Form, Input, Button, Message, Select, message } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
 import institutionsData from "../../data/institutions.json";
+import tenantData from "../../data/tenantTypes.json";
 
 // TODO: this should be taken from db
 const institutions = institutionsData;
+const tenantTypes = tenantData;
 
 class CreateTenant extends Component {
   constructor() {
     super();
     this.state = {
       name: "",
+      type: "",
       email: "",
       address: "",
       institution: "",
@@ -49,6 +52,7 @@ class CreateTenant extends Component {
   onFinish = (values) => {
     const newUser = {
       name: values.name,
+      type: values.type,
       email: values.email,
       address: values.address,
       institution: values.institution,
@@ -99,6 +103,28 @@ class CreateTenant extends Component {
             // className={classnames("", {
             //   invalid: errors.email,
             // })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Type"
+          name="type"
+          rules={[
+            {
+              required: true,
+              message: "Please select F&B or non-F&B!",
+            },
+          ]}
+        >
+          <Select
+            className="dropdown"
+            placeholder="F&B or Non-F&B"
+            options={tenantTypes}
+            onChange={this.onDropdownChange}
+            id="type"
+            type="type"
+            value={this.state.type}
+            error={errors.type}
           />
         </Form.Item>
 

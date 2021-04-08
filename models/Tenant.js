@@ -19,6 +19,10 @@ const TenantSchema = new Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
 });
 
 const User = mongoose.model("tenants", TenantSchema);

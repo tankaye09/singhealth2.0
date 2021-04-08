@@ -13,6 +13,8 @@ import {
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
+import SelelctTenant from "./SelelctTenant";
+
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
 
@@ -59,7 +61,10 @@ class Checklist extends Component {
       total_score:
         this.state.catCounts[0] +
         this.state.catCounts[1] +
-        this.state.catCounts[2],
+        this.state.catCounts[2] +
+        this.state.catCounts[3] +
+        this.state.catCounts[4],
+
       image: this.state.image,
       date: this.state.date,
       description: this.state.description,
@@ -198,6 +203,10 @@ class Checklist extends Component {
     return (
       <div className="table">
         <h1>FB CheckList</h1>
+        <p>
+          <SelelctTenant />
+        </p>
+
         {Fb.map((cat, catIndex) => {
           // var catScore = cat.score;
           return (

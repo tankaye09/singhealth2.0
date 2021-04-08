@@ -166,6 +166,7 @@ router.post("/createtenant", (req, res) => {
               address: req.body.address,
               institution: req.body.institution,
               auditor: req.body.auditor,
+              type: req.body.type,
             });
 
             // save in database

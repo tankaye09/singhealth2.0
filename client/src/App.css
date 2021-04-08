@@ -301,12 +301,13 @@ div.form {
 
 .create-audit-row {
   text-align: left;
-  padding-right: 5px;
+  padding-right: 20px;
   float: left;
 }
 
 .checklist-checkbox {
-  float: right;
+  position: absolute;
+  right: 0;
 }
 
 .checklist-item {
