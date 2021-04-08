@@ -1,14 +1,8 @@
 import axios from "axios";
-import {
-  GET_ERRORS,
-  GET_MESSAGE,
-  SET_CURRENT_USER,
-  USER_LOADING,
-} from "./types";
+import { GET_ERRORS, SET_SELECTED_TENANT } from "./types";
 
 // Get Tenants
 export const getTenants = (onDataReceived) => (dispatch) => {
-  console.log("before axios");
   axios
     .get("/api/tenants")
     .then((response) => {
@@ -23,4 +17,12 @@ export const getTenants = (onDataReceived) => (dispatch) => {
         })
       // console.log("err")
     );
+};
+
+// Update tenantInfo in store with the row selected tenantInfo
+export const setSelectedTenant = (data) => {
+  return {
+    type: SET_SELECTED_TENANT,
+    payload: data,
+  };
 };

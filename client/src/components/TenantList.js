@@ -5,29 +5,10 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
-import { getTenants } from "../actions/tenantActions";
+import { getTenants, setSelectedTenant } from "../actions/tenantActions";
 import PropTypes from "prop-types";
+import { FormProvider } from "antd/lib/form/context";
 
-const { Column, ColumnGroup } = Table;
-
-// const hardData = [
-//   {
-//     _id: "60631883a28310df640dcfe9",
-//     userId: "60631883a28310df640dcfe8",
-//     address: "addtenent7",
-//     institution: "CGH",
-//     auditor: "1",
-//     __v: 0,
-//   },
-//   {
-//     _id: "60631d491b5182a0d81d3942",
-//     userId: "60631d491b5182a0d81d3941",
-//     address: "tenant1",
-//     institution: "SGH",
-//     auditor: "staff1",
-//     __v: 0,
-//   },
-// ];
 class Directory extends Component {
   constructor() {
     super();
@@ -35,6 +16,7 @@ class Directory extends Component {
       tenantData: [],
       searchText: "",
       searchedColumn: "",
+      tenantInfo: {},
     };
   }
 
@@ -143,6 +125,21 @@ class Directory extends Component {
     this.setState({ searchText: "" });
   };
 
+  onCreateClick = (record) => {
+    //pass to redux
+    this.props.setSelectedTenant({ record });
+    //if FB, go to FB | if non-FB go to non-FB
+    if (record.type === "F&B") {
+      this.props.history.push("/checklistFB");
+    } else this.props.history.push("/checklistNonFB");
+    // this.props.tenantInfo = record;
+    console.log({ record });
+  };
+  onEditClick = () => ({
+    //pass props to checklist
+    //if FB, go to FB | if non-FB go to non-FB
+  });
+
   render() {
     const columns = [
       {
@@ -150,34 +147,61 @@ class Directory extends Component {
         dataIndex: "address",
         key: "address",
         fixed: "left",
+        width: "150",
         ...this.getColumnSearchProps("address"),
       },
       {
         title: "Inst.",
         dataIndex: "institution",
         key: "institution",
-        ...this.getColumnSearchProps("address"),
+        width: "150",
+        ...this.getColumnSearchProps("institution"),
       },
       {
         title: "Auditor",
         dataIndex: "auditor",
         key: "auditor",
+        width: "150",
         ...this.getColumnSearchProps("auditor"),
       },
       {
         title: "ID",
         dataIndex: "userId",
         key: "userId",
-        ...this.getColumnSearchProps("auditor"),
+        width: "150",
+        ...this.getColumnSearchProps("id"),
       },
       {
-        title: "Create",
+        title: "FB/NonFB",
+        dataIndex: "type",
+        key: "type",
+        width: "150",
+        ...this.getColumnSearchProps("type"),
+      },
+      {
+        title: "Audit Action",
         dataIndex: "",
         key: "x",
         fixed: "right",
-        render: () => (
+        width: "20%",
+        render: (record) => (
           <div>
-            <a>FB</a> / <a>Non-FB</a> Audit
+            <Button
+              className="action-buttons"
+              type="primary"
+              size="small"
+              onClick={() => this.onCreateClick(record)}
+            >
+              Create
+            </Button>
+            <Button
+              className="action-buttons"
+              type="primary"
+              size="small"
+              onClick={() => this.onEditClick(record)}
+            >
+              Edit
+            </Button>
           </div>
         ),
       },
@@ -197,9 +221,12 @@ class Directory extends Component {
 
 Directory.propTypes = {
   getTenants: PropTypes.func.isRequired,
+  setSelectedTenant: PropTypes.func.isRequired,
   tenantData: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   tenantData: state.tenantData,
 });
-export default connect(mapStateToProps, { getTenants })(Directory);
+export default connect(mapStateToProps, { getTenants, setSelectedTenant })(
+  Directory
+);

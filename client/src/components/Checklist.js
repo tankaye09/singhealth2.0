@@ -13,7 +13,6 @@ import {
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
-import SelelctTenant from "./SelelctTenant";
 
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
@@ -203,9 +202,6 @@ class Checklist extends Component {
     return (
       <div className="table">
         <h1>FB CheckList</h1>
-        <p>
-          <SelelctTenant />
-        </p>
 
         {Fb.map((cat, catIndex) => {
           // var catScore = cat.score;

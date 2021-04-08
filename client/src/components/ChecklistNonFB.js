@@ -11,8 +11,11 @@ import {
   Modal,
 } from "antd";
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit } from "../actions/auditActions.js";
+import store from "../store";
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
@@ -22,6 +25,7 @@ const { Panel } = Collapse;
 class ChecklistNonFB extends Component {
   // not exactly dynamic
   state = {
+    tenantInfo: {},
     type: "Non-FB",
     checked: false,
     catCounts: [0, 0, 0],
@@ -157,9 +161,14 @@ class ChecklistNonFB extends Component {
   };
 
   render() {
+    const { tenantInfo } = this.state;
+    console.log("Tenant info: ", { tenantInfo });
     return (
       <div className="table">
-        <h1>Non-FB CheckList</h1>
+        <h3>
+          Non-F&B Audit for Tenant at Address:{" "}
+          <b>{this.props.tenantInfo.record._id}</b>
+        </h3>
         {nonFb.map((cat, catIndex) => {
           // var catScore = cat.score;
           return (
@@ -308,5 +317,10 @@ class ChecklistNonFB extends Component {
     );
   }
 }
-
-export default ChecklistNonFB;
+ChecklistNonFB.propTypes = {
+  tenantInfo: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  tenantInfo: state.tenantInfo,
+});
+export default connect(mapStateToProps)(ChecklistNonFB);
