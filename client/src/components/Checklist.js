@@ -13,6 +13,7 @@ import {
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
+import dateformat from "dateformat";
 const fileUpload = require("fuctbase64");
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
@@ -74,7 +75,7 @@ class Checklist extends Component {
         this.state.catCounts[4],
       image: this.state.image,
       date: this.state.date,
-      description: this.state.description,
+      comment: this.state.comment,
       location: this.state.location,
     });
     this.showAuditModal();
@@ -84,16 +85,28 @@ class Checklist extends Component {
     this.setState({ [e.target.id]: e.target.value });
   };
 
+  onChangeComment = (comment) => {
+    this.setState({ comment: [{ "content": comment.nativeEvent.explicitOriginalTarget.value, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), }] });
+  };
+
+  onChangeCaption = (caption) => {
+    console.log(this.state);
+    this.setState({
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value
+    });
+  };
+
   onChangeDate = (date, dateString) => {
-    this.setState({ date: date });
+    this.setState({ date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") });
   };
 
   fileSelectedHandler = (event) => {
-    // console.log(event.target.files[0]);
+    console.log(event.target.files[0]);
     fileUpload(event).then((data) => {
-      // console.log("base64: ", data.base64);
+      console.log("base64: ", data.base64);
       this.setState({
-        image: data.base64,
+        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
+        tempImageBase64: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") }]
       });
     });
   };
@@ -130,7 +143,9 @@ class Checklist extends Component {
 
   handleUploadOk = (e) => {
     console.log(e);
+    console.log(this.state);
     this.setState({
+      image: [{ "base64": this.state.tempImageBase64[0].base64, "date": this.state.tempImageBase64[0].date, "caption": this.state.tempImageCaption }],
       visibleConfirm: false,
     });
   };
@@ -181,14 +196,17 @@ class Checklist extends Component {
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     image: null,
+    tempImageBase64: [],
+    tempImageCaption: null,
     date: null,
-    description: "",
+    comment: null,
     location: "",
     visibleForm: false,
     visibleConfirm: false,
     visibleAudit: false,
     i: 0,
   };
+
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
     switch (catIndex) {
@@ -266,8 +284,8 @@ class Checklist extends Component {
           >
             <Input className="commentBox"
               //placeholder="Comment"
-              onChange={this.onChange}
-              value={this.state.description}
+              onChange={this.onChangeComment}
+              value={this.state.comment}
               id="comment"
               type="comment"
             />
@@ -348,7 +366,7 @@ class Checklist extends Component {
             </Form.Item> */}
 
               <Form.Item
-                name="description"
+                name="caption"
                 rules={[
                   {
                     required: true,
@@ -357,11 +375,11 @@ class Checklist extends Component {
                 ]}
               >
                 <Input
-                  placeholder="Description"
-                  onChange={this.onChange}
-                  value={this.state.description}
-                  id="description"
-                  type="description"
+                  placeholder="Caption"
+                  onChange={this.onChangeCaption}
+                  value={this.state.caption}
+                  id="caption"
+                  type="capyion"
                 />
               </Form.Item>
 

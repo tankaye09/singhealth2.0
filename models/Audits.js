@@ -16,20 +16,20 @@ const AuditSchema = new Schema({
         required: true,
     },
     image: {
-        type: String,
+        type: [],
         required: true,
     },
     date: {
-        type: Date,
+        type: String,
         required: true,
     },
-    description: {
-        type: String,
+    comment: {
+        type: [],
         required: true,
     },
     location: {
         type: String,
-        required: true,
+        required: false,
     },
 });
 

@@ -1,8 +1,11 @@
+import { getAllByPlaceholderText } from "@testing-library/dom";
 import axios from "axios";
 
 export const submit = (data) => {
   console.log(data);
-  axios.post("/api/audits/add", data);
+  axios.post("/api/audits/add", data).catch((error) => {
+    console.log(error);
+  });
 };
 
 export const display = (onDataReceived) => {

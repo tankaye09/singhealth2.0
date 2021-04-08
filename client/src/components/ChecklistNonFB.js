@@ -13,6 +13,7 @@ import {
 import React, { Component } from "react";
 import importJSON from "../data/questionsDict.json";
 import { submit } from "../actions/auditActions.js";
+import dateformat from "dateformat";
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
@@ -29,6 +30,7 @@ const layout = {
 // TODO: Take score from json file => Update the score, replace the json file
 
 class ChecklistNonFB extends Component {
+
   // not exactly dynamic
   state = {
     type: "Non-FB",
@@ -39,8 +41,10 @@ class ChecklistNonFB extends Component {
     //counts[2]: for Workplace Safety & Health (40%)
     total_score: 0,
     image: null,
+    tempImageBase64: [],
+    tempImageCaption: null,
     date: null,
-    description: "",
+    comment: null,
     location: "",
     visibleForm: false,
     visibleConfirm: false,
@@ -49,6 +53,7 @@ class ChecklistNonFB extends Component {
 
   submitAudit = () => {
     console.log(this.state);
+    console.log(typeof this.state.date);
     submit({
       type: "Non-FB",
       catCounts: this.state.catCounts,
@@ -58,7 +63,7 @@ class ChecklistNonFB extends Component {
         this.state.catCounts[2],
       image: this.state.image,
       date: this.state.date,
-      description: this.state.description,
+      comment: this.state.comment,
       location: this.state.location,
     });
     this.showAuditModal();
@@ -68,8 +73,19 @@ class ChecklistNonFB extends Component {
     this.setState({ [e.target.id]: e.target.value });
   };
 
+  onChangeComment = (comment) => {
+    this.setState({ comment: [{ "content": comment.nativeEvent.explicitOriginalTarget.value, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), }] });
+  };
+
+  onChangeCaption = (caption) => {
+    console.log(this.state);
+    this.setState({
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value
+    });
+  };
+
   onChangeDate = (date, dateString) => {
-    this.setState({ date: date });
+    this.setState({ date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") });
   };
 
   showFormModal = () => {
@@ -111,7 +127,9 @@ class ChecklistNonFB extends Component {
 
   handleUploadOk = (e) => {
     console.log(e);
+    console.log(this.state);
     this.setState({
+      image: [{ "base64": this.state.tempImageBase64[0].base64, "date": this.state.tempImageBase64[0].date, "caption": this.state.tempImageCaption }],
       visibleConfirm: false,
     });
   };
@@ -128,9 +146,10 @@ class ChecklistNonFB extends Component {
   fileSelectedHandler = (event) => {
     console.log(event.target.files[0]);
     fileUpload(event).then((data) => {
-      // console.log("base64: ", data.base64);
+      console.log("base64: ", data.base64);
       this.setState({
-        image: data.base64,
+        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
+        tempImageBase64: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ") }]
       });
     });
   };
@@ -165,9 +184,6 @@ class ChecklistNonFB extends Component {
     }
   };
 
-
-
-
   render() {
     return (
       <div>
@@ -201,8 +217,8 @@ class ChecklistNonFB extends Component {
           >
             <Input className="commentBox"
               //placeholder="Comment"
-              onChange={this.onChange}
-              value={this.state.description}
+              onChange={this.onChangeComment}
+              value={this.state.comment}
               id="comment"
               type="comment"
             />
@@ -286,7 +302,7 @@ class ChecklistNonFB extends Component {
             </Form.Item> */}
 
               <Form.Item
-                name="description"
+                name="caption"
                 rules={[
                   {
                     required: true,
@@ -295,11 +311,11 @@ class ChecklistNonFB extends Component {
                 ]}
               >
                 <Input
-                  placeholder="Description"
-                  onChange={this.onChange}
-                  value={this.state.description}
-                  id="description"
-                  type="description"
+                  placeholder="Caption"
+                  onChange={this.onChangeCaption}
+                  value={this.state.caption}
+                  id="caption"
+                  type="caption"
                 />
               </Form.Item>
 

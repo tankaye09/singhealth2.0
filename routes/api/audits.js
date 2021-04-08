@@ -9,15 +9,10 @@ router.post("/add", (req, res) => {
     const newAudit = new Audit({
         type: req.body.type,
         catCounts: req.body.catCounts,
-        profcount: req.body.profcount,
-        gc_count: req.body.gc_count,
-        food_count: req.body.food_count,
-        health_count: req.body.health_count,
-        safety_count: req.body.safety_count,
         total_score: req.body.total_score,
         image: req.body.image,
         date: req.body.date,
-        description: req.body.description,
+        comment: req.body.comment,
         location: req.body.location,
     });
 
