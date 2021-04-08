@@ -90,9 +90,9 @@ class Directory extends Component {
     onFilter: (value, record) =>
       record[dataIndex]
         ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
         : "",
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
@@ -194,6 +194,7 @@ class Directory extends Component {
             >
               Create
             </Button>
+            <p></p>
             <Button
               className="action-buttons"
               type="primary"

@@ -1,8 +1,11 @@
+import { getAllByPlaceholderText } from "@testing-library/dom";
 import axios from "axios";
 
 export const submit = (data) => {
   console.log(data);
-  axios.post("/api/audits/add", data).catch((err) => console.log(err));
+  axios.post("/api/audits/add", data).catch((error) => {
+    console.log(error);
+  });
 };
 
 export const display = (onDataReceived) => {
@@ -17,4 +20,11 @@ export const display = (onDataReceived) => {
     .catch(() => {
       alert("Error");
     });
+};
+
+export const updateAudit = (data) => {
+  console.log(data);
+  axios.put("/api/audits/add", data).catch((error) => {
+    console.log(error);
+  });
 };
