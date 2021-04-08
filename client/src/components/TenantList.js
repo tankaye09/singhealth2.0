@@ -194,6 +194,7 @@ class Directory extends Component {
             >
               Create
             </Button>
+            <p></p>
             <Button
               className="action-buttons"
               type="primary"

@@ -11,6 +11,8 @@ import {
   DatePicker,
 } from "antd";
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
 const fileUpload = require("fuctbase64");
@@ -178,6 +180,8 @@ class Checklist extends Component {
     visibleForm: false,
     visibleConfirm: false,
     visibleAudit: false,
+    tenantInfo: {},
+    type: "FB",
   };
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -225,7 +229,14 @@ class Checklist extends Component {
   render() {
     return (
       <div className="table">
-        <h1>FB CheckList</h1>
+        <h3>
+          F&B Audit for Tenant at Address:{" "}
+          <b>
+            {this.props.tenantInfo !== null ? this.props.tenantInfo.record._id !== null
+              ? this.props.tenantInfo.record._id
+              : "" : ""}
+          </b>
+        </h3>
 
         {Fb.map((cat, catIndex) => {
           // var catScore = cat.score;
@@ -362,4 +373,11 @@ class Checklist extends Component {
     );
   }
 }
-export default Checklist;
+
+Checklist.propTypes = {
+  tenantInfo: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  tenantInfo: state.tenantInfo,
+});
+export default connect(mapStateToProps)(Checklist);
