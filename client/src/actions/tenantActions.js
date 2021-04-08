@@ -3,6 +3,7 @@ import { GET_ERRORS, SET_SELECTED_TENANT } from "./types";
 
 // Get Tenants
 export const getTenants = (onDataReceived) => (dispatch) => {
+  console.log("arrived");
   axios
     .get("/api/tenants")
     .then((response) => {
@@ -17,6 +18,18 @@ export const getTenants = (onDataReceived) => (dispatch) => {
         })
       // console.log("err")
     );
+};
+
+export const getTenant = (onDataReceived) => {
+  axios
+    .get("/api/tenants")
+    .then((response) => {
+      // console.log("response is:", response.data);
+      onDataReceived(response.data);
+    })
+    .catch(() => {
+      alert("Error");
+    });
 };
 
 // Update tenantInfo in store with the row selected tenantInfo

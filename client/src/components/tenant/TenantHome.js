@@ -4,11 +4,11 @@ import axios from "axios";
 import { NavLink, useHistory } from "react-router-dom";
 import { Table, Tag, Space, Button } from "antd";
 import { display } from "../../actions/auditActions.js";
-import { auditInfo } from "../../actions/tenantActions";
+import { auditInfo, getTenant } from "../../actions/tenantActions";
 import { connect } from "react-redux";
+import store from "../../store.js";
 import PropTypes from "prop-types";
 const { Column, ColumnGroup } = Table;
-
 
 const Audit = (props) => (
   <tr>
@@ -40,21 +40,31 @@ class TenantHome extends Component {
     this.state = {
       audits: [],
       actualAudits: [],
+      userID: null,
     };
   }
 
   componentDidMount() {
+    console.log(store.getState().auth.user.id);
+    getTenant((data) => {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].userId == store.getState().auth.user.id) {
+          this.setState({ userID: data[i]._id })
+        }
+      }
+    });
     display((data) => {
       var tempList = [];
       for (var i = 0; i < data.length; i++) {
         console.log(data[i]);
-        if (data[i].tenantID == "606d8d37f1c72db7882af5c4") {
+        if (data[i].tenantID == this.state.userID) {
           tempList.push(data[i]);
         }
       }
       this.setState({ actualAudits: tempList });
     });
     // this.auditList();
+
   }
 
   deleteAudit(id) {
@@ -133,7 +143,7 @@ TenantHome.propTypes = {
   auditInfo: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
-  tenantID: state.tenantID,
+  userID: state.auth.user.id,
 });
 export default connect(mapStateToProps, { auditInfo })(
   TenantHome
