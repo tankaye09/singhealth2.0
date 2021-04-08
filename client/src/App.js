@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
+import Recaptcha from "react-recaptcha";
+
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 
 import { Provider } from "react-redux";

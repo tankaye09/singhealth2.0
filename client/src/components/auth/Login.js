@@ -4,18 +4,17 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
+import Recaptcha from "react-recaptcha";
 
 import { Form, Input, Button, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import ReCAPTCHA from "react-google-recaptcha";
-const recaptchaRef = React.createRef();
-const grecaptchaObject = window.grecaptcha;
-
 class Login extends Component {
   constructor() {
     super();
+    this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
+      isVerified: false,
       email: "",
       password: "",
       usertypebool: false,
@@ -60,25 +59,41 @@ class Login extends Component {
   onFinish = (values) => {
     // console.log(values);
     // Process checkbox boolean to usertype string
-    var { usertype } = "";
-    if (this.state.usertypebool) {
-      usertype = "staff";
+    if (!this.state.isVerified) {
+      alert("Please verify you are human");
     } else {
-      usertype = "tenant";
-    }
-    const userData = {
-      email: values.email,
-      password: values.password,
-      usertype: usertype,
-    };
-    console.log(values);
+      window.recaptcha = null;
+      var { usertype } = "";
+      if (this.state.usertypebool) {
+        usertype = "staff";
+      } else {
+        usertype = "tenant";
+      }
+      const userData = {
+        email: values.email,
+        password: values.password,
+        usertype: usertype,
+      };
+      console.log(values);
 
-    this.props.loginUser(userData, this.props.history); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+      this.props.loginUser(userData, this.props.history); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+    }
   };
+
+  recaptchaLoaded() {
+    console.log("captcha loaded");
+  }
+
+  verifyCallback(response) {
+    if (response) {
+      this.setState({ isVerified: true });
+    }
+  }
   render() {
     const { errors } = this.state;
     return (
       <div>
+        <div>{this.state.isVerified.toString()}</div>
         <Form
           onFinish={this.onFinish}
           name="normal_login"
@@ -144,17 +159,12 @@ class Login extends Component {
             </Button>
             New staff member? <Link to="/Register">Register here!</Link>
           </Form.Item>
-
-          <Form.Item
-            name="recaptcha">
-            <ReCAPTCHA
-              ref={(r) => this.recaptcha = r}
-              size="invisible"
-              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-              onChange={this.onChange}
-            />
-          </Form.Item>
         </Form>
+        <Recaptcha
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          render="explicit"
+          verifyCallback={this.verifyCallback}
+        />
       </div>
     );
   }

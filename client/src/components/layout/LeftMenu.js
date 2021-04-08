@@ -28,14 +28,14 @@ class StaffLeftMenu extends Component {
           <NavLink to="/auditlist">Audits</NavLink>
         </Menu.Item>
 
-        <SubMenu key="sub1" title={<span>Create Audit</span>}>
+        {/* <SubMenu key="sub1" title={<span>Create Audit</span>}>
           <Menu.Item key="fbchecklist">
             <NavLink to="/checklistFB">FB Audit List</NavLink>
           </Menu.Item>
           <Menu.Item key="nonfbchecklist">
             <NavLink to="/checklistNonFB">Non-FB Audit List</NavLink>
           </Menu.Item>
-        </SubMenu>
+        </SubMenu> */}
 
         <Menu.Item key="createtenant">
           <NavLink to="/createtenant">Create Tenant</NavLink>

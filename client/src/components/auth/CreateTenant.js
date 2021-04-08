@@ -187,6 +187,7 @@ class CreateTenant extends Component {
           ]}
         >
           <Select
+            showSearch
             className="dropdown"
             icon={MailOutlined}
             placeholder="Institution"

@@ -161,13 +161,15 @@ class ChecklistNonFB extends Component {
   };
 
   render() {
-    const { tenantInfo } = this.state;
-    console.log("Tenant info: ", { tenantInfo });
     return (
       <div className="table">
         <h3>
           Non-F&B Audit for Tenant at Address:{" "}
-          <b>{this.props.tenantInfo.record._id}</b>
+          <b>
+            {this.props.tenantInfo.record._id !== null
+              ? this.props.tenantInfo.record._id
+              : ""}
+          </b>
         </h3>
         {nonFb.map((cat, catIndex) => {
           // var catScore = cat.score;
