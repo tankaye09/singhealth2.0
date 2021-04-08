@@ -40,7 +40,7 @@ export const display = (onDataReceived) => (dispatch) => {
 
 export const updateAudit = (data) => {
   console.log(data);
-  axios.put("/api/audits/add", data).catch((error) => {
+  axios.put("/api/audits/update", data).catch((error) => {
     console.log(error);
   });
 };

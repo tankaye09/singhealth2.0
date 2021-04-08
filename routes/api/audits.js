@@ -30,22 +30,30 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.put("/update/:id", function (req, res) {
-  db.collection("audits").update(
+router.route("/").get((req, res) => {
+  console.log("test");
+  Audit.find()
+    .then((data) => res.json(data))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+router.put("/update", function (req, res) {
+  console.log(req.body._id);
+  Audit.findOneAndUpdate(
     { _id: req.body._id },
     {
-      $set: {
-        type: req.body.type,
-        catCounts: req.body.catCounts,
-        total_score: req.body.total_score,
-        image: req.body.image,
-        date: req.body.date,
+      $push: {
         comment: req.body.comment,
-        location: req.body.location,
-        tenantID: req.body.tenantID,
       },
+      new: true,
     }
-  );
+  )
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 module.exports = router;

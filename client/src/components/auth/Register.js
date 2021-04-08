@@ -248,6 +248,7 @@ class Register extends Component {
         <Recaptcha
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           render="explicit"
+          onloadCallback={console.log("onloadCallback")}
           verifyCallback={this.verifyCallback}
         />
       </div>

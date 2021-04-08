@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import Recaptcha from "react-recaptcha";
-
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 
 import { Provider } from "react-redux";
@@ -30,7 +28,6 @@ import TenantEditAudit from "./components/tenant/EditAudit";
 import ViewAuditTenant from "./components/ViewAuditTenant";
 //Error warning
 import MessageDisplay from "./components/MessageDisplay";
-
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -74,10 +71,18 @@ class App extends Component {
               />
               <StaffRoute exact path="/directory" component={Directory} />
               <StaffRoute exact path="/createtenant" component={CreateTenant} />
-              <StaffRoute exact path="/viewaudit" component={ViewAuditAuditor} />
+              <StaffRoute
+                exact
+                path="/viewaudit"
+                component={ViewAuditAuditor}
+              />
 
               <TenantRoute exact path="/tenant" component={TenantHome} />
-              <TenantRoute exact path="/viewaudittenant" component={ViewAuditTenant} />
+              <TenantRoute
+                exact
+                path="/viewaudittenant"
+                component={ViewAuditTenant}
+              />
               <TenantRoute
                 exact
                 path="/tenant/editAudit"
