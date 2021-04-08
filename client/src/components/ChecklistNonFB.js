@@ -20,6 +20,7 @@ import dateformat from "dateformat";
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
+const { TextArea } = Input;
 
 const layout = {
   labelCol: {
@@ -225,16 +226,14 @@ class ChecklistNonFB extends Component {
           </b>
         </h3>
 
-        <h1>Non-FB Checklist</h1>
         <Form
-          {...layout}
+          // {...layout}
           name="Non-FB Checklist"
-          className="nonfb_checklist"
+          className="login-register-form"
           onFinish={this.onFinish}
         >
           <Form.Item
             name="date"
-            label="Date"
             rules={[{ required: true, message: "Date of Incident" }]}
           >
             <DatePicker
@@ -246,32 +245,26 @@ class ChecklistNonFB extends Component {
 
           <Form.Item
             name="Comment"
-            label="Comment"
-            rules={[
-              {
-                required: false,
-                message: "Description",
-              },
-            ]}
+            rules={[{ required: true, message: "Description" }]}
           >
-            <Input
-              className="commentBox"
-              //placeholder="Comment"
-              onChange={this.onChangeComment}
+            <TextArea
+              placeholder="Notes or Comments"
+              onChange={this.onChange}
               value={this.state.comment}
               id="comment"
               type="comment"
+              rows={4}
             />
           </Form.Item>
-          <Form.Item label="Total Score: ">
-            <span className="total_score">
-              {(this.state.catCounts[0] +
-                this.state.catCounts[1] +
-                this.state.catCounts[2]) /
-                2}
-            </span>
-          </Form.Item>
         </Form>
+
+        <Button
+          type="dashed"
+          className="submit-button"
+          onClick={this.showFormModal}
+        >
+          Upload Photo
+        </Button>
 
         <div className="panels">
           {nonFb.map((cat, catIndex) => {
@@ -300,9 +293,13 @@ class ChecklistNonFB extends Component {
                               dataSource={subCat.questions} // Questions
                               renderItem={(item) => (
                                 <List.Item>
-                                  <div className="create-audit-row">{item}</div>
-                                  <div>
-                                    {this.createCheckbox(item, catIndex)}
+                                  <div className="checklist-item">
+                                    <div className="create-audit-row">
+                                      {item}
+                                    </div>
+                                    <div className="checklist-checkbox">
+                                      {this.createCheckbox(item, catIndex)}
+                                    </div>
                                   </div>
                                 </List.Item>
                               )}
@@ -317,10 +314,16 @@ class ChecklistNonFB extends Component {
               </Collapse>
             );
           })}
+          <b>
+            Total Score:{" "}
+            <span className="total_score">
+              {(this.state.catCounts[0] +
+                this.state.catCounts[1] +
+                this.state.catCounts[2]) /
+                2}
+            </span>
+          </b>
 
-          <Button type="primary" onClick={this.showFormModal}>
-            Upload Photo
-          </Button>
           <Modal
             title="Upload Photo"
             visible={this.state.visibleForm}

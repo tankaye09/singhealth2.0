@@ -1,9 +1,12 @@
 import React, { Component, TextArea } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Table, Tag, Space } from "antd";
-import { getAudits } from "../data/AuditData.ts";
-import { display } from "../actions/auditActions.js"; import { submit } from "../actions/auditActions.js";
+import { Input, Table, Button, Tag, Space } from "antd";
+import { connect } from "react-redux";
+import Highlighter from "react-highlight-words";
+import { SearchOutlined } from "@ant-design/icons";
+
+import { display } from "../actions/auditActions.js";
 
 const { Column, ColumnGroup } = Table;
 
@@ -28,12 +31,15 @@ const Audit = (props) => (
   </tr>
 );
 
-export default class AuditList extends Component {
+const mapDispatchToProps = {
+  display,
+};
+
+class AuditList extends Component {
   constructor(props) {
     super(props);
 
     this.deleteAudit = this.deleteAudit.bind(this);
-
     this.state = { audits: [] };
   }
 
@@ -47,7 +53,8 @@ export default class AuditList extends Component {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-    display((data) => {
+    this.props.display((data) => {
+      console.log(data);
       this.setState({ audits: data });
     });
   }
@@ -72,37 +79,166 @@ export default class AuditList extends Component {
       );
     });
   }
+
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => this.handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              this.setState({
+                searchText: selectedKeys[0],
+                searchedColumn: dataIndex,
+              });
+            }}
+          >
+            Filter
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        : "",
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select(), 100);
+      }
+    },
+    render: (text) =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+
+  handleReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+
   render() {
     // console.log(this.state.audits);
+    const columns = [
+      {
+        title: "Type",
+        dataIndex: "type",
+        key: "type",
+        fixed: "left",
+        width: "150",
+        ...this.getColumnSearchProps("type"),
+      },
+      {
+        title: "Location",
+        dataIndex: "location",
+        key: "location",
+        width: "150",
+        ...this.getColumnSearchProps("location"),
+      },
+      {
+        title: "Date",
+        dataIndex: "date",
+        key: "date",
+        width: "150",
+        ...this.getColumnSearchProps("date"),
+      },
+      {
+        title: "Audit Score",
+        dataIndex: "total_score",
+        key: "total_score",
+        width: "150",
+        ...this.getColumnSearchProps("total_score"),
+      },
+      {
+        title: "View Audit",
+        dataIndex: "",
+        key: "x",
+        render: (record) => (
+          <div>
+            <Button
+              onClick={() =>
+                window.open(
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+                )
+              }
+            >
+              View Image
+            </Button>
+          </div>
+        ),
+      },
+    ];
+
     return (
       <div className="table">
         <Table
+          columns={columns}
           dataSource={this.state.audits}
           title={() => <div className="table-title">Audits</div>}
-          scroll={{ x: 400 }}
-        >
-          <Column title="Type" dataIndex="type" key="type" />
-          <Column title="Tenant" dataIndex="tenant" key="tenant" />
-          <Column title="Date" dataIndex="date" key="date" />
-          <Column
-            title="Total Score"
-            dataIndex="total_score"
-            key="total_score"
-          />
-          <Column
-            title="View Audit"
-            dataIndex="view_audit"
-            key="view_audit"
-            render={(text, record) => (
-              <a>
-                <td onClick={() => window.open(text, "_blank")}>View Image</td>
-              </a>
-            )}
-          />
-        </Table>
+          scroll={{ x: 400, y: 300 }}
+        />
       </div>
     );
   }
 }
 
-// const data = getAudits("Pamela");
+export default connect(null, mapDispatchToProps)(AuditList);

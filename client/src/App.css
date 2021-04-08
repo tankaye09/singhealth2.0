@@ -314,6 +314,12 @@ div.form {
   display: inline-flex;
 }
 
+.auditDate {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Dropdown */
 .dropdown {
   text-align: left;
@@ -339,7 +345,7 @@ div.form {
 .auditDate {
   margin-left: auto;
 }
-.total_score{
+.total_score {
   margin-left: auto;
 }
 
