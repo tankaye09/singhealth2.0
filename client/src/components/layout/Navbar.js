@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import RightMenuLoggedIn from "./RightMenuLoggedIn";
-import { Drawer, Button } from "antd";
+import { Drawer, Button, Divider } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 // import Logo from "SingHealthLogo.png";
@@ -55,6 +55,7 @@ class Navbar extends Component {
             <p>
               <LeftMenu />
             </p>
+            <Divider />
             <p>{rightMenu}</p>
           </Drawer>
         </div>
