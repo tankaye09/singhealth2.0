@@ -21,6 +21,7 @@ import Directory from "./components/TenantList";
 import Checklist from "./components/Checklist";
 import ChecklistNonFB from "./components/ChecklistNonFB";
 import CreateTenant from "./components/auth/CreateTenant";
+import ViewAudit from "./components/ViewAudit";
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
 import TenantEditAudit from "./components/tenant/EditAudit";
@@ -69,6 +70,7 @@ class App extends Component {
               />
               <StaffRoute exact path="/directory" component={Directory} />
               <StaffRoute exact path="/createtenant" component={CreateTenant} />
+              <StaffRoute exact path="/viewaudit" component={ViewAudit} />
 
               <TenantRoute exact path="/tenant" component={TenantHome} />
               <TenantRoute
