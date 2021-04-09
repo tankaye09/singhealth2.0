@@ -14,7 +14,7 @@ class Login extends Component {
     super();
     this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
-      isVerified: false,
+      isVerified: true,
       email: "",
       password: "",
       usertypebool: false,
@@ -160,12 +160,6 @@ class Login extends Component {
             New staff member? <Link to="/Register">Register here!</Link>
           </Form.Item>
         </Form>
-        <Recaptcha
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-          render="explicit"
-          onloadCallback={console.log("onloadCallback")}
-          verifyCallback={this.verifyCallback}
-        />
       </div>
     );
   }

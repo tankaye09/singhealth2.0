@@ -45,7 +45,7 @@ class TenantHome extends Component {
   }
 
   componentDidMount() {
-    console.log("Monted: ", store.getState().auth.user.id);
+    console.log(store.getState().auth.user.id);
     getTenant((data) => {
       for (var i = 0; i < data.length; i++) {
         if (data[i].userId == store.getState().auth.user.id) {
@@ -107,7 +107,7 @@ class TenantHome extends Component {
       <div className="table">
         <Table
           dataSource={this.state.actualAudits}
-          title={() => <div className="table-title">Your Audits</div>}
+          title={() => <div className="table-title">Audits</div>}
           scroll={{ x: 400 }}
         >
           <Column title="Type" dataIndex="type" key="type" />
@@ -145,4 +145,4 @@ TenantHome.propTypes = {
 const mapStateToProps = (state) => ({
   userID: state.auth.user.id,
 });
-export default connect(mapStateToProps, { auditInfo, getTenant })(TenantHome);
+export default connect(mapStateToProps, { auditInfo })(TenantHome);

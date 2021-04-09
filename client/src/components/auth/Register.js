@@ -22,7 +22,7 @@ class Register extends Component {
     super();
     this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
-      isVerified: false,
+      isVerified: true,
       name: "",
       email: "",
       password: "",
@@ -245,12 +245,6 @@ class Register extends Component {
             Or <Link to="/Login">Login here</Link>
           </Form.Item>
         </Form>
-        <Recaptcha
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-          render="explicit"
-          onloadCallback={console.log("onloadCallback")}
-          verifyCallback={this.verifyCallback}
-        />
       </div>
     );
   }
