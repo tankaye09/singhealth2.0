@@ -86,12 +86,6 @@ class TenantHome extends Component {
   };
 
   auditList() {
-    for (var i = 0; i < this.state.audits.length; i++) {
-      console.log(this.state.audits[i]);
-      if (this.state.audits[i].tenantID == "606d8d37f1c72db7882af5c4") {
-        this.state.actualAudits.push(this.state.audits[i]);
-      }
-    }
     return this.state.actualAudits.map((currentaudit) => {
       return (
         <Audit
