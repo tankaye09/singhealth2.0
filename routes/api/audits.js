@@ -24,7 +24,7 @@ router.post("/add", (req, res) => {
 });
 
 router.route("/").get((req, res) => {
-  console.log("test");
+  // console.log("test");
   Audit.find()
     .then((data) => res.json(data))
     .catch((err) => res.status(400).json("Error: " + err));

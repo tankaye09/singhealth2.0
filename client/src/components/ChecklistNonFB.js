@@ -15,21 +15,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit } from "../actions/auditActions.js";
-import store from "../store";
 import dateformat from "dateformat";
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
 const { TextArea } = Input;
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
+// const layout = {
+//   labelCol: {
+//     span: 8,
+//   },
+//   wrapperCol: {
+//     span: 16,
+//   },
+// };
 
 const mapDispatchToProps = {
   submit,
@@ -58,11 +57,17 @@ class ChecklistNonFB extends Component {
     visibleConfirm: false,
     visibleAudit: false,
   };
+  componentDidMount() {
+    console.log("props: ", this.props.tenantInfo);
+    if (typeof this.props.tenantInfo !== "undefined") {
+      this.setState({ tenantInfo: this.props.tenantInfo.record });
+    }
+  }
 
   submitAudit = () => {
-    console.log(this.state);
-    console.log(typeof this.state.date);
-    console.log(typeof this.props.tenantInfo.record._id);
+    // console.log(this.state);
+    // console.log(typeof this.state.date);
+    // console.log(typeof this.props.tenantInfo.record._id);
     this.props.submit({
       type: "Non-FB",
       catCounts: this.state.catCounts,
@@ -77,6 +82,7 @@ class ChecklistNonFB extends Component {
       tenantID: this.props.tenantInfo.record._id,
     });
     this.showAuditModal();
+    window.scrollTo(0, 0); // Scroll to top
   };
 
   onChange = (e) => {
@@ -220,8 +226,8 @@ class ChecklistNonFB extends Component {
         <h3>
           Non-F&B Audit for Tenant at Address:{" "}
           <b>
-            {this.props.tenantInfo.record._id !== null
-              ? this.props.tenantInfo.record._id
+            {typeof this.state.tenantInfo !== "undefined"
+              ? this.state.tenantInfo.address
               : ""}
           </b>
         </h3>
@@ -340,15 +346,6 @@ class ChecklistNonFB extends Component {
               <Form.Item>
                 <Input type="file" onChange={this.fileSelectedHandler} />
               </Form.Item>
-              {/* <Form.Item
-              name="date"
-              rules={[{ required: true, message: "Date of Incident" }]}
-            >
-              <DatePicker
-                placeholder="Date"
-                onChange={this.onChangeDate}
-              />
-            </Form.Item> */}
 
               <Form.Item
                 name="caption"
@@ -367,30 +364,7 @@ class ChecklistNonFB extends Component {
                   type="caption"
                 />
               </Form.Item>
-
-              {/* <Form.Item
-              name="location"
-              rules={[{ required: true, message: "Location of Incident" }]}
-            >
-              <Input
-                placeholder="Location"
-                onChange={this.onChange}
-                value={this.state.location}
-                id="location"
-                type="location"
-              />
-            </Form.Item> */}
             </Form>
-            {/* <Form>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="upload-photo-button"
-              onClick={() => { this.upload(this.state); }}
-            >
-              Upload
-                    </Button>
-          </Form> */}
             <Modal
               title="Upload Confirm"
               destroyOnClose={true}
@@ -410,18 +384,6 @@ class ChecklistNonFB extends Component {
           >
             SUBMIT
           </Button>
-          {/* <Button onClick={() => this.updateItems()} className="submit-button" type="primary" htmlType="submit">
-          TEST
-        </Button> */}
-          {/* <Modal
-            title=""
-            visible={this.state.visibleAudit}
-            onOk={this.handleAuditOk}
-            okButtonProps={{ disabled: false }}
-            cancelButtonProps={{ disabled: true, visible: false }}
-          >
-            <p>Audit Uploaded!</p>
-          </Modal> */}
         </div>
       </div>
     );

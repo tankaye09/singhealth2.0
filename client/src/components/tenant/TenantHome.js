@@ -36,33 +36,38 @@ class TenantHome extends Component {
     super(props);
 
     this.deleteAudit = this.deleteAudit.bind(this);
-
     this.state = {
       audits: [],
       actualAudits: [],
-      userID: null,
+      tenantId: "",
     };
   }
 
   componentDidMount() {
-    console.log("Monted: ", store.getState().auth.user.id);
+    console.log("Mounted: ", store.getState().auth.user.id);
     getTenant((data) => {
       for (var i = 0; i < data.length; i++) {
-        if (data[i].userId == store.getState().auth.user.id) {
-          this.setState({ userID: data[i]._id });
+        if (data[i].userId === store.getState().auth.user.id) {
+          this.setState(
+            { tenantId: data[i]._id },
+            console.log(data[i]._id),
+            this.props.display((displayData) => {
+              // console.log("displayData is: ", displayData);
+              var tempList = [];
+              for (var i = 0; i < displayData.length; i++) {
+                // console.log(displayData[i].tenantID);
+                if (displayData[i].tenantID === this.state.tenantId) {
+                  tempList.push(displayData[i]);
+                }
+              }
+              // console.log(tempList);
+              this.setState({ actualAudits: tempList });
+            })
+          );
         }
       }
     });
-    display((data) => {
-      var tempList = [];
-      for (var i = 0; i < data.length; i++) {
-        console.log(data[i]);
-        if (data[i].tenantID == this.state.userID) {
-          tempList.push(data[i]);
-        }
-      }
-      this.setState({ actualAudits: tempList });
-    });
+
     // this.auditList();
   }
 
@@ -145,4 +150,6 @@ TenantHome.propTypes = {
 const mapStateToProps = (state) => ({
   userID: state.auth.user.id,
 });
-export default connect(mapStateToProps, { auditInfo, getTenant })(TenantHome);
+export default connect(mapStateToProps, { auditInfo, getTenant, display })(
+  TenantHome
+);
