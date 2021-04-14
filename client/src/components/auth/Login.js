@@ -9,6 +9,9 @@ import Recaptcha from "react-recaptcha";
 import { Form, Input, Button, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
+// HAZEL: for testing change to true
+const recaptchaOn = false;
+
 class Login extends Component {
   constructor() {
     super();
@@ -30,6 +33,11 @@ class Login extends Component {
       } else if (this.props.auth.user.usertype === "tenant") {
         this.props.history.push("/tenant");
       }
+    }
+    if (recaptchaOn) {
+      this.setState({
+        isVerified: true,
+      });
     }
   }
   // might be deprecated
@@ -93,7 +101,6 @@ class Login extends Component {
     const { errors } = this.state;
     return (
       <div>
-        <div>{this.state.isVerified.toString()}</div>
         <Form
           onFinish={this.onFinish}
           name="normal_login"

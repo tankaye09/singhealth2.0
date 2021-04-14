@@ -15,6 +15,9 @@ import {
 } from "@ant-design/icons";
 import institutionsData from "../../data/institutions.json";
 
+// HAZEL: for testing change to true
+const recaptchaOn = false;
+
 const institutions = institutionsData;
 
 class Register extends Component {
@@ -38,6 +41,11 @@ class Register extends Component {
     // If loggied in and user navigates to Register page, should redirect them to dashboad
     if (this.props.auth.isAuthenticaed) {
       this.props.history.push("/dashboard"); // Push new entry into history stack, ie redirecting the user to another route
+    }
+    if (recaptchaOn) {
+      this.setState({
+        isVerified: true,
+      });
     }
   }
 
