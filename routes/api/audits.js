@@ -30,13 +30,6 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/").get((req, res) => {
-  console.log("test");
-  Audit.find()
-    .then((data) => res.json(data))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
 router.put("/update", function (req, res) {
   console.log(req.body._id);
   Audit.findOneAndUpdate(

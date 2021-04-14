@@ -39,10 +39,3 @@ export const setSelectedTenant = (data) => {
     payload: data,
   };
 };
-
-export const auditInfo = (data) => {
-  return {
-    type: SET_SELECTED_TENANT,
-    payload: data,
-  };
-};

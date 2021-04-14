@@ -53,11 +53,15 @@ class ViewAuditTenant extends Component {
     var Comm = [];
     for (
       var i = 0;
-      i < Math.max(this.state.comment.length, this.state.image.length);
+      i <
+      Math.max(
+        this.state.comment.length,
+        this.state.image === null ? 0 : this.state.image.length
+      );
       i++
     ) {
       Comm.push(this.state.comment[i]);
-      if (this.state.image[i] != null) {
+      if (this.state.image != null && this.state.image[i] != null) {
         Comm.push(this.state.image[i]);
       }
     }
@@ -75,7 +79,7 @@ class ViewAuditTenant extends Component {
             />
           </div>
         );
-      } else {
+      } else if (Comm[j].image) {
         output.push(
           <div className="image">
             <Image

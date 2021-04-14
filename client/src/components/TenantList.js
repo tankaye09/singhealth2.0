@@ -90,9 +90,9 @@ class Directory extends Component {
     onFilter: (value, record) =>
       record[dataIndex]
         ? record[dataIndex]
-          .toString()
-          .toLowerCase()
-          .includes(value.toLowerCase())
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
         : "",
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
@@ -135,7 +135,7 @@ class Directory extends Component {
     // this.props.tenantInfo = record;
     console.log({ record });
   };
-  onEditClick = () => ({
+  onDeleteClick = () => ({
     //pass props to checklist
     //if FB, go to FB | if non-FB go to non-FB
   });
@@ -157,13 +157,13 @@ class Directory extends Component {
         width: "150",
         ...this.getColumnSearchProps("institution"),
       },
-      {
-        title: "Auditor",
-        dataIndex: "auditor",
-        key: "auditor",
-        width: "150",
-        ...this.getColumnSearchProps("auditor"),
-      },
+      // {
+      //   title: "Auditor",
+      //   dataIndex: "auditor",
+      //   key: "auditor",
+      //   width: "150",
+      //   ...this.getColumnSearchProps("auditor"),
+      // },
       {
         title: "ID",
         dataIndex: "userId",
@@ -179,7 +179,7 @@ class Directory extends Component {
         ...this.getColumnSearchProps("type"),
       },
       {
-        title: "Audit Action",
+        title: "Action",
         dataIndex: "",
         key: "x",
         fixed: "right",
@@ -192,16 +192,16 @@ class Directory extends Component {
               size="small"
               onClick={() => this.onCreateClick(record)}
             >
-              Create
+              Create {"\n"} Audit
             </Button>
             <p></p>
             <Button
               className="action-buttons"
               type="primary"
               size="small"
-              onClick={() => this.onEditClick(record)}
+              onClick={() => this.onDeleteClick(record)}
             >
-              Edit
+              Delete Tenant
             </Button>
           </div>
         ),

@@ -11,6 +11,10 @@ const tenants = require("./routes/api/tenants");
 
 const app = express();
 
+// Change limit of payload
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
+
 // Bodyparser middleware
 app.use(
   bodyParser.urlencoded({
