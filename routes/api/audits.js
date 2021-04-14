@@ -15,6 +15,7 @@ router.post("/add", (req, res) => {
     comment: req.body.comment,
     location: req.body.location,
     tenantID: req.body.tenantID,
+    institution: req.body.institution,
   });
 
   newAudit

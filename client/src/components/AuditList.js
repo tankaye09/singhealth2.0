@@ -5,6 +5,8 @@ import { Input, Table, Button, Tag, Space } from "antd";
 import { connect } from "react-redux";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
+import { auditInfo, getTenants } from "../actions/tenantActions";
+import PropTypes from "prop-types";
 
 import { display } from "../actions/auditActions.js";
 
@@ -40,7 +42,7 @@ class AuditList extends Component {
     super(props);
 
     this.deleteAudit = this.deleteAudit.bind(this);
-    this.state = { audits: [] };
+    this.state = { audits: [], };
   }
 
   componentDidMount() {
@@ -57,7 +59,17 @@ class AuditList extends Component {
       console.log(data);
       this.setState({ audits: data });
     });
+
   }
+
+  onViewClick = (record) => {
+    //pass to redux
+    this.props.auditInfo({ record });
+    //if FB, go to FB | if non-FB go to non-FB
+    this.props.history.push("/viewaudit");
+    // this.props.tenantInfo = record;
+    console.log({ record });
+  };
 
   deleteAudit(id) {
     axios
@@ -141,9 +153,9 @@ class AuditList extends Component {
     onFilter: (value, record) =>
       record[dataIndex]
         ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
         : "",
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
@@ -188,7 +200,21 @@ class AuditList extends Component {
         ...this.getColumnSearchProps("type"),
       },
       {
-        title: "Location",
+        title: "Tenant ID",
+        dataIndex: "tenantID",
+        key: "itenantID",
+        width: "150",
+        ...this.getColumnSearchProps("tenantID"),
+      },
+      {
+        title: "Inst.",
+        dataIndex: "institution",
+        key: "institution",
+        width: "150",
+        ...this.getColumnSearchProps("institution"),
+      },
+      {
+        title: "Address",
         dataIndex: "location",
         key: "location",
         width: "150",
@@ -212,16 +238,14 @@ class AuditList extends Component {
         title: "View Audit",
         dataIndex: "",
         key: "x",
+        fixed: "right",
+        width: "20%",
         render: (record) => (
           <div>
             <Button
-              onClick={() =>
-                window.open(
-                  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
-                )
-              }
+              onClick={() => this.onViewClick(record)}
             >
-              View Image
+              View Audit
             </Button>
           </div>
         ),
@@ -241,4 +265,12 @@ class AuditList extends Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(AuditList);
+AuditList.propTypes = {
+  auditInfo: PropTypes.func.isRequired,
+};
+const mapStateToProps = (state) => ({
+  userID: state.auth.user.id,
+});
+export default connect(mapStateToProps, { auditInfo, getTenants, display })(
+  AuditList
+);

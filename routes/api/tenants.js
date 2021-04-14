@@ -10,6 +10,14 @@ router.get("/", (req, res) => {
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
+router.delete("/delete", (req, res) => {
+  Keys.deleteOne({ _id: req.body._id })
+    .then(() => {
+      console.log("Tenant Deleted")
+    })
+    .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
 // router.get("/tenants/:id", (req, res) => {
 //   Keys.findOne({ "userId": req.body.id }
 //     .then((err, result) => {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, SET_SELECTED_TENANT } from "./types";
+import { GET_ERRORS, SET_SELECTED_TENANT, GET_MESSAGE } from "./types";
 
 // Get Tenants
 export const getTenants = (onDataReceived) => (dispatch) => {
@@ -31,6 +31,24 @@ export const getTenant = (onDataReceived) => {
       alert("Error");
     });
 };
+
+export const delTenant = (data) => (dispatch) => {
+  axios
+    .delete("/api/tenants/delete", data)
+    .then(() =>
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Tenant Deleted",
+      })
+    )
+    .catch((error) => {
+      console.log("in the error");
+      dispatch({
+        type: GET_ERRORS,
+        payload: error.response.data,
+      });
+    });
+}
 
 // Update tenantInfo in store with the row selected tenantInfo
 export const setSelectedTenant = (data) => {
