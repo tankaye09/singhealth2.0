@@ -9,7 +9,8 @@ import Recaptcha from "react-recaptcha";
 import { Form, Input, Button, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-// HAZEL: for testing change to true
+// TEST TEAM: for testing change to false
+// DEV TEAM: for dev change to true
 const recaptchaOn = false;
 
 class Login extends Component {
@@ -34,7 +35,7 @@ class Login extends Component {
         this.props.history.push("/tenant");
       }
     }
-    if (recaptchaOn) {
+    if (!recaptchaOn) {
       this.setState({
         isVerified: true,
       });
