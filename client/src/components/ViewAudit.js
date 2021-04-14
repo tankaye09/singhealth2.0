@@ -10,59 +10,54 @@ import {
   Button,
 } from "antd";
 import dateformat from "dateformat";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { display, updateAudit } from "../actions/auditActions.js";
 
 const { Text } = Typography;
 const { TextArea } = Input;
 
-export default class ViewAuditAuditor extends Component {
+class ViewAudit extends Component {
   state = {
-    input: "85",
-    tenant: "tenant1",
+    _id: "",
+    audit: "",
+    total_score: "",
+    tenantID: "",
     auditor: "auditor",
     // auditorComments: ["Bla", "blabla"],
     // tenantComments: ["Response", "response"],
-    comments: [
-      {
-        content: "Please clear your rubbish as seen in photo",
-        date: "2015-05-29T15:30:17.983Z",
-        author: "auditor",
-      },
-      {
-        content: "I have cleared my rubbish, this is proof",
-        date: "2016-05-29T15:30:17.983Z",
-        author: "tenant1",
-      },
-      {
-        content: "I just checked again this morning and rubbish not cleared",
-        date: "2017-05-29T15:30:17.983Z",
-        author: "auditor",
-      },
-      {
-        content: "Ok, it is cleared for sure this time",
-        date: "2022-06-29T15:30:17.983Z",
-        author: "tenant1",
-      },
-    ],
-    image: [
-      {
-        base64:
-          "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",
-        date: "2018-05-29T15:30:17.983Z",
-      },
-    ],
+    comment: "",
+    image: "",
+    date: "",
+    catCounts: "",
+    type: "",
     decodedImage: "",
     newComment: "",
   };
+
+  componentDidMount() {
+    this.setState({
+      _id: this.props.tenantInfo.record._id,
+      total_score: this.props.tenantInfo.record.total_score,
+      tenantID: this.props.tenantInfo.record.tenantID,
+      comment: this.props.tenantInfo.record.comment,
+      image: this.props.tenantInfo.record.image,
+      date: this.props.tenantInfo.record.date,
+      catCounts: this.props.tenantInfo.record.catCounts,
+      type: this.props.tenantInfo.record.type,
+    });
+    console.log(this.state);
+  }
 
   displayComments() {
     var output = [];
     var Comm = [];
     for (
       var i = 0;
-      i < Math.max(this.state.comments.length, this.state.image.length);
+      i < Math.max(this.state.comment.length, this.state.image.length);
       i++
     ) {
-      Comm.push(this.state.comments[i]);
+      Comm.push(this.state.comment[i]);
       if (this.state.image[i] != null) {
         Comm.push(this.state.image[i]);
       }
@@ -97,9 +92,6 @@ export default class ViewAuditAuditor extends Component {
 
   onChange = (value) => {
     console.log(value.Text);
-    this.setState({
-      newComment: value,
-    });
     console.log(this.state.newComment);
   };
 
@@ -118,14 +110,30 @@ export default class ViewAuditAuditor extends Component {
   };
 
   submitComment = () => {
-    var tempArray = this.state.comments;
+    var tempArray = this.state.comment;
     console.log(tempArray);
     tempArray.push(this.state.newComment[0]);
     console.log(tempArray);
     this.setState({
-      comments: tempArray,
+      comment: tempArray,
     });
-    console.log(this.state.comments);
+    console.log(this.state.comment);
+    this.update();
+  };
+
+  update = () => {
+    console.log(this.state);
+    updateAudit({
+      _id: this.props.tenantInfo.record._id,
+      type: this.props.tenantInfo.record.type,
+      catCounts: this.props.tenantInfo.record.catCounts,
+      total_score: this.props.tenantInfo.record.total_score,
+      image: this.props.tenantInfo.record.image,
+      date: this.props.tenantInfo.record.date,
+      comment: this.state.newComment,
+      location: this.props.tenantInfo.record.location,
+      tenantID: this.props.tenantInfo.record.tenantID,
+    });
   };
 
   render() {
@@ -135,11 +143,11 @@ export default class ViewAuditAuditor extends Component {
         <Progress
           className="score"
           type="circle"
-          percent={this.state.input}
+          percent={this.state.total_score}
           width={200}
         />
         <div>
-          <Text className="name">Tenant: {this.state.tenant}</Text>
+          <Text className="name">Tenant: {this.state.tenantID}</Text>
           <div />
           <Text className="name">Auditor: {this.state.auditor}</Text>
           <div />
@@ -171,3 +179,11 @@ export default class ViewAuditAuditor extends Component {
     );
   }
 }
+
+ViewAudit.propTypes = {
+  tenantInfo: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  tenantInfo: state.tenantInfo,
+});
+export default connect(mapStateToProps)(ViewAudit);

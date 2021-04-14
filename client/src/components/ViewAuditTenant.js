@@ -129,7 +129,7 @@ class ViewAuditTenant extends Component {
       total_score: this.props.tenantInfo.record.total_score,
       image: this.props.tenantInfo.record.image,
       date: this.props.tenantInfo.record.date,
-      comment: this.state.comment,
+      comment: this.state.newComment,
       location: this.props.tenantInfo.record.location,
       tenantID: this.props.tenantInfo.record.tenantID,
     });

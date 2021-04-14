@@ -35,6 +35,10 @@ const AuditSchema = new Schema({
     type: String,
     required: true,
   },
+  institution: {
+    type: String,
+    required: true,
+  }
 });
 
 const Audit = mongoose.model("audits", AuditSchema);

@@ -45,9 +45,6 @@ class StaffLeftMenu extends Component {
           <NavLink to="/directory">Directory</NavLink>
         </Menu.Item>
 
-        <Menu.Item key="viewaudit">
-          <NavLink to="/viewaudit">View Audit</NavLink>
-        </Menu.Item>
       </Menu>
     );
   }

@@ -5,7 +5,7 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
-import { getTenants, setSelectedTenant } from "../actions/tenantActions";
+import { getTenants, setSelectedTenant, delTenant } from "../actions/tenantActions";
 import PropTypes from "prop-types";
 import { FormProvider } from "antd/lib/form/context";
 
@@ -140,6 +140,16 @@ class Directory extends Component {
     //if FB, go to FB | if non-FB go to non-FB
   });
 
+  onDeleteClick = (record) => {
+    var tenantList = this.state.tenantData
+    for (var i = 0; i < tenantList.length; i++) {
+      if (tenantList[i].userId == record.userId) {
+        console.log(tenantList[i]._id);
+        delTenant(tenantList[i]._id);
+      }
+    }
+  }
+
   render() {
     const columns = [
       {
@@ -202,6 +212,15 @@ class Directory extends Component {
               onClick={() => this.onEditClick(record)}
             >
               Edit
+            </Button>
+            <p></p>
+            <Button
+              className="action-buttons"
+              type="primary"
+              size="small"
+              onClick={() => this.onDeleteClick(record)}
+            >
+              Delete Tenant
             </Button>
           </div>
         ),

@@ -72,14 +72,15 @@ class ChecklistNonFB extends Component {
       type: "Non-FB",
       catCounts: this.state.catCounts,
       total_score:
-        this.state.catCounts[0] +
-        this.state.catCounts[1] +
-        this.state.catCounts[2],
+        (this.state.catCounts[0] +
+          this.state.catCounts[1] +
+          this.state.catCounts[2]) / 2,
       image: this.state.image,
       date: this.state.date,
       comment: this.state.comment,
-      location: this.state.location,
+      location: this.props.tenantInfo.record.address,
       tenantID: this.props.tenantInfo.record._id,
+      institution: this.props.tenantInfo.record.institution,
     });
     this.showAuditModal();
     window.scrollTo(0, 0); // Scroll to top
@@ -95,6 +96,7 @@ class ChecklistNonFB extends Component {
         {
           content: comment.nativeEvent.explicitOriginalTarget.value,
           date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          author: "auditor",
         },
       ],
     });
@@ -255,7 +257,7 @@ class ChecklistNonFB extends Component {
           >
             <TextArea
               placeholder="Notes or Comments"
-              onChange={this.onChange}
+              onChange={this.onChangeComment}
               value={this.state.comment}
               id="comment"
               type="comment"
