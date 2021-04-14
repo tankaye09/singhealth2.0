@@ -16,7 +16,7 @@ import {
 import institutionsData from "../../data/institutions.json";
 
 // HAZEL: for testing change to true
-const recaptchaOn = false;
+const recaptchaOff = true;
 
 const institutions = institutionsData;
 
@@ -42,7 +42,7 @@ class Register extends Component {
     if (this.props.auth.isAuthenticaed) {
       this.props.history.push("/dashboard"); // Push new entry into history stack, ie redirecting the user to another route
     }
-    if (recaptchaOn) {
+    if (recaptchaOff) {
       this.setState({
         isVerified: true,
       });

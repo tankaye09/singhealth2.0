@@ -34,7 +34,7 @@ class Login extends Component {
         this.props.history.push("/tenant");
       }
     }
-    if (recaptchaOn) {
+    if (!recaptchaOn) {
       this.setState({
         isVerified: true,
       });
