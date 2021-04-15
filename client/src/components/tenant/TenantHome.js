@@ -213,8 +213,11 @@ class TenantHome extends Component {
         key: "date",
         fixed: "left",
         width: "150",
-        sorter: (a, b) => new Date(a.date) - new Date(b.date),
-        sortDirections: ["descend"],
+        sorter: (a, b) => {
+          if (a.date > b.date) return 1;
+          else return -1;
+        },
+        defaultSortOrder: "descend",
         ...this.getColumnSearchProps("date"),
       },
       {
@@ -250,6 +253,7 @@ class TenantHome extends Component {
         <Table
           columns={columns}
           dataSource={this.state.actualAudits}
+          rowClassName={(record) => (record.total_score < 95 ? "red" : "green")}
           title={() => <div className="table-title">Your Audits</div>}
           scroll={{ x: 400 }}
         />
@@ -259,7 +263,7 @@ class TenantHome extends Component {
 }
 
 TenantHome.propTypes = {
-  auditInfo: PropTypes.func.isRequired,
+  setSelectedTenant: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   userID: state.auth.user.id,

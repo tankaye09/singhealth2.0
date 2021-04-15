@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Input, Table, Button, Tag, Space } from "antd";
 import { connect } from "react-redux";
+import { moment } from "moment";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
-import { auditInfo, getTenants } from "../actions/tenantActions";
+import { setSelectedTenant, getTenants } from "../actions/tenantActions";
 import PropTypes from "prop-types";
 
 import { display } from "../actions/auditActions.js";
@@ -42,7 +43,7 @@ class AuditList extends Component {
     super(props);
 
     this.deleteAudit = this.deleteAudit.bind(this);
-    this.state = { audits: [], };
+    this.state = { audits: [] };
   }
 
   componentDidMount() {
@@ -59,12 +60,11 @@ class AuditList extends Component {
       console.log(data);
       this.setState({ audits: data });
     });
-
   }
 
   onViewClick = (record) => {
     //pass to redux
-    this.props.auditInfo({ record });
+    this.props.setSelectedTenant({ record });
     //if FB, go to FB | if non-FB go to non-FB
     this.props.history.push("/viewaudit");
     // this.props.tenantInfo = record;
@@ -153,9 +153,9 @@ class AuditList extends Component {
     onFilter: (value, record) =>
       record[dataIndex]
         ? record[dataIndex]
-          .toString()
-          .toLowerCase()
-          .includes(value.toLowerCase())
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
         : "",
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
@@ -189,21 +189,24 @@ class AuditList extends Component {
   };
 
   render() {
-    // console.log(this.state.audits);
+    // if (this.state.audits.length > 0) {
+    //   console.log("before: ", this.state.audits[0].date);
+    //   const someDate = moment(this.state.audits[0].date);
+    //   console.log("after: ", someDate);
+    // }
     const columns = [
       {
-        title: "Type",
-        dataIndex: "type",
-        key: "type",
-        fixed: "left",
+        title: "Addr.",
+        dataIndex: "location",
+        key: "location",
         width: "150",
-        ...this.getColumnSearchProps("type"),
+        ...this.getColumnSearchProps("location"),
       },
       {
         title: "Tenant ID",
         dataIndex: "tenantID",
         key: "itenantID",
-        width: "150",
+        width: "300",
         ...this.getColumnSearchProps("tenantID"),
       },
       {
@@ -214,38 +217,42 @@ class AuditList extends Component {
         ...this.getColumnSearchProps("institution"),
       },
       {
-        title: "Address",
-        dataIndex: "location",
-        key: "location",
-        width: "150",
-        ...this.getColumnSearchProps("location"),
-      },
-      {
         title: "Date",
         dataIndex: "date",
         key: "date",
         width: "150",
+        sorter: (a, b) => {
+          if (a.date > b.date) return 1;
+          else return -1;
+        },
+        defaultSortOrder: "descend",
         ...this.getColumnSearchProps("date"),
+      },
+      {
+        title: "Type",
+        dataIndex: "type",
+        key: "type",
+        width: "150",
+        ...this.getColumnSearchProps("type"),
       },
       {
         title: "Audit Score",
         dataIndex: "total_score",
         key: "total_score",
-        width: "150",
+        fixed: "right",
+        width: "10%",
         ...this.getColumnSearchProps("total_score"),
       },
       {
-        title: "View Audit",
+        title: "Action",
         dataIndex: "",
         key: "x",
         fixed: "right",
-        width: "20%",
+        width: "10%",
         render: (record) => (
           <div>
-            <Button
-              onClick={() => this.onViewClick(record)}
-            >
-              View Audit
+            <Button type="primary" onClick={() => this.onViewClick(record)}>
+              View
             </Button>
           </div>
         ),
@@ -255,10 +262,11 @@ class AuditList extends Component {
     return (
       <div className="table">
         <Table
+          rowClassName={(record) => (record.total_score < 95 ? "red" : "green")}
           columns={columns}
           dataSource={this.state.audits}
           title={() => <div className="table-title">Audits</div>}
-          scroll={{ x: 400, y: 300 }}
+          scroll={{ x: 800, y: 300 }}
         />
       </div>
     );
@@ -266,11 +274,13 @@ class AuditList extends Component {
 }
 
 AuditList.propTypes = {
-  auditInfo: PropTypes.func.isRequired,
+  setSelectedTenant: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   userID: state.auth.user.id,
 });
-export default connect(mapStateToProps, { auditInfo, getTenants, display })(
-  AuditList
-);
+export default connect(mapStateToProps, {
+  setSelectedTenant,
+  getTenants,
+  display,
+})(AuditList);

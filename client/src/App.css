@@ -241,6 +241,13 @@ div.form {
   margin-top: 10px;
 }
 
+.table-row-light {
+  background-color: #ffffff;
+}
+.table-row-dark {
+  background-color: #fbfbfb;
+}
+
 .table-title {
   font-weight: bold;
   font-size: x-large;
@@ -318,6 +325,13 @@ div.form {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.red {
+  color: red;
+}
+.green {
+  color: green;
 }
 
 /* Dropdown */

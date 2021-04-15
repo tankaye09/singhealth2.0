@@ -70,6 +70,7 @@ class ViewAuditTenant extends Component {
 
     for (var j = 0; j < Comm.length; j++) {
       if (Comm[j].content) {
+        console.log("if: ", Comm[j].content);
         output.push(
           <div>
             <Comment
@@ -79,7 +80,8 @@ class ViewAuditTenant extends Component {
             />
           </div>
         );
-      } else if (Comm[j].image) {
+      } else {
+        console.log("else: ", typeof Comm[j]);
         output.push(
           <div className="image">
             <Image
