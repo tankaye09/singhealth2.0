@@ -45,6 +45,13 @@ export const updateAudit = (data) => {
   });
 };
 
+export const updateAuditImage = (data) => {
+  console.log(data);
+  axios.put("/api/audits/updateImage", data).catch((error) => {
+    console.log(error);
+  });
+};
+
 export const deleteAudit = (data) => {
   console.log(data);
   axios.post("/api/audits", data).catch((error) => {

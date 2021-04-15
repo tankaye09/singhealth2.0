@@ -8,11 +8,13 @@ import {
   Comment,
   Form,
   Button,
+  Modal,
 } from "antd";
 import dateformat from "dateformat";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { display, updateAudit } from "../actions/auditActions.js";
+import { display, updateAudit, updateAuditImage } from "../actions/auditActions.js";
+const fileUpload = require("fuctbase64");
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -33,6 +35,11 @@ class ViewAudit extends Component {
     type: "",
     decodedImage: "",
     newComment: "",
+    tempImageBase64: [],
+    tempImageCaption: null,
+    imageUpload: [],
+    visibleConfirm: false,
+    testState: "",
   };
 
   componentDidMount() {
@@ -49,6 +56,49 @@ class ViewAudit extends Component {
     console.log(this.state);
   }
 
+  fileSelectedHandler = (event) => {
+    console.log(event.target.files[0]);
+    fileUpload(event).then((data) => {
+      console.log("base64: ", data.base64);
+      this.setState({
+        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
+        tempImageBase64: [
+          {
+            base64: data.base64,
+            date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          },
+        ],
+      });
+    });
+  };
+
+  onChangeCaption = (caption) => {
+    console.log(this.state);
+    this.setState({
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value,
+    });
+  };
+
+  handleUploadOk = (e) => {
+    console.log(e);
+    console.log(this.state);
+    var tempArray = this.state.image;
+    console.log(tempArray);
+    tempArray.push([
+      {
+        base64: this.state.tempImageBase64[0].base64,
+        date: this.state.tempImageBase64[0].date,
+        caption: this.state.tempImageCaption,
+      },
+    ]);
+    console.log(tempArray);
+    this.setState({
+      image: tempArray,
+      visibleConfirm: false,
+    });
+    this.updateImage();
+  };
+
   displayComments() {
     var output = [];
     var Comm = [];
@@ -57,7 +107,10 @@ class ViewAudit extends Component {
       i < Math.max(this.state.comment.length, this.state.image.length);
       i++
     ) {
-      Comm.push(this.state.comment[i]);
+      if (this.state.comment[i] != null) {
+        Comm.push(this.state.comment[i]);
+      }
+
       if (this.state.image[i] != null) {
         Comm.push(this.state.image[i]);
       }
@@ -74,15 +127,26 @@ class ViewAudit extends Component {
               className="comment"
               content={<p>{Comm[j].content}</p>}
             />
+            <p></p>
+            <p></p>
           </div>
         );
       } else {
         output.push(
           <div className="image">
+            <p></p>
+            <Comment
+              author={<a>{Comm[j].uploader}</a>}
+              className="caption"
+              content={<p>{Comm[j].caption}</p>} >
+
+            </Comment>
             <Image
               width={100}
               src={`data:image/jpeg;base64,${Comm[j].base64}`}
             />
+            <p></p>
+            <p></p>
           </div>
         );
       }
@@ -93,6 +157,30 @@ class ViewAudit extends Component {
   onChange = (value) => {
     console.log(value.Text);
     console.log(this.state.newComment);
+  };
+
+  handleFormOk = (e) => {
+    console.log(e);
+    this.setState({
+      imageUpload: [
+        {
+          base64: this.state.tempImageBase64[0].base64,
+          date: this.state.tempImageBase64[0].date,
+          caption: this.state.tempImageCaption,
+          uploader: "auditor",
+        },
+      ],
+      // image: tempArray,
+      // visibleConfirm: false,
+      testState: "Test Passed",
+    });
+    this.showConfirmModal();
+  };
+
+  showConfirmModal = () => {
+    this.setState({
+      visibleConfirm: true,
+    });
   };
 
   newComment = (values) => {
@@ -118,10 +206,10 @@ class ViewAudit extends Component {
       comment: tempArray,
     });
     console.log(this.state.comment);
-    this.update();
+    this.updateComment();
   };
 
-  update = () => {
+  updateComment = () => {
     console.log(this.state);
     updateAudit({
       _id: this.props.tenantInfo.record._id,
@@ -131,6 +219,21 @@ class ViewAudit extends Component {
       image: this.props.tenantInfo.record.image,
       date: this.props.tenantInfo.record.date,
       comment: this.state.newComment,
+      location: this.props.tenantInfo.record.location,
+      tenantID: this.props.tenantInfo.record.tenantID,
+    });
+  };
+
+  updateImage = () => {
+    console.log(this.state);
+    updateAuditImage({
+      _id: this.props.tenantInfo.record._id,
+      type: this.props.tenantInfo.record.type,
+      catCounts: this.props.tenantInfo.record.catCounts,
+      total_score: this.props.tenantInfo.record.total_score,
+      image: this.state.imageUpload,
+      date: this.props.tenantInfo.record.date,
+      comment: this.props.tenantInfo.record.comment,
       location: this.props.tenantInfo.record.location,
       tenantID: this.props.tenantInfo.record.tenantID,
     });
@@ -173,9 +276,44 @@ class ViewAudit extends Component {
                 Submit Comment
               </Button>
             </Form.Item>
+            <Form.Item>
+              <Input type="file" onChange={this.fileSelectedHandler} />
+            </Form.Item>
+
+            <Form.Item
+              name="caption"
+              rules={[
+                {
+                  required: true,
+                  message: "Description",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Caption"
+                onChange={this.onChangeCaption}
+                value={this.state.caption}
+                id="caption"
+                type="caption"
+              />
+            </Form.Item>
+            <Button
+              onClick={this.handleFormOk}>
+              Submit Photo
+            </Button>
           </Form>
+          <Modal
+            title="Upload Confirm"
+            destroyOnClose={true}
+            visible={this.state.visibleConfirm}
+            onOk={this.handleUploadOk}
+            okButtonProps={{ disabled: false }}
+            cancelButtonProps={{ disabled: true, visible: false }}
+          >
+            <p>Photo Added!</p>
+          </Modal>
         </div>
-      </div>
+      </div >
     );
   }
 }

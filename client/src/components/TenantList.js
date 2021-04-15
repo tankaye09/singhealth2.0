@@ -144,7 +144,17 @@ class Directory extends Component {
     //if FB, go to FB | if non-FB go to non-FB
   });
 
+  confirmDelete = () => {
+    // this.setState({
+    //   visible: false,
+    // });
+    this.onDeleteClick();
+  }
+
   onDeleteClick = () => {
+    // this.setState({
+    //   visible: false,
+    // });
     var tenantList = this.state.tenantData
     for (var i = 0; i < tenantList.length; i++) {
       if (tenantList[i].userId == this.state.userId) {
@@ -155,6 +165,7 @@ class Directory extends Component {
         console.log("sent for deletion");
       }
     }
+
   }
 
   showModal = (record) => {
@@ -245,7 +256,7 @@ class Directory extends Component {
             <Modal
               title="Modal"
               visible={this.state.visible}
-              onOk={this.onDeleteClick()}
+              onOk={this.confirmDelete()}
               onCancel={this.hideModal}
               okText="Confirm"
               cancelText="Cancel"

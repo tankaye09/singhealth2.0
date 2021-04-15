@@ -168,6 +168,7 @@ class Checklist extends Component {
           base64: this.state.tempImageBase64[0].base64,
           date: this.state.tempImageBase64[0].date,
           caption: this.state.tempImageCaption,
+          uploader: "auditor",
         },
       ],
       visibleConfirm: false,
@@ -391,7 +392,7 @@ class Checklist extends Component {
                 onChange={this.onChangeCaption}
                 value={this.state.caption}
                 id="caption"
-                type="capyion"
+                type="caption"
               />
             </Form.Item>
           </Form>
