@@ -51,6 +51,7 @@ class Navbar extends Component {
             closable={false}
             onClose={this.onClose}
             visible={this.state.visible}
+            width="70%"
           >
             <p>
               <LeftMenu />

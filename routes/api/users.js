@@ -158,8 +158,10 @@ router.post("/createtenant", (req, res) => {
 
       promise
         .then((message) => {
-          console.log(message);
+          console.log("Inside promise: ", message);
           User.findOne({ email: req.body.email }).then((newlyCreatedUser) => {
+            console.log("newlycreated: ");
+            console.log("newlycreated: ", newlyCreatedUser);
             //create Tenant entry
             const newTenant = new Tenant({
               userId: newlyCreatedUser._id,
@@ -188,7 +190,7 @@ router.post("/createtenant", (req, res) => {
 router.post("/deletetenant", (req, res) => {
   User.findOneAndDelete({ _id: req.body._id })
     .then(() => {
-      console.log("Tenant Deleted2")
+      console.log("Tenant Deleted2");
     })
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });

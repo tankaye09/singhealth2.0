@@ -58,6 +58,13 @@ class AuditList extends Component {
     //   });
     this.props.display((data) => {
       console.log(data);
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].type === "Non-FB") {
+          data[i].total_score = ((data[i].total_score / 34) * 100).toFixed(2);
+        } else {
+          data[i].total_score = ((data[i].total_score / 96) * 100).toFixed(2);
+        }
+      }
       this.setState({ audits: data });
     });
   }

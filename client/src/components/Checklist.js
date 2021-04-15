@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
 import dateformat from "dateformat";
+import store from "../store";
 const fileUpload = require("fuctbase64");
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
@@ -41,6 +42,7 @@ class Checklist extends Component {
   state = {
     tenantInfo: {},
     type: "FB",
+    auditor: store.getState().auth.user.name,
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     total_score: 0,
@@ -66,13 +68,15 @@ class Checklist extends Component {
     // console.log(this.state);
     this.props.submit({
       type: "FB",
+      auditor: store.getState().auth.user.name,
       catCounts: this.state.catCounts,
       total_score:
         (this.state.catCounts[0] +
           this.state.catCounts[1] +
           this.state.catCounts[2] +
           this.state.catCounts[3] +
-          this.state.catCounts[4]) / 2,
+          this.state.catCounts[4]) /
+        2,
       image: this.state.image,
       date: this.state.date,
       comment: this.state.comment,

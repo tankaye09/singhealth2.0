@@ -8,11 +8,15 @@ import {
   Comment,
   Form,
   Button,
+  Row,
+  Col,
+  Card,
 } from "antd";
 import dateformat from "dateformat";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { display, updateAudit } from "../actions/auditActions.js";
+import moment from "moment";
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -43,6 +47,8 @@ class ViewAuditTenant extends Component {
       comment: this.props.tenantInfo.record.comment,
       image: this.props.tenantInfo.record.image,
       date: this.props.tenantInfo.record.date,
+      rectifyDate: this.props.tenantInfo.record.rectifyDate,
+      auditor: this.props.tenantInfo.record.auditor,
       catCounts: this.props.tenantInfo.record.catCounts,
       type: this.props.tenantInfo.record.type,
     });
@@ -72,23 +78,23 @@ class ViewAuditTenant extends Component {
       if (Comm[j].content) {
         console.log("if: ", Comm[j].content);
         output.push(
-          <div>
+          <Card size="small">
             <Comment
               author={<a>{Comm[j].author}</a>}
               className="comment"
               content={<p>{Comm[j].content}</p>}
             />
-          </div>
+          </Card>
         );
       } else {
         console.log("else: ", typeof Comm[j]);
         output.push(
-          <div className="image">
+          <Card className="image" size="small">
             <Image
               width={100}
               src={`data:image/jpeg;base64,${Comm[j].base64}`}
             />
-          </div>
+          </Card>
         );
       }
     }
@@ -107,7 +113,7 @@ class ViewAuditTenant extends Component {
         {
           content: values.nativeEvent.explicitOriginalTarget.value,
           date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
-          author: "tenant",
+          author: "Tenant(You)",
         },
       ],
     });
@@ -135,6 +141,7 @@ class ViewAuditTenant extends Component {
       total_score: this.props.tenantInfo.record.total_score,
       image: this.props.tenantInfo.record.image,
       date: this.props.tenantInfo.record.date,
+      rectifyDate: this.props.tenantInfo.record.rectifyDate,
       comment: this.state.newComment,
       location: this.props.tenantInfo.record.location,
       tenantID: this.props.tenantInfo.record.tenantID,
@@ -143,43 +150,74 @@ class ViewAuditTenant extends Component {
 
   render() {
     return (
-      <div>
-        <p></p>
-        <Progress
-          className="score"
-          type="circle"
-          percent={this.state.total_score}
-          width={200}
-        />
-        <div>
-          <Text className="name">Tenant: {this.state.tenantID}</Text>
-          <div />
-          <Text className="name">Auditor: {this.state.auditor}</Text>
-          <div />
-          {this.displayComments()}
-          <div />
-          <Form
-            className="addComment"
-            onChange={this.newComment}
-            initialValues={{
-              remember: false,
-            }}
-          >
-            <Form.Item name="addComment" label="Add Comment">
-              <TextArea
-                className="addCommentText"
-                placeholder="Add Comment"
-                rows={4}
-                allowClear={true}
+      <div className="table">
+        <Card size="small">
+          <Row>
+            <Col span={15} style={{ display: "block" }}>
+              <div
+                style={{ "text-align": "left", clear: "both", width: "100%" }}
+              >
+                Tenant ID:{" "}
+              </div>
+              <div className="name">
+                <b>{this.state.tenantID}</b>
+              </div>
+              <div
+                style={{ "text-align": "left", clear: "both", width: "100%" }}
+              >
+                Auditor:
+              </div>
+              <div className="name">
+                <b>{this.state.auditor}</b>
+              </div>
+              <div
+                style={{ "text-align": "left", clear: "both", width: "100%" }}
+              >
+                Rectification Deadline:
+              </div>
+              <div className="name">
+                <b>
+                  {moment(
+                    this.state.rectifyDate,
+                    "YYYY-MM-DDTHH:mm:ss.SSS"
+                  ).format("Do MMMM, YYYY")}
+                </b>
+              </div>
+            </Col>
+            <Col span={9}>
+              <Progress
+                className="score"
+                type="circle"
+                percent={this.state.total_score}
+                width={"18vh"}
+                strokeWidth={"10"}
               />
-            </Form.Item>
-            <Form.Item>
-              <Button className="submit-comment" onClick={this.submitComment}>
-                Submit Comment
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+            </Col>
+          </Row>
+        </Card>
+        {this.displayComments()}
+        <div />
+        <Form
+          className="addComment"
+          onChange={this.newComment}
+          initialValues={{
+            remember: false,
+          }}
+        >
+          <Form.Item name="addComment" label="Add Comment">
+            <TextArea
+              className="addCommentText"
+              placeholder="Add Comment"
+              rows={4}
+              allowClear={true}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button className="submit-comment" onClick={this.submitComment}>
+              Submit Comment
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     );
   }

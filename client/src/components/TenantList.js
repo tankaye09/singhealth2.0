@@ -5,7 +5,11 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
-import { getTenants, setSelectedTenant, delTenant } from "../actions/tenantActions";
+import {
+  getTenants,
+  setSelectedTenant,
+  delTenant,
+} from "../actions/tenantActions";
 import { deleteAudit } from "../actions/auditActions";
 import PropTypes from "prop-types";
 import { FormProvider } from "antd/lib/form/context";
@@ -28,6 +32,13 @@ class Directory extends Component {
     console.log("data");
 
     this.props.getTenants((data) => {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].type === "Non-FB") {
+          data[i].total_score = (data[i].total_score / 34) * 100;
+        } else {
+          data[i].total_score = (data[i].total_score / 96) * 100;
+        }
+      }
       this.setState({ tenantData: data });
       console.log(this.state.tenantData);
     });
@@ -139,13 +150,9 @@ class Directory extends Component {
     // this.props.tenantInfo = record;
     console.log({ record });
   };
-  onDeleteClick = () => ({
-    //pass props to checklist
-    //if FB, go to FB | if non-FB go to non-FB
-  });
 
   onDeleteClick = () => {
-    var tenantList = this.state.tenantData
+    var tenantList = this.state.tenantData;
     for (var i = 0; i < tenantList.length; i++) {
       if (tenantList[i].userId == this.state.userId) {
         console.log(this.state.userId);
@@ -155,7 +162,7 @@ class Directory extends Component {
         console.log("sent for deletion");
       }
     }
-  }
+  };
 
   showModal = (record) => {
     this.setState({
@@ -224,15 +231,7 @@ class Directory extends Component {
             >
               Create {"\n"} Audit
             </Button>
-            <p></p>
-            <Button
-              className="action-buttons"
-              type="primary"
-              size="small"
-              onClick={() => this.onDeleteClick(record)}
-            >
-              Delete Tenant
-            </Button>
+
             <p></p>
             <Button
               className="action-buttons"
@@ -242,6 +241,7 @@ class Directory extends Component {
             >
               Delete Tenant
             </Button>
+
             <Modal
               title="Modal"
               visible={this.state.visible}
@@ -277,6 +277,6 @@ Directory.propTypes = {
 const mapStateToProps = (state) => ({
   tenantData: state.tenantData,
 });
-export default connect(mapStateToProps, { getTenants, setSelectedTenant, })(
+export default connect(mapStateToProps, { getTenants, setSelectedTenant })(
   Directory
 );

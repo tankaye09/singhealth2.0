@@ -7,6 +7,10 @@ const AuditSchema = new Schema({
     type: String,
     required: true,
   },
+  auditor: {
+    type: String,
+    required: true,
+  },
   catCounts: {
     type: [],
     required: false,
@@ -20,6 +24,10 @@ const AuditSchema = new Schema({
     required: false,
   },
   date: {
+    type: String,
+    required: true,
+  },
+  rectifyDate: {
     type: String,
     required: true,
   },
@@ -38,7 +46,7 @@ const AuditSchema = new Schema({
   institution: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const Audit = mongoose.model("audits", AuditSchema);

@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit } from "../actions/auditActions.js";
 import dateformat from "dateformat";
+import store from "../store";
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
@@ -41,6 +42,7 @@ class ChecklistNonFB extends Component {
   state = {
     tenantInfo: {},
     type: "Non-FB",
+    auditor: store.getState().auth.user.name,
     checked: false,
     catCounts: [0, 0, 0],
     // counts[0]: for Professionalism & Staff Hygiene (20%),
@@ -51,6 +53,7 @@ class ChecklistNonFB extends Component {
     tempImageBase64: [],
     tempImageCaption: null,
     date: null,
+    rectifyDate: null,
     comment: null,
     location: "",
     visibleForm: false,
@@ -70,13 +73,16 @@ class ChecklistNonFB extends Component {
     // console.log(typeof this.props.tenantInfo.record._id);
     this.props.submit({
       type: "Non-FB",
+      auditor: store.getState().auth.user.name,
       catCounts: this.state.catCounts,
       total_score:
         (this.state.catCounts[0] +
           this.state.catCounts[1] +
-          this.state.catCounts[2]) / 2,
+          this.state.catCounts[2]) /
+        2,
       image: this.state.image,
       date: this.state.date,
+      rectifyDate: this.state.rectifyDate,
       comment: this.state.comment,
       location: this.props.tenantInfo.record.address,
       tenantID: this.props.tenantInfo.record._id,
@@ -96,7 +102,7 @@ class ChecklistNonFB extends Component {
         {
           content: comment.nativeEvent.explicitOriginalTarget.value,
           date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
-          author: "auditor",
+          author: store.getState().auth.user.name,
         },
       ],
     });
@@ -112,6 +118,15 @@ class ChecklistNonFB extends Component {
   onChangeDate = (date, dateString) => {
     this.setState({
       date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+    });
+  };
+
+  onChangeRectifyDate = (rectifyDate, dateString) => {
+    this.setState({
+      rectifyDate: dateformat(
+        rectifyDate._d.toString(),
+        "yyyy-mm-dd'T'HH:MM:ss.sssZ"
+      ),
     });
   };
 
@@ -223,6 +238,9 @@ class ChecklistNonFB extends Component {
   };
 
   render() {
+    const rectifyLabel = (
+      <div>If there are no non-compliances, put {<b>today's</b>} date</div>
+    );
     return (
       <div className="table">
         <h3>
@@ -242,18 +260,42 @@ class ChecklistNonFB extends Component {
         >
           <Form.Item
             name="date"
+            label="Audit Start Date"
             rules={[{ required: true, message: "Date of Incident" }]}
           >
             <DatePicker
               className="auditDate"
-              placeholder="Date"
+              placeholder="Audit Date"
               onChange={this.onChangeDate}
             />
           </Form.Item>
 
           <Form.Item
+            name="recitfyDate"
+            label={rectifyLabel}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the timeframe to rectify non-compliance",
+              },
+            ]}
+          >
+            <DatePicker
+              className="auditDate"
+              placeholder="Rectification Deadline"
+              onChange={this.onChangeRectifyDate}
+            />
+          </Form.Item>
+
+          <Form.Item
             name="Comment"
-            rules={[{ required: true, message: "Description" }]}
+            label="Notes or Comments"
+            rules={[
+              {
+                required: true,
+                message: "PLease enter some notes or comments about the audit",
+              },
+            ]}
           >
             <TextArea
               placeholder="Notes or Comments"

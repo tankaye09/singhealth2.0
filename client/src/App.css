@@ -234,7 +234,7 @@ div.form {
 }
 
 .table {
-  width: 98%;
+  width: 95%;
   max-width: 767px;
   margin-left: auto;
   margin-right: auto;
@@ -363,11 +363,6 @@ div.form {
   margin-left: auto;
 }
 
-.score {
-  font-size: 100px;
-  font-style: italic;
-}
-
 .upon {
   font-size: 50px;
   font-style: italic;
@@ -389,8 +384,18 @@ div.form {
 }
 
 .name {
-  font-size: 30px;
-  font-style: italic;
+  font-size: auto;
+  word-wrap: break-word;
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+}
+
+.score {
+  font-size: 30;
+  font-size: 3vh;
+  float: left;
+  font-weight: bold;
 }
 
 .name2 {

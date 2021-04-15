@@ -8,10 +8,12 @@ router.post("/add", (req, res) => {
   console.log(req.body);
   const newAudit = new Audit({
     type: req.body.type,
+    auditor: req.body.auditor,
     catCounts: req.body.catCounts,
     total_score: req.body.total_score,
     image: req.body.image,
     date: req.body.date,
+    rectifyDate: req.body.rectifyDate,
     comment: req.body.comment,
     location: req.body.location,
     tenantID: req.body.tenantID,
@@ -52,9 +54,7 @@ router.put("/update", function (req, res) {
 
 router.post("/", function (req, res) {
   console.log(req.body._id);
-  Audit.findOneAndDelete(
-    { tenantID: req.body.tenantID },
-  )
+  Audit.findOneAndDelete({ tenantID: req.body.tenantID })
     .then((doc) => {
       res.send(doc);
     })
