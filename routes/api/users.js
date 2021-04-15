@@ -185,4 +185,12 @@ router.post("/createtenant", (req, res) => {
   });
 });
 
+router.post("/deletetenant", (req, res) => {
+  User.findOneAndDelete({ _id: req.body._id })
+    .then(() => {
+      console.log("Tenant Deleted2")
+    })
+    .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
 module.exports = router;

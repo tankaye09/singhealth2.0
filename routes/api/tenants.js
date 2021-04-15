@@ -10,8 +10,9 @@ router.get("/", (req, res) => {
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete", (req, res) => {
-  Keys.deleteOne({ _id: req.body._id })
+router.post("/", (req, res) => {
+  console.log(req.body._id);
+  Keys.findOneAndDelete({ _id: req.body._id })
     .then(() => {
       console.log("Tenant Deleted")
     })

@@ -44,3 +44,10 @@ export const updateAudit = (data) => {
     console.log(error);
   });
 };
+
+export const deleteAudit = (data) => {
+  console.log(data);
+  axios.post("/api/audits", data).catch((error) => {
+    console.log(error);
+  });
+};
