@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Input, Table, Button, Tag, Space } from "antd";
 import { connect } from "react-redux";
-import { moment } from "moment";
+import moment from "moment";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { setSelectedTenant, getTenants } from "../actions/tenantActions";
@@ -234,6 +234,8 @@ class AuditList extends Component {
         },
         defaultSortOrder: "descend",
         ...this.getColumnSearchProps("date"),
+        render: (text) =>
+          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("DD/MM/YYYY"),
       },
       {
         title: "Type",
@@ -248,7 +250,10 @@ class AuditList extends Component {
         key: "total_score",
         fixed: "right",
         width: "10%",
-        ...this.getColumnSearchProps("total_score"),
+        sorter: (a, b) => {
+          if (a.score > b.score) return 1;
+          else return -1;
+        },
       },
       {
         title: "Action",

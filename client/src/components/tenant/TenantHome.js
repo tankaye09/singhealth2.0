@@ -10,6 +10,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import store from "../../store.js";
 import PropTypes from "prop-types";
+import moment from "moment";
 const { Column, ColumnGroup } = Table;
 
 // const Audit = (props) => (
@@ -219,6 +220,8 @@ class TenantHome extends Component {
         },
         defaultSortOrder: "descend",
         ...this.getColumnSearchProps("date"),
+        render: (text) =>
+          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("DD/MM/YYYY"),
       },
       {
         title: "Score",
@@ -226,7 +229,10 @@ class TenantHome extends Component {
         key: "total_score",
         fixed: "left",
         width: "150",
-        ...this.getColumnSearchProps("total_score"),
+        sorter: (a, b) => {
+          if (a.score > b.score) return 1;
+          else return -1;
+        },
       },
       {
         title: "Action",
