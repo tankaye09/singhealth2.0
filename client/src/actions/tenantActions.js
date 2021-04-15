@@ -32,21 +32,19 @@ export const getTenant = (onDataReceived) => {
     });
 };
 
-export const delTenant = (data) => (dispatch) => {
+export const delTenant = (data) => {
+  console.log("arrived");
+  console.log(data);
   axios
-    .delete("/api/tenants/delete", data)
-    .then(() =>
-      dispatch({
-        type: GET_MESSAGE,
-        payload: "Tenant Deleted",
-      })
-    )
+    .post("/api/tenants", {
+      _id: data._id
+    })
+    .then(response => {
+      // this.setState({ users: response.data });
+      console.log('deleteUser response', response);
+    })
     .catch((error) => {
-      console.log("in the error");
-      dispatch({
-        type: GET_ERRORS,
-        payload: error.response.data,
-      });
+      console.log(error);
     });
 }
 

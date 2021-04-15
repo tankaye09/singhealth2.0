@@ -50,4 +50,17 @@ router.put("/update", function (req, res) {
     });
 });
 
+router.post("/", function (req, res) {
+  console.log(req.body._id);
+  Audit.findOneAndDelete(
+    { tenantID: req.body.tenantID },
+  )
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
 module.exports = router;

@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Input, Button, Space, Table } from "antd";
+import { Input, Button, Space, Table, Modal } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
 import { getTenants, setSelectedTenant, delTenant } from "../actions/tenantActions";
+import { deleteAudit } from "../actions/auditActions";
 import PropTypes from "prop-types";
 import { FormProvider } from "antd/lib/form/context";
+import { deleteTenant } from "../actions/authActions";
 
 class Directory extends Component {
   constructor() {
@@ -17,6 +19,8 @@ class Directory extends Component {
       searchText: "",
       searchedColumn: "",
       tenantInfo: {},
+      visible: false,
+      userId: null,
     };
   }
 
@@ -140,15 +144,31 @@ class Directory extends Component {
     //if FB, go to FB | if non-FB go to non-FB
   });
 
-  onDeleteClick = (record) => {
+  onDeleteClick = () => {
     var tenantList = this.state.tenantData
     for (var i = 0; i < tenantList.length; i++) {
-      if (tenantList[i].userId == record.userId) {
-        console.log(tenantList[i]._id);
-        delTenant(tenantList[i]._id);
+      if (tenantList[i].userId == this.state.userId) {
+        console.log(this.state.userId);
+        delTenant({ _id: tenantList[i]._id });
+        deleteAudit({ tenantID: tenantList[i]._id });
+        deleteTenant({ _id: this.state.userId });
+        console.log("sent for deletion");
       }
     }
   }
+
+  showModal = (record) => {
+    this.setState({
+      visible: true,
+      userId: record.userId,
+    });
+  };
+
+  hideModal = () => {
+    this.setState({
+      visible: false,
+    });
+  };
 
   render() {
     const columns = [
@@ -218,10 +238,20 @@ class Directory extends Component {
               className="action-buttons"
               type="primary"
               size="small"
-              onClick={() => this.onDeleteClick(record)}
+              onClick={() => this.showModal(record)}
             >
               Delete Tenant
             </Button>
+            <Modal
+              title="Modal"
+              visible={this.state.visible}
+              onOk={this.onDeleteClick()}
+              onCancel={this.hideModal}
+              okText="Confirm"
+              cancelText="Cancel"
+            >
+              <p>Are you sure you want to delete this Tenant?</p>
+            </Modal>
           </div>
         ),
       },
@@ -247,6 +277,6 @@ Directory.propTypes = {
 const mapStateToProps = (state) => ({
   tenantData: state.tenantData,
 });
-export default connect(mapStateToProps, { getTenants, setSelectedTenant })(
+export default connect(mapStateToProps, { getTenants, setSelectedTenant, })(
   Directory
 );
