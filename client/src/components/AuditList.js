@@ -7,6 +7,7 @@ import moment from "moment";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { setSelectedTenant, getTenants } from "../actions/tenantActions";
+import { sendEmailReminder } from "../actions/auditActions";
 import PropTypes from "prop-types";
 
 import { display } from "../actions/auditActions.js";
@@ -76,6 +77,11 @@ class AuditList extends Component {
     this.props.history.push("/viewaudit");
     // this.props.tenantInfo = record;
     console.log({ record });
+  };
+
+  onReminderClick = (record) => {
+    console.log({ record });
+    sendEmailReminder({ record });
   };
 
   deleteAudit(id) {
@@ -265,6 +271,9 @@ class AuditList extends Component {
           <div>
             <Button type="primary" onClick={() => this.onViewClick(record)}>
               View
+            </Button>
+            <Button type="primary" onClick={() => this.onReminderClick(record)}>
+              Reminder
             </Button>
           </div>
         ),

@@ -11,6 +11,10 @@ const AuditSchema = new Schema({
     type: String,
     required: true,
   },
+  auditorId: {
+    type: String,
+    required: true,
+  },
   catCounts: {
     type: [],
     required: false,

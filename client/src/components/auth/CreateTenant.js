@@ -2,7 +2,7 @@ import React, { ReactDOM, Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerTenant } from "../../actions/authActions";
+import { registerTenant, sendEmail } from "../../actions/authActions";
 import { Form, Input, Button, Message, Select, message } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
 import institutionsData from "../../data/institutions.json";
@@ -48,7 +48,6 @@ class CreateTenant extends Component {
   onDropdownChange = (e, { value }) => this.setState({ value });
 
   // TODO send email to tenant with login details
-
   onFinish = (values) => {
     const newUser = {
       name: values.name,
@@ -60,6 +59,7 @@ class CreateTenant extends Component {
     };
     console.log("newUser: ", newUser);
     this.props.registerTenant(newUser, this.props.history);
+    // this.props.sendEmail(newUser);
     window.scrollTo(0, 0); // Scroll to top
   };
 
@@ -247,6 +247,6 @@ const mapStateToProps = (state) => ({
   errors: state.errors, // allows us to call this.props.errors
 });
 
-export default connect(mapStateToProps, { registerTenant })(
+export default connect(mapStateToProps, { registerTenant, sendEmail })(
   withRouter(CreateTenant)
 );

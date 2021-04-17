@@ -28,6 +28,7 @@ class ViewAuditTenant extends Component {
     total_score: "",
     tenantID: "",
     auditor: "auditor",
+    auditorId: "",
     // auditorComments: ["Bla", "blabla"],
     // tenantComments: ["Response", "response"],
     comment: "",
@@ -49,6 +50,7 @@ class ViewAuditTenant extends Component {
       date: this.props.tenantInfo.record.date,
       rectifyDate: this.props.tenantInfo.record.rectifyDate,
       auditor: this.props.tenantInfo.record.auditor,
+      auditorId: this.props.tenantInfo.record.auditorId,
       catCounts: this.props.tenantInfo.record.catCounts,
       type: this.props.tenantInfo.record.type,
     });
@@ -145,6 +147,7 @@ class ViewAuditTenant extends Component {
       comment: this.state.newComment,
       location: this.props.tenantInfo.record.location,
       tenantID: this.props.tenantInfo.record.tenantID,
+      auditorId: this.props.tenantInfo.record.auditorId,
     });
   };
 

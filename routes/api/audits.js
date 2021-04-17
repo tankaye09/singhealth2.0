@@ -9,6 +9,7 @@ router.post("/add", (req, res) => {
   const newAudit = new Audit({
     type: req.body.type,
     auditor: req.body.auditor,
+    auditorId: req.body.auditorId,
     catCounts: req.body.catCounts,
     total_score: req.body.total_score,
     image: req.body.image,

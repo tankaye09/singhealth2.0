@@ -97,27 +97,62 @@ export const logoutUser = () => (dispatch) => {
 /* Tenant */
 // Register Tenant
 export const registerTenant = (userData, history) => (dispatch) => {
-  axios
-    .post("/api/users/createtenant", userData)
-    .then((res) => {
-      dispatch({
-        type: GET_MESSAGE,
-        payload: "Tenant Created",
+  let promise = new Promise((resolve, reject) => {
+    axios
+      .post("/api/users/createtenant", userData)
+      .then((res) => {
+        dispatch({
+          type: GET_MESSAGE,
+          payload: "Tenant Created",
+        });
+        history.push("/auditlist");
+        resolve(userData);
+      }) // TODO: set up ViewTenants{AuditorName} or sth
+      .catch((error) => {
+        dispatch({
+          type: GET_ERRORS,
+          payload: error.response.data,
+        });
+        reject("Tenant Creation Failed");
       });
-      history.push("/createtenant");
-    }) // TODO: set up ViewTenants{AuditorName} or sth
-    .catch((err) =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      })
-    );
+  });
+
+  promise
+    .then((message) => {
+      sendEmail(message);
+    })
+    .catch((message) => {
+      console.log(message);
+    });
 };
 
 export const deleteTenant = (data) => {
   console.log(data);
+  axios.post("/api/users/deletetenant", data).catch((err) => {
+    console.log(err);
+  });
+};
+
+export const printMe = () => {
+  console.log("Inside print me");
+};
+
+export const sendEmail = (data) => {
+  console.log("In send email");
   axios
-    .post("/api/users/deletetenant", data)
-    .catch((err) => { console.log(err); }
-    );
-}
+    .post("/api/sendemail/create", data)
+    .then((res) => {
+      console.log("email sent success");
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
+    })
+    .catch((err) => {
+      console.log("email sent failed, err: ", err);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
+    });
+};

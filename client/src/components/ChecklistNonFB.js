@@ -43,6 +43,7 @@ class ChecklistNonFB extends Component {
     tenantInfo: {},
     type: "Non-FB",
     auditor: store.getState().auth.user.name,
+    auditorId: store.getState().auth.user.id,
     checked: false,
     catCounts: [0, 0, 0],
     // counts[0]: for Professionalism & Staff Hygiene (20%),
@@ -74,6 +75,7 @@ class ChecklistNonFB extends Component {
     this.props.submit({
       type: "Non-FB",
       auditor: store.getState().auth.user.name,
+      auditorId: store.getState().auth.user.id,
       catCounts: this.state.catCounts,
       total_score:
         (this.state.catCounts[0] +

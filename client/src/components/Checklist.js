@@ -43,6 +43,7 @@ class Checklist extends Component {
     tenantInfo: {},
     type: "FB",
     auditor: store.getState().auth.user.name,
+    auditorId: store.getState().auth.user.id,
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     total_score: 0,
@@ -50,6 +51,7 @@ class Checklist extends Component {
     tempImageBase64: [],
     tempImageCaption: null,
     date: null,
+    rectifyDate: null,
     comment: null,
     location: "",
     visibleForm: false,
@@ -69,6 +71,7 @@ class Checklist extends Component {
     this.props.submit({
       type: "FB",
       auditor: store.getState().auth.user.name,
+      auditorId: store.getState().auth.user.id,
       catCounts: this.state.catCounts,
       total_score:
         (this.state.catCounts[0] +
@@ -80,6 +83,7 @@ class Checklist extends Component {
       image: this.state.image,
       date: this.state.date,
       comment: this.state.comment,
+      rectifyDate: this.state.rectifyDate,
       location: this.props.tenantInfo.record.address,
       tenantID: this.props.tenantInfo.record._id,
       institution: this.props.tenantInfo.record.institution,
@@ -98,7 +102,7 @@ class Checklist extends Component {
         {
           content: comment.nativeEvent.explicitOriginalTarget.value,
           date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
-          author: "auditor",
+          author: store.getState().auth.user.name,
         },
       ],
     });
@@ -114,6 +118,15 @@ class Checklist extends Component {
   onChangeDate = (date, dateString) => {
     this.setState({
       date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+    });
+  };
+
+  onChangeRectifyDate = (rectifyDate, dateString) => {
+    this.setState({
+      rectifyDate: dateformat(
+        rectifyDate._d.toString(),
+        "yyyy-mm-dd'T'HH:MM:ss.sssZ"
+      ),
     });
   };
 
@@ -255,7 +268,10 @@ class Checklist extends Component {
   };
 
   render() {
-    console.log(this.state.tenantInfo);
+    // console.log(this.state.tenantInfo);
+    const rectifyLabel = (
+      <div>If there are no non-compliances, put {<b>today's</b>} date</div>
+    );
     return (
       <div className="table">
         <h3>
@@ -281,6 +297,23 @@ class Checklist extends Component {
               className="auditDate"
               placeholder="Date"
               onChange={this.onChangeDate}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="recitfyDate"
+            label={rectifyLabel}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the timeframe to rectify non-compliance",
+              },
+            ]}
+          >
+            <DatePicker
+              className="auditDate"
+              placeholder="Rectification Deadline"
+              onChange={this.onChangeRectifyDate}
             />
           </Form.Item>
 

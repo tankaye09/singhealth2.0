@@ -245,7 +245,7 @@ class Directory extends Component {
             <Modal
               title="Modal"
               visible={this.state.visible}
-              onOk={this.onDeleteClick()}
+              onOk={this.onDeleteClick}
               onCancel={this.hideModal}
               okText="Confirm"
               cancelText="Cancel"

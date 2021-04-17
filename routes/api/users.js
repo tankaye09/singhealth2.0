@@ -160,7 +160,6 @@ router.post("/createtenant", (req, res) => {
         .then((message) => {
           console.log("Inside promise: ", message);
           User.findOne({ email: req.body.email }).then((newlyCreatedUser) => {
-            console.log("newlycreated: ");
             console.log("newlycreated: ", newlyCreatedUser);
             //create Tenant entry
             const newTenant = new Tenant({
