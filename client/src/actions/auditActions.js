@@ -83,7 +83,7 @@ export const updateAuditImage = (data) => {
 
 export const deleteAudit = (data) => {
   console.log(data);
-  axios.post("/api/audits", data).catch((error) => {
+  return axios.post("/api/audits", data).catch((error) => {
     console.log(error);
   });
 };

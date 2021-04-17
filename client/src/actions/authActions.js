@@ -128,7 +128,7 @@ export const registerTenant = (userData, history) => (dispatch) => {
 
 export const deleteTenant = (data) => {
   console.log(data);
-  axios.post("/api/users/deletetenant", data).catch((err) => {
+  return axios.post("/api/users/deletetenant", data).catch((err) => {
     console.log(err);
   });
 };

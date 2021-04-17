@@ -25,7 +25,13 @@ class Directory extends Component {
       tenantInfo: {},
       visible: false,
       userId: null,
+      rerender: "",
     };
+
+    // this.delTenant = this.delTenant.bind(this);
+    // this.deleteAudit = this.deleteAudit.bind(this);
+    // this.deleteTenant = this.deleteTenant.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
 
   componentDidMount() {
@@ -168,9 +174,13 @@ class Directory extends Component {
       if (tenantList[i].userId == this.state.userId) {
         console.log(this.state.userId);
         delTenant({ _id: tenantList[i]._id });
-        deleteAudit({ tenantID: tenantList[i]._id });
+        deleteAudit({ tenantID: tenantList[i]._id }).then(() => {
+          this.setState(this.state);
+          console.log("force update");
+        });
         deleteTenant({ _id: this.state.userId });
         console.log("sent for deletion");
+        break;
       }
     }
     // this.setState({

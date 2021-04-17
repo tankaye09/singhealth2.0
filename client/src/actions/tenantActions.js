@@ -35,18 +35,18 @@ export const getTenant = (onDataReceived) => {
 export const delTenant = (data) => {
   console.log("arrived");
   console.log(data);
-  axios
+  return axios
     .post("/api/tenants", {
-      _id: data._id
+      _id: data._id,
     })
-    .then(response => {
+    .then((response) => {
       // this.setState({ users: response.data });
-      console.log('deleteUser response', response);
+      console.log("deleteUser response", response);
     })
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
 // Update tenantInfo in store with the row selected tenantInfo
 export const setSelectedTenant = (data) => {
