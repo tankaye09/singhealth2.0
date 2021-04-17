@@ -151,7 +151,18 @@ class Directory extends Component {
     console.log({ record });
   };
 
+  // confirmDelete = () => {
+  //   // this.setState({
+  //   //   visible: true,
+  //   // });
+  //   this.onDeleteClick();
+  // }
+
   onDeleteClick = () => {
+    this.setState({
+      ...this.state,
+      visible: false,
+    });
     var tenantList = this.state.tenantData;
     for (var i = 0; i < tenantList.length; i++) {
       if (tenantList[i].userId == this.state.userId) {
@@ -162,6 +173,9 @@ class Directory extends Component {
         console.log("sent for deletion");
       }
     }
+    // this.setState({
+    //   visible2: false,
+    // });
   };
 
   showModal = (record) => {

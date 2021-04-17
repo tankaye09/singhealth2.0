@@ -53,6 +53,25 @@ router.put("/update", function (req, res) {
     });
 });
 
+router.put("/updateImage", function (req, res) {
+  console.log(req.body._id);
+  Audit.findOneAndUpdate(
+    { _id: req.body._id },
+    {
+      $push: {
+        image: req.body.image,
+      },
+      new: true,
+    }
+  )
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
 router.post("/", function (req, res) {
   console.log(req.body._id);
   Audit.findOneAndDelete({ tenantID: req.body.tenantID })

@@ -383,6 +383,14 @@ div.form {
   text-align: left;
 }
 
+.caption {
+  margin-top: -8%;
+  padding-left: 30%;
+  width: 100%;
+  text-align: left;
+}
+
+
 .name {
   font-size: auto;
   word-wrap: break-word;

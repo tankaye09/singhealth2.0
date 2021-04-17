@@ -178,6 +178,7 @@ class ChecklistNonFB extends Component {
           base64: this.state.tempImageBase64[0].base64,
           date: this.state.tempImageBase64[0].date,
           caption: this.state.tempImageCaption,
+          uploader: "auditor",
         },
       ],
       visibleConfirm: false,
