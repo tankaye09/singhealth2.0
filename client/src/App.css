@@ -1,4 +1,9 @@
 @import "~antd/dist/antd.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+body {
+  font-family: "Roboto Slab", serif;
+}
 
 /* Navbar */
 
@@ -255,8 +260,8 @@ div.form {
 
 /* Change header text and background color   */
 .ant-table-thead > tr > th {
-  color: rgb(0, 0, 0);
-  background: #fff5bd !important;
+  color: rgb(255, 255, 255);
+  background: #f3ab1b !important;
   font-weight: 600;
 }
 
@@ -306,6 +311,16 @@ div.form {
   font-weight: bold;
 }
 
+.action-buttons {
+  width: 150%;
+  height: auto;
+  font-size: smaller;
+  color: #f3ab1b;
+  font-weight: bold;
+  border-color: #f3ab1b;
+  border-radius: 3px;
+}
+
 .create-audit-row {
   text-align: left;
   padding-right: 20px;
@@ -328,10 +343,10 @@ div.form {
 }
 
 .red {
-  color: red;
+  color: #cc7351;
 }
 .green {
-  color: green;
+  color: #9dab86;
 }
 
 /* Dropdown */
@@ -369,18 +384,26 @@ div.form {
 }
 
 .addComment {
-  height: 50px;
+  /* height: 50px;
   margin-top: 10px;
   margin-bottom: 50px;
-  margin-left: 10%;
-  width: 40%;
+  margin-left: 10%; */
+  /* width: 40%; */
+  margin: auto;
 }
 
-.comment {
+.commentLeft {
   padding-left: 10%;
   padding-right: 10%;
   width: 50%;
   text-align: left;
+}
+
+.commentRight {
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 50%;
+  text-align: right;
 }
 
 .caption {
@@ -389,7 +412,6 @@ div.form {
   width: 100%;
   text-align: left;
 }
-
 
 .name {
   font-size: auto;
@@ -411,7 +433,11 @@ div.form {
   font-style: italic;
 }
 
-.image {
+.imageLeft {
   left: 0px;
-  width: 33%;
+  width: 66%;
+}
+.imageRight {
+  right: 0px;
+  width: 66%;
 }

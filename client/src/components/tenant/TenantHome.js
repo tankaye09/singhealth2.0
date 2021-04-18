@@ -130,7 +130,7 @@ class TenantHome extends Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : "#a35709" }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -239,16 +239,17 @@ class TenantHome extends Component {
         dataIndex: "",
         key: "x",
         fixed: "right",
-        width: "150",
+        width: "20%",
         render: (record) => (
           <div>
             <Button
               className="action-buttons"
-              type="primary"
               size="small"
               onClick={() => this.onViewClick(record)}
             >
-              View Audit
+              View
+              <br />
+              Audit
             </Button>
           </div>
         ),

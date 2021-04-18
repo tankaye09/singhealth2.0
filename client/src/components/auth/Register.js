@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
 import { getStaffKey } from "../../actions/authActions";
-import { Form, Input, Button, Checkbox, Select } from "antd";
+import { Form, Input, Button, Layout, Select } from "antd";
 import {
   MailOutlined,
   UserOutlined,
@@ -14,6 +14,8 @@ import {
   SketchOutlined,
 } from "@ant-design/icons";
 import institutionsData from "../../data/institutions.json";
+
+const { Header, Footer, Sider, Content } = Layout;
 
 // TEST TEAM: for testing change to false
 // DEV TEAM: for dev change to true
@@ -99,10 +101,12 @@ class Register extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <div>
+      <Layout>
+        <h2>Staff Registration Form</h2>
         <Form
           name="normal_login"
           className="login-register-form"
+          title="Register"
           onFinish={this.onFinish}
         >
           <Form.Item
@@ -260,7 +264,7 @@ class Register extends Component {
           onloadCallback={console.log("onloadCallback")}
           verifyCallback={this.verifyCallback}
         />
-      </div>
+      </Layout>
     );
   }
 }

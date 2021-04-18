@@ -12,6 +12,7 @@ import {
   Col,
   Card,
   Modal,
+  Divider,
 } from "antd";
 import dateformat from "dateformat";
 import PropTypes from "prop-types";
@@ -131,6 +132,8 @@ class ViewAuditTenant extends Component {
     Comm = Comm.sort((a, b) => a.date > b.date);
     console.log(Comm);
 
+    let commentAlign = "commentLeft";
+    let imageAlign = "imageLeft";
     for (var j = 0; j < Comm.length; j++) {
       if (Comm[j].content) {
         console.log("if: ", Comm[j].content);
@@ -138,7 +141,7 @@ class ViewAuditTenant extends Component {
           <Card size="small">
             <Comment
               author={<a>{Comm[j].author}</a>}
-              className="comment"
+              className={commentAlign}
               content={<p>{Comm[j].content}</p>}
             />
           </Card>
@@ -146,7 +149,7 @@ class ViewAuditTenant extends Component {
       } else {
         console.log("else: ", typeof Comm[j]);
         output.push(
-          <Card className="image" size="small">
+          <Card className={imageAlign} size="small">
             <p></p>
             <Comment
               author={<a>{Comm[j].uploader}</a>}
@@ -217,6 +220,7 @@ class ViewAuditTenant extends Component {
     });
     console.log(this.state.comment);
     this.updateComments();
+    this.setState({ newComment: "" });
   };
 
   updateComments = () => {
@@ -300,35 +304,56 @@ class ViewAuditTenant extends Component {
         </Card>
         {this.displayComments()}
         <div />
-        <Form>
-          <Form.Item>
-            <Button className="submit-comment" onClick={this.submitComment}>
-              Submit Comment
-            </Button>
-          </Form.Item>
-          <Form.Item>
-            <Input type="file" onChange={this.fileSelectedHandler} />
-          </Form.Item>
-
-          <Form.Item
-            name="caption"
-            rules={[
-              {
-                required: true,
-                message: "Description",
-              },
-            ]}
+        <Card size="small">
+          <Form
+            className="addComment"
+            onChange={this.newComment}
+            layout="vertical"
+            size="small"
+            initialValues={{
+              remember: false,
+            }}
           >
-            <Input
-              placeholder="Caption"
-              onChange={this.onChangeCaption}
-              value={this.state.caption}
-              id="caption"
-              type="caption"
-            />
-          </Form.Item>
-          <Button onClick={this.handleFormOk}>Submit Photo</Button>
-        </Form>
+            <Form.Item name="addComment" label={<b>Add Comment</b>}>
+              <TextArea
+                className="addCommentText"
+                placeholder="Add Comment"
+                rows={4}
+                allowClear={true}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button className="submit-comment" onClick={this.submitComment}>
+                Submit Comment
+              </Button>
+            </Form.Item>
+
+            <Divider />
+            <Form.Item label={<b>Add Photo</b>}>
+              <Input type="file" onChange={this.fileSelectedHandler} />
+            </Form.Item>
+
+            <Form.Item
+              name="caption"
+              rules={[
+                {
+                  required: true,
+                  message: "Description",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Caption"
+                onChange={this.onChangeCaption}
+                value={this.state.caption}
+                id="caption"
+                type="caption"
+              />
+            </Form.Item>
+            <Button onClick={this.handleFormOk}>Submit Photo</Button>
+          </Form>
+        </Card>
+
         <Modal
           title="Upload Confirm"
           destroyOnClose={true}

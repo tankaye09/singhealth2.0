@@ -161,7 +161,7 @@ class AuditList extends Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : "#a35709" }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -212,28 +212,28 @@ class AuditList extends Component {
         title: "Addr.",
         dataIndex: "location",
         key: "location",
-        width: "150",
+        width: "20%",
         ...this.getColumnSearchProps("location"),
       },
       {
         title: "Tenant ID",
         dataIndex: "tenantID",
         key: "itenantID",
-        width: "300",
+        width: "20%",
         ...this.getColumnSearchProps("tenantID"),
       },
       {
         title: "Inst.",
         dataIndex: "institution",
         key: "institution",
-        width: "150",
+        width: "15%",
         ...this.getColumnSearchProps("institution"),
       },
       {
         title: "Date",
         dataIndex: "date",
         key: "date",
-        width: "150",
+        width: "15%",
         sorter: (a, b) => {
           if (a.date > b.date) return 1;
           else return -1;
@@ -247,7 +247,7 @@ class AuditList extends Component {
         title: "Type",
         dataIndex: "type",
         key: "type",
-        width: "150",
+        width: "10%",
         ...this.getColumnSearchProps("type"),
       },
       {
@@ -269,10 +269,18 @@ class AuditList extends Component {
         width: "10%",
         render: (record) => (
           <div>
-            <Button type="primary" onClick={() => this.onViewClick(record)}>
+            <Button
+              className="action-buttons"
+              size="small"
+              onClick={() => this.onViewClick(record)}
+            >
               View
             </Button>
-            <Button type="primary" onClick={() => this.onReminderClick(record)}>
+            <Button
+              className="action-buttons"
+              size="small"
+              onClick={() => this.onReminderClick(record)}
+            >
               Reminder
             </Button>
           </div>

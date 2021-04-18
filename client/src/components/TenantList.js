@@ -109,7 +109,7 @@ class Directory extends Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : "#a35709" }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -237,10 +237,9 @@ class Directory extends Component {
         ...this.getColumnSearchProps("id"),
       },
       {
-        title: "FB/NonFB",
+        title: "Type",
         dataIndex: "type",
         key: "type",
-        width: "150",
         ...this.getColumnSearchProps("type"),
       },
       {
@@ -253,21 +252,21 @@ class Directory extends Component {
           <div>
             <Button
               className="action-buttons"
-              type="primary"
               size="small"
               onClick={() => this.onCreateClick(record)}
             >
-              Create {"\n"} Audit
+              Create
+              <br />
+              Audit
             </Button>
-
-            <p></p>
             <Button
               className="action-buttons"
-              type="primary"
               size="small"
               onClick={() => this.showModal(record)}
             >
-              Delete Tenant
+              Delete
+              <br />
+              Tenant
             </Button>
 
             <Modal

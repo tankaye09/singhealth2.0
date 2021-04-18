@@ -3,10 +3,12 @@ import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerTenant, sendEmail } from "../../actions/authActions";
-import { Form, Input, Button, Message, Select, message } from "antd";
+import { Form, Input, Button, Message, Select, Layout } from "antd";
 import { MailOutlined, UserOutlined, LockOutlined } from "@ant-design/icons";
 import institutionsData from "../../data/institutions.json";
 import tenantData from "../../data/tenantTypes.json";
+
+const { Header, Footer, Sider, Content } = Layout;
 
 // TODO: this should be taken from db
 const institutions = institutionsData;
@@ -70,167 +72,176 @@ class CreateTenant extends Component {
       labelCol: { span: 3 },
     };
     return (
-      <div>
-        <h1 style={{ background: "#fff5bd" }}>Create a Tenant Account</h1>
-
-        <Form
-          {...layout}
-          name="normal_login"
-          className="login-register-form"
-          onFinish={this.onFinish}
-          initialValues={{
-            auditor: user.name,
+      <Layout>
+        <h2
+          style={{
+            background: "#fff5bd",
+            width: "98%",
+            "margin-bottom": "auto",
           }}
         >
-          {/* No name, replace with id for annonymity */}
-
-          <Form.Item
-            label="Tenant Name"
-            name="name"
-            rules={[
-              {
-                required: true,
-                type: "string",
-                message: "Please input a valid Name!",
-              },
-            ]}
+          Create a Tenant Account
+        </h2>
+        <Content>
+          <Form
+            {...layout}
+            name="normal_login"
+            className="login-register-form"
+            onFinish={this.onFinish}
+            initialValues={{
+              auditor: user.name,
+            }}
           >
-            <Input
-              placeholder="Tenant Name"
-              onChange={this.onChange}
-              value={this.state.name}
-              error={errors.name}
-              id="name"
-              type="name"
-              // className={classnames("", {
-              //   invalid: errors.email,
-              // })}
-            />
-          </Form.Item>
+            {/* No name, replace with id for annonymity */}
 
-          <Form.Item
-            label="Type"
-            name="type"
-            rules={[
-              {
-                required: true,
-                message: "Please select F&B or non-F&B!",
-              },
-            ]}
-          >
-            <Select
-              showSearch
-              className="dropdown"
-              placeholder="F&B or Non-F&B"
-              options={tenantTypes}
-              onChange={this.onDropdownChange}
-              id="type"
-              type="type"
-              value={this.state.type}
-              error={errors.type}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-                message: "Please input a valid Email!",
-              },
-            ]}
-          >
-            <Input
-              placeholder="Email"
-              onChange={this.onChange}
-              value={this.state.email}
-              error={errors.email}
-              id="email"
-              type="email"
-              // className={classnames("", {
-              //   invalid: errors.email,
-              // })}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[
-              {
-                required: true,
-                type: "string",
-                message: "Please input a valid Address!",
-              },
-            ]}
-          >
-            <Input
-              placeholder="Address"
-              onChange={this.onChange}
-              value={this.state.address}
-              error={errors.address}
-              id="address"
-              type="address"
-              // className={classnames("", {
-              //   invalid: errors.email,
-              // })}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Institution"
-            name="institution"
-            rules={[
-              {
-                required: true,
-                message: "Please select an institution!",
-              },
-            ]}
-          >
-            <Select
-              showSearch
-              className="dropdown"
-              icon={MailOutlined}
-              placeholder="Institution"
-              options={institutions}
-              onChange={this.onDropdownChange}
-              id="institution"
-              type="institution"
-              value={this.state.institution}
-              error={errors.institution}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Auditor"
-            name="auditor"
-            rules={[
-              { required: true, message: "Please input name of Auditor!" },
-            ]}
-          >
-            <Input
-              placeholder="Auditor"
-              onChange={this.onChange}
-              value={this.state.auditor}
-              error={errors.auditor}
-              id="auditor"
-              type="auditor"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-register-form-button"
+            <Form.Item
+              label="Tenant Name"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  type: "string",
+                  message: "Please input a valid Name!",
+                },
+              ]}
             >
-              Create Tenant
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+              <Input
+                placeholder="Tenant Name"
+                onChange={this.onChange}
+                value={this.state.name}
+                error={errors.name}
+                id="name"
+                type="name"
+                // className={classnames("", {
+                //   invalid: errors.email,
+                // })}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Type"
+              name="type"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select F&B or non-F&B!",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                className="dropdown"
+                placeholder="F&B or Non-F&B"
+                options={tenantTypes}
+                onChange={this.onDropdownChange}
+                id="type"
+                type="type"
+                value={this.state.type}
+                error={errors.type}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please input a valid Email!",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Email"
+                onChange={this.onChange}
+                value={this.state.email}
+                error={errors.email}
+                id="email"
+                type="email"
+                // className={classnames("", {
+                //   invalid: errors.email,
+                // })}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  type: "string",
+                  message: "Please input a valid Address!",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Address"
+                onChange={this.onChange}
+                value={this.state.address}
+                error={errors.address}
+                id="address"
+                type="address"
+                // className={classnames("", {
+                //   invalid: errors.email,
+                // })}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Institution"
+              name="institution"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select an institution!",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                className="dropdown"
+                icon={MailOutlined}
+                placeholder="Institution"
+                options={institutions}
+                onChange={this.onDropdownChange}
+                id="institution"
+                type="institution"
+                value={this.state.institution}
+                error={errors.institution}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Auditor"
+              name="auditor"
+              rules={[
+                { required: true, message: "Please input name of Auditor!" },
+              ]}
+            >
+              <Input
+                placeholder="Auditor"
+                onChange={this.onChange}
+                value={this.state.auditor}
+                error={errors.auditor}
+                id="auditor"
+                type="auditor"
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-register-form-button"
+              >
+                Create Tenant
+              </Button>
+            </Form.Item>
+          </Form>
+        </Content>
+      </Layout>
     );
   }
 }

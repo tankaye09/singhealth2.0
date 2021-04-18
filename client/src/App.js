@@ -24,7 +24,6 @@ import CreateTenant from "./components/auth/CreateTenant";
 import ViewAuditAuditor from "./components/ViewAudit";
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
-import TenantEditAudit from "./components/tenant/EditAudit";
 import ViewAuditTenant from "./components/ViewAuditTenant";
 //Error warning
 import MessageDisplay from "./components/MessageDisplay";
@@ -82,11 +81,6 @@ class App extends Component {
                 exact
                 path="/viewaudittenant"
                 component={ViewAuditTenant}
-              />
-              <TenantRoute
-                exact
-                path="/tenant/editAudit"
-                component={TenantEditAudit}
               />
             </Switch>
           </div>
