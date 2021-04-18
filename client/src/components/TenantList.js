@@ -29,14 +29,17 @@ class Directory extends Component {
     };
 
     // this.delTenant = this.delTenant.bind(this);
-    // this.deleteAudit = this.deleteAudit.bind(this);
+    this.deleteAudit = deleteAudit.bind(this);
     // this.deleteTenant = this.deleteTenant.bind(this);
-    this.onDeleteClick = this.onDeleteClick.bind(this);
+    // this.onDeleteClick = this.onDeleteClick.bind(this);
   }
 
   componentDidMount() {
-    console.log("data");
+    this.getTenantFunction();
+  }
 
+  getTenantFunction() {
+    console.log("data");
     this.props.getTenants((data) => {
       for (var i = 0; i < data.length; i++) {
         if (data[i].type === "Non-FB") {
@@ -164,28 +167,29 @@ class Directory extends Component {
   //   this.onDeleteClick();
   // }
 
-  onDeleteClick = () => {
-    this.setState({
-      ...this.state,
-      visible: false,
-    });
+  onDeleteClick = async () => {
+    this.hideModal();
     var tenantList = this.state.tenantData;
+    // function sleep(ms) {
+    //   return new Promise((resolve) => setTimeout(resolve, ms));
+    // }
     for (var i = 0; i < tenantList.length; i++) {
       if (tenantList[i].userId == this.state.userId) {
         console.log(this.state.userId);
         delTenant({ _id: tenantList[i]._id });
-        deleteAudit({ tenantID: tenantList[i]._id }).then(() => {
-          this.setState(this.state);
-          console.log("force update");
-        });
         deleteTenant({ _id: this.state.userId });
+        this.deleteAudit({ tenantID: tenantList[i]._id }).then(() => {
+          // this.setState(this.state); // this should rerender the component but it does not
+          this.getTenantFunction(); // this gets the new data from database and sets the state of tenantData to the updated one
+        });
         console.log("sent for deletion");
         break;
       }
     }
-    // this.setState({
-    //   visible2: false,
-    // });
+    // console.log("sleeping");
+    // await sleep(1000);
+    // console.log("slept");
+    // this.forceUpdate();
   };
 
   showModal = (record) => {
@@ -269,7 +273,7 @@ class Directory extends Component {
             <Modal
               title="Modal"
               visible={this.state.visible}
-              onOk={this.onDeleteClick}
+              onOk={this.onDeleteClick.bind(this)}
               onCancel={this.hideModal}
               okText="Confirm"
               cancelText="Cancel"

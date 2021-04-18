@@ -83,9 +83,12 @@ export const updateAuditImage = (data) => {
 
 export const deleteAudit = (data) => {
   console.log(data);
-  return axios.post("/api/audits", data).catch((error) => {
-    console.log(error);
-  });
+  return axios
+    .post("/api/audits", data)
+    .then((res) => console.log("audit deleted success"))
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export const sendEmail = (data) => {
