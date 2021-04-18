@@ -321,6 +321,14 @@ div.form {
   border-radius: 3px;
 }
 
+.view-audit-buttons {
+  height: auto;
+  color: #f3ab1b;
+  font-weight: bold;
+  border-color: #f3ab1b;
+  border-radius: 3px;
+}
+
 .create-audit-row {
   text-align: left;
   padding-right: 20px;
@@ -392,17 +400,20 @@ div.form {
   margin: auto;
 }
 
-.commentLeft {
+.cardLeft {
   padding-left: 10%;
   padding-right: 10%;
-  width: 50%;
+  width: 80%;
+  margin-top: 2px;
   text-align: left;
 }
 
-.commentRight {
+.cardRight {
   padding-left: 10%;
   padding-right: 10%;
-  width: 50%;
+  width: 80%;
+  margin-top: 2px;
+  margin-left: 20%;
   text-align: right;
 }
 
@@ -431,13 +442,4 @@ div.form {
 .name2 {
   font-size: 20px;
   font-style: italic;
-}
-
-.imageLeft {
-  left: 0px;
-  width: 66%;
-}
-.imageRight {
-  right: 0px;
-  width: 66%;
 }

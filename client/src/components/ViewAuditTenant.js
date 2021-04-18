@@ -13,16 +13,13 @@ import {
   Card,
   Modal,
   Divider,
+  Layout,
 } from "antd";
 import dateformat from "dateformat";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import moment from "moment";
-import {
-  display,
-  updateAudit,
-  updateAuditImage,
-} from "../actions/auditActions.js";
+import { updateAudit, updateAuditImage } from "../actions/auditActions.js";
 const fileUpload = require("fuctbase64");
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -132,24 +129,24 @@ class ViewAuditTenant extends Component {
     Comm = Comm.sort((a, b) => a.date > b.date);
     console.log(Comm);
 
-    let commentAlign = "commentLeft";
-    let imageAlign = "imageLeft";
+    let cardAlign = "cardLeft";
     for (var j = 0; j < Comm.length; j++) {
       if (Comm[j].content) {
         console.log("if: ", Comm[j].content);
+        cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
         output.push(
-          <Card size="small">
+          <Card size="small" className={cardAlign}>
             <Comment
               author={<a>{Comm[j].author}</a>}
-              className={commentAlign}
               content={<p>{Comm[j].content}</p>}
             />
           </Card>
         );
       } else {
+        cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
         console.log("else: ", typeof Comm[j]);
         output.push(
-          <Card className={imageAlign} size="small">
+          <Card className={cardAlign} size="small">
             <p></p>
             <Comment
               author={<a>{Comm[j].uploader}</a>}
@@ -257,7 +254,7 @@ class ViewAuditTenant extends Component {
 
   render() {
     return (
-      <div className="table">
+      <Layout>
         <Card size="small">
           <Row>
             <Col span={15} style={{ display: "block" }}>
@@ -304,7 +301,7 @@ class ViewAuditTenant extends Component {
         </Card>
         {this.displayComments()}
         <div />
-        <Card size="small">
+        <Card size="small" style={{ "background-color": "#F0F2F5" }}>
           <Form
             className="addComment"
             onChange={this.newComment}
@@ -323,12 +320,16 @@ class ViewAuditTenant extends Component {
               />
             </Form.Item>
             <Form.Item>
-              <Button className="submit-comment" onClick={this.submitComment}>
+              <Button
+                className="view-audit-buttons"
+                onClick={this.submitComment}
+              >
                 Submit Comment
               </Button>
             </Form.Item>
 
             <Divider />
+
             <Form.Item label={<b>Add Photo</b>}>
               <Input type="file" onChange={this.fileSelectedHandler} />
             </Form.Item>
@@ -350,7 +351,9 @@ class ViewAuditTenant extends Component {
                 type="caption"
               />
             </Form.Item>
-            <Button onClick={this.handleFormOk}>Submit Photo</Button>
+            <Button className="view-audit-buttons" onClick={this.handleFormOk}>
+              Submit Photo
+            </Button>
           </Form>
         </Card>
 
@@ -364,7 +367,7 @@ class ViewAuditTenant extends Component {
         >
           <p>Photo Added!</p>
         </Modal>
-      </div>
+      </Layout>
     );
   }
 }

@@ -12,16 +12,14 @@ import {
   Col,
   Card,
   Modal,
+  Divider,
+  Layout,
 } from "antd";
 import dateformat from "dateformat";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import moment from "moment";
-import {
-  display,
-  updateAudit,
-  updateAuditImage,
-} from "../actions/auditActions.js";
+import { updateAudit, updateAuditImage } from "../actions/auditActions.js";
 const fileUpload = require("fuctbase64");
 
 const { Text } = Typography;
@@ -133,20 +131,22 @@ class ViewAudit extends Component {
     Comm = Comm.sort((a, b) => a.date > b.date);
     console.log(Comm);
 
+    let cardAlign = "cardLeft";
     for (var j = 0; j < Comm.length; j++) {
       if (Comm[j].content) {
+        cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
         output.push(
-          <Card size="small">
+          <Card size="small" className={cardAlign}>
             <Comment
               author={<a>{Comm[j].author}</a>}
-              className="comment"
               content={<p>{Comm[j].content}</p>}
             />
           </Card>
         );
       } else {
+        cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
         output.push(
-          <Card className="image" size="small">
+          <Card className={cardAlign} size="small">
             <Comment
               author={<a>{Comm[j].uploader}</a>}
               className="caption"
@@ -250,7 +250,7 @@ class ViewAudit extends Component {
 
   render() {
     return (
-      <div className="table">
+      <Layout>
         <Card>
           <Row>
             <Col span={15} style={{ display: "block" }}>
@@ -297,49 +297,64 @@ class ViewAudit extends Component {
         </Card>
         <div>
           <div>{this.displayComments()}</div>
-          <Form
-            className="addComment"
-            onChange={this.newComment}
-            initialValues={{
-              remember: false,
-            }}
-          >
-            <Form.Item name="addComment" label="Add Comment">
-              <TextArea
-                className="addCommentText"
-                placeholder="Add Comment"
-                rows={4}
-                allowClear={true}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button className="submit-comment" onClick={this.submitComment}>
-                Submit Comment
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Input type="file" onChange={this.fileSelectedHandler} />
-            </Form.Item>
-
-            <Form.Item
-              name="caption"
-              rules={[
-                {
-                  required: true,
-                  message: "Description",
-                },
-              ]}
+          <Card size="small" style={{ "background-color": "#F0F2F5" }}>
+            <Form
+              className="addComment"
+              onChange={this.newComment}
+              layout="vertical"
+              size="small"
+              initialValues={{
+                remember: false,
+              }}
             >
-              <Input
-                placeholder="Caption"
-                onChange={this.onChangeCaption}
-                value={this.state.caption}
-                id="caption"
-                type="caption"
-              />
-            </Form.Item>
-            <Button onClick={this.handleFormOk}>Submit Photo</Button>
-          </Form>
+              <Form.Item name="addComment" label={<b>Add Comment</b>}>
+                <TextArea
+                  className="addCommentText"
+                  placeholder="Add Comment"
+                  rows={4}
+                  allowClear={true}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  className="view-audit-buttons"
+                  onClick={this.submitComment}
+                >
+                  Submit Comment
+                </Button>
+              </Form.Item>
+
+              <Divider />
+
+              <Form.Item label={<b>Add Photo</b>}>
+                <Input type="file" onChange={this.fileSelectedHandler} />
+              </Form.Item>
+
+              <Form.Item
+                name="caption"
+                rules={[
+                  {
+                    required: true,
+                    message: "Description",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Caption"
+                  onChange={this.onChangeCaption}
+                  value={this.state.caption}
+                  id="caption"
+                  type="caption"
+                />
+              </Form.Item>
+              <Button
+                className="view-audit-buttons"
+                onClick={this.handleFormOk}
+              >
+                Submit Photo
+              </Button>
+            </Form>
+          </Card>
           <Modal
             title="Upload Confirm"
             destroyOnClose={true}
@@ -351,7 +366,7 @@ class ViewAudit extends Component {
             <p>Photo Added!</p>
           </Modal>
         </div>
-      </div>
+      </Layout>
     );
   }
 }
