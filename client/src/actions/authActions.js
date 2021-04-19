@@ -133,8 +133,46 @@ export const deleteTenant = (data) => {
   });
 };
 
-export const printMe = () => {
-  console.log("Inside print me");
+export const resetPassword = (data) => (dispatch) => {
+  console.log("resetpassword");
+  axios
+    .put("/api/users/resetpassword", data)
+    .then((res) => {
+      console.log("axios called");
+      sendEmailPasswordReset(res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Password Resetted if email is valid",
+      });
+    })
+    .catch((err) => {
+      console.log("axios called but error");
+      console.log(err);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Password Resetted if email is valid",
+      });
+    });
+};
+
+export const sendEmailPasswordReset = (data) => {
+  console.log("In send email");
+  axios
+    .post("/api/sendemail/reset", data)
+    .then((res) => {
+      console.log("email sent success");
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
+    })
+    .catch((err) => {
+      console.log("email sent failed, err: ", err);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
+    });
 };
 
 export const sendEmail = (data) => {

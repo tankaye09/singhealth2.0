@@ -27,6 +27,7 @@
     "dateformat": "^4.5.1",
     "express": "^4.17.1",
     "fuctbase64": "^1.4.0",
+    "generate-password": "^1.6.0",
     "image-to-base64": "^2.1.1",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",

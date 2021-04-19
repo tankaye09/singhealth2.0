@@ -25,6 +25,7 @@ import ViewAuditAuditor from "./components/ViewAudit";
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
 import ViewAuditTenant from "./components/ViewAuditTenant";
+import ResetPassword from "./components/auth/ResetPassword";
 //Error warning
 import MessageDisplay from "./components/MessageDisplay";
 
@@ -60,6 +61,7 @@ class App extends Component {
             <Route exact path="/" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/resetpassword" component={ResetPassword} />
             <Switch>
               <StaffRoute exact path="/auditlist" component={AuditList} />
               <StaffRoute exact path="/checklistFB" component={Checklist} />

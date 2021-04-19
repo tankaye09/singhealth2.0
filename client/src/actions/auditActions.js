@@ -91,62 +91,62 @@ export const deleteAudit = (data) => {
     });
 };
 
-export const sendEmail = (data) => {
+export const sendEmail = (data) => (dispatch) => {
   console.log("In send email");
   axios
     .post("/api/sendemail/audit", data)
     .then((res) => {
       console.log("email sent success");
-      // dispatch({
-      //   type: GET_MESSAGE,
-      //   payload: "Email Sent to Tenant",
-      // });
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Email Sent to Tenant",
+      });
     })
     .catch((err) => {
       console.log("email sent failed, err: ", err);
-      // dispatch({
-      //   type: GET_ERRORS,
-      //   payload: "Email Sent Failed",
-      // });
+      dispatch({
+        type: GET_ERRORS,
+        payload: "Email Sent Failed",
+      });
     });
 };
 
-export const sendEmailAuditUpdate = (data) => {
+export const sendEmailAuditUpdate = (data) => (dispatch) => {
   console.log("In send email");
   axios
     .post("/api/sendemail/auditupdate", data)
     .then((res) => {
       console.log("email sent success");
-      // dispatch({
-      //   type: GET_MESSAGE,
-      //   payload: "Email Sent to Tenant",
-      // });
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Email Notification Sent",
+      });
     })
     .catch((err) => {
       console.log("email sent failed, err: ", err);
-      // dispatch({
-      //   type: GET_ERRORS,
-      //   payload: "Email Sent Failed",
-      // });
+      dispatch({
+        type: GET_ERRORS,
+        payload: "Email Sent Failed",
+      });
     });
 };
 
-export const sendEmailReminder = (data) => {
+export const sendEmailReminder = (data) => (dispatch) => {
   console.log("In send email");
   return axios
     .post("/api/sendemail/reminder", data)
     .then((res) => {
       console.log("email sent success");
-      // dispatch({
-      //   type: GET_MESSAGE,
-      //   payload: "Email Reminder Sent to Tenant",
-      // });
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Email Reminder Sent to Tenant",
+      });
     })
     .catch((err) => {
       console.log("email sent failed, err: ", err);
-      // dispatch({
-      //   type: GET_ERRORS,
-      //   payload: "Email Sent Failed",
-      // });
+      dispatch({
+        type: GET_ERRORS,
+        payload: "Email Sent Failed",
+      });
     });
 };

@@ -35,16 +35,26 @@ router.post("/create", async (req, res) => {
   });
 
   // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
-    to: `${req.body.email}`, // list of receivers
-    subject: "Singhealth Notification: New Singhealth Tenant Account Created", // Subject line
-    // text: "Hello world?", // plain text body
-    html: output, // html body
-  });
-
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  let info = await transporter.sendMail(
+    {
+      from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
+      to: `${req.body.email}`, // list of receivers
+      subject: "Singhealth Notification: New Singhealth Tenant Account Created", // Subject line
+      // text: "Hello world?", // plain text body
+      html: output, // html body
+    },
+    (error, info) => {
+      if (error) {
+        console.log("email sent error");
+        res.send(error);
+      } else {
+        console.log("Message sent: %s", info.messageId);
+        res.send(info.messageId);
+      }
+    }
+  );
+  // console.log("Message sent: %s", info.messageId);
+  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 });
 
 // @route POST api/sendemail/audit
@@ -76,16 +86,26 @@ router.post("/audit", (req, res) => {
       });
 
       // send mail with defined transport object
-      let info = await transporter.sendMail({
-        from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
-        to: `${user.email}`, // list of receivers
-        subject: "Singhealth Notification: New Audit Created", // Subject line
-        // text: "Hello world?", // plain text body
-        html: output, // html body
-      });
-
-      console.log("Message sent: %s", info.messageId);
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      let info = await transporter.sendMail(
+        {
+          from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
+          to: `${user.email}`, // list of receivers
+          subject: "Singhealth Notification: New Audit Created", // Subject line
+          // text: "Hello world?", // plain text body
+          html: output, // html body
+        },
+        (error, info) => {
+          if (error) {
+            console.log("email sent error");
+            res.send(error);
+          } else {
+            console.log("Message sent: %s", info.messageId);
+            res.send(info.messageId);
+          }
+        }
+      );
+      // console.log("Message sent: %s", info.messageId);
+      // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     });
   });
 });
@@ -143,16 +163,26 @@ router.post("/auditupdate", (req, res) => {
         });
 
         // send mail with defined transport object
-        let info = await transporter.sendMail({
-          from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
-          to: `${user.email}`, // list of receivers
-          subject: "Singhealth Notification: New Audit Update", // Subject line
-          // text: "Hello world?", // plain text body
-          html: output, // html body
-        });
-
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        let info = await transporter.sendMail(
+          {
+            from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
+            to: `${user.email}`, // list of receivers
+            subject: "Singhealth Notification: New Audit Update", // Subject line
+            // text: "Hello world?", // plain text body
+            html: output, // html body
+          },
+          (error, info) => {
+            if (error) {
+              console.log("email sent error");
+              res.send(error);
+            } else {
+              console.log("Message sent: %s", info.messageId);
+              res.send(info.messageId);
+            }
+          }
+        );
+        // console.log("Message sent: %s", info.messageId);
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
       });
     })
     .catch((message) => {
@@ -194,35 +224,81 @@ router.post("/reminder", (req, res) => {
             },
           });
 
-          try {
-            // send mail with defined transport object
-            let info = await transporter.sendMail(
-              {
-                from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
-                to: `${user.email}`, // list of receivers
-                subject: "Singhealth Notification: Audit Expiry Reminder", // Subject line
-                // text: "Hello world?", // plain text body
-                html: output, // html body
-              },
-              (error, info) => {
-                if (error) {
-                  console.log("email sent error");
-                  return error;
-                } else {
-                  console.log("Message sent: %s", info.messageId);
-                  return info.response;
-                }
+          // send mail with defined transport object
+          let info = await transporter.sendMail(
+            {
+              from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
+              to: `${user.email}`, // list of receivers
+              subject: "Singhealth Notification: Audit Expiry Reminder", // Subject line
+              // text: "Hello world?", // plain text body
+              html: output, // html body
+            },
+            (error, info) => {
+              if (error) {
+                console.log("email sent error");
+                res.send(error);
+              } else {
+                console.log("Message sent: %s", info.messageId);
+                res.send(info.messageId);
               }
-            );
-            // console.log("Message sent: %s", info.messageId);
-            // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-          } catch (err) {
-            return err;
-          }
+            }
+          );
+          // console.log("Message sent: %s", info.messageId);
+          // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         })
         .catch((err) => console.log("Error finding user: ", err));
     })
     .catch((err) => console.log("Error finding tenant: ", err));
+});
+
+// Send password reset email with new password
+router.post("/reset", async (req, res) => {
+  console.log("Res in sendemail/reset: ", req.body);
+  const output = `
+    <h3>Singhealth Account Password Resetted</h3>
+    <p>Hello User,</p>
+    <p>Your Password has been resetted. Please visit http://localhost:3000/ to login to your account </p>
+    <ul>
+      <li>New password: ${req.body.password}</li>
+    </ul>
+    <p>You are advised to change your password after logging in</p>
+    <p>Thank you</p>
+    `;
+
+  let transporter = nodemailer.createTransport({
+    host: "smtp-mail.outlook.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: "singhealthbot@outlook.com", // username
+      pass: "Singhealthb0t", // password
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail(
+    {
+      from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
+      to: `${req.body.email}`, // list of receivers
+      subject: "Singhealth Notification: New Singhealth Tenant Account Created", // Subject line
+      // text: "Hello world?", // plain text body
+      html: output, // html body
+    },
+    (error, info) => {
+      if (error) {
+        console.log("email sent error");
+        res.send(error);
+      } else {
+        console.log("Message sent: %s", info.messageId);
+        res.send(info.messageId);
+      }
+    }
+  );
+  // console.log("Message sent: %s", info.messageId);
+  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 });
 
 module.exports = router;

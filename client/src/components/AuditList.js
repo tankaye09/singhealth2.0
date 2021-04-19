@@ -84,8 +84,7 @@ class AuditList extends Component {
 
   onReminderClick = (record) => {
     console.log({ record });
-    // this.props.sendEmailReminder({ record });
-    sendEmailReminder({ record }).then(() => console.log("email sent"));
+    this.props.sendEmailReminder({ record });
   };
 
   deleteAudit(id) {

@@ -11,6 +11,9 @@ const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
 
+// Password generator
+var generator = require("generate-password");
+
 // @route POST api/users/register
 // @desc Register user
 // @access Public
@@ -114,9 +117,11 @@ const Tenant = require("../../models/Tenant");
 // @desc Register tenant
 // @access Public -> TODO: make
 router.post("/createtenant", (req, res) => {
-  // var resJsonUser;
-  // var resJsonTenant;
   console.log("inside router.post");
+  // var newpassword = generator.generate({
+  //   length: 10,
+  //   numbers: true,
+  // });
 
   User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
@@ -192,6 +197,47 @@ router.post("/deletetenant", (req, res) => {
       console.log("Tenant Deleted2");
     })
     .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
+var newpassword = generator.generate({
+  length: 10,
+  numbers: true,
+});
+// let newpassword = "newpassword";
+let hashed = "";
+router.put("/resetpassword", (req, res) => {
+  console.log("axios called inside axios");
+
+  // Hash password before saving in database
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newpassword, salt, (err, hash) => {
+      if (err) throw err;
+      hashed = hash;
+      User.findOneAndUpdate(
+        { email: req.body.email },
+        { password: hashed },
+        (error, data) => {
+          if (error) {
+            console.log(error);
+            res.send(error);
+          } else {
+            console.log("This is the data: ", data);
+            data.password = newpassword;
+            console.log("This is the new data: ", data);
+            res.send(data);
+          }
+        }
+      );
+      // .then(() => {
+      //   console.log("Password reseted");
+      //   console.log(res);
+      // })
+      // .catch((err) => {
+      //   console.log("password not reseted");
+      //   console.log(err);
+      // });
+    });
+  });
 });
 
 module.exports = router;

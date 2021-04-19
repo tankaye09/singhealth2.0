@@ -106,7 +106,6 @@ class Login extends Component {
       <Layout>
         <h2>Welcome to SingHealth Audit</h2>
         <p>Enter your email and password to log in </p>
-
         <Content>
           <Form
             onFinish={this.onFinish}
@@ -171,6 +170,11 @@ class Login extends Component {
               >
                 Log in
               </Button>
+              <p></p>
+              <p>
+                Forgot password?
+                <Link to="/resetPassword"> Click here </Link>to reset it
+              </p>
               New staff member? <Link to="/Register">Register here!</Link>
             </Form.Item>
           </Form>

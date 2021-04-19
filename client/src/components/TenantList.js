@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Input, Button, Space, Table, Modal } from "antd";
+import { Input, Button, Space, Table, Modal, Layout } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -284,14 +284,16 @@ class Directory extends Component {
       },
     ];
     return (
-      <div className="table">
-        <Table
-          columns={columns}
-          dataSource={this.state.tenantData}
-          scroll={{ x: 400, y: 300 }}
-          title={() => <div className="table-title">Tenants</div>}
-        />
-      </div>
+      <Layout>
+        <div className="table">
+          <h3>Tenants</h3>
+          <Table
+            columns={columns}
+            dataSource={this.state.tenantData}
+            scroll={{ x: 400, y: 300 }}
+          />
+        </div>
+      </Layout>
     );
   }
 }
