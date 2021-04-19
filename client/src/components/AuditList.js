@@ -1,7 +1,7 @@
 import React, { Component, TextArea } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Input, Table, Button, Tag, Space } from "antd";
+import { Input, Table, Button, Layout, Space } from "antd";
 import { connect } from "react-redux";
 import moment from "moment";
 import Highlighter from "react-highlight-words";
@@ -37,6 +37,9 @@ const Audit = (props) => (
 
 const mapDispatchToProps = {
   display,
+  sendEmailReminder,
+  setSelectedTenant,
+  getTenants,
 };
 
 class AuditList extends Component {
@@ -81,7 +84,8 @@ class AuditList extends Component {
 
   onReminderClick = (record) => {
     console.log({ record });
-    sendEmailReminder({ record });
+    // this.props.sendEmailReminder({ record });
+    sendEmailReminder({ record }).then(() => console.log("email sent"));
   };
 
   deleteAudit(id) {
@@ -289,15 +293,19 @@ class AuditList extends Component {
     ];
 
     return (
-      <div className="table">
-        <Table
-          rowClassName={(record) => (record.total_score < 95 ? "red" : "green")}
-          columns={columns}
-          dataSource={this.state.audits}
-          title={() => <div className="table-title">Audits</div>}
-          scroll={{ x: 800, y: 300 }}
-        />
-      </div>
+      <Layout>
+        <div className="table">
+          <h3>Your Audits</h3>
+          <Table
+            rowClassName={(record) =>
+              record.total_score < 95 ? "red" : "green"
+            }
+            columns={columns}
+            dataSource={this.state.audits}
+            scroll={{ x: 800, y: 300 }}
+          />
+        </div>
+      </Layout>
     );
   }
 }
@@ -308,8 +316,4 @@ AuditList.propTypes = {
 const mapStateToProps = (state) => ({
   userID: state.auth.user.id,
 });
-export default connect(mapStateToProps, {
-  setSelectedTenant,
-  getTenants,
-  display,
-})(AuditList);
+export default connect(mapStateToProps, mapDispatchToProps)(AuditList);

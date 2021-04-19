@@ -133,13 +133,13 @@ export const sendEmailAuditUpdate = (data) => {
 
 export const sendEmailReminder = (data) => {
   console.log("In send email");
-  axios
+  return axios
     .post("/api/sendemail/reminder", data)
     .then((res) => {
       console.log("email sent success");
       // dispatch({
       //   type: GET_MESSAGE,
-      //   payload: "Email Sent to Tenant",
+      //   payload: "Email Reminder Sent to Tenant",
       // });
     })
     .catch((err) => {
