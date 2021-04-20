@@ -101,7 +101,7 @@ class AccountInfo extends Component {
 
     return (
       <Layout>
-        <Card>
+        <Card style={{ "border-radius": "10px", margin: "5vw" }}>
           <Row>
             <Col span={12}>
               <ul className="ul">
@@ -214,7 +214,7 @@ class AccountInfo extends Component {
             </Col>
           </Row>
         </Card>
-        <Card size="small" style={{ "background-color": "#F0F2F5" }}>
+        <Card style={{ "background-color": "#F0F2F5" }}>
           <Form
             className="addComment"
             layout="vertical"
