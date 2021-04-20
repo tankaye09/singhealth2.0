@@ -19,6 +19,17 @@ import PropTypes from "prop-types";
 
 const { Title } = Typography;
 
+const gridStyleLeft = {
+    width: '50%',
+    textAlign: 'Left',
+};
+
+const gridStyleRight = {
+    width: '50%',
+    textAlign: 'Right',
+};
+
+
 class AccountInfo extends Component {
     constructor(props) {
         super(props);
@@ -91,49 +102,75 @@ class AccountInfo extends Component {
             <Layout>
                 <Card>
                     <Row>
-                        <Col span={15} style={{ display: "block" }}>
+                        <ul className="ul">
                             <div
                                 style={{ "text-align": "left", clear: "both", width: "100%" }}
                             >
-                                Tenant ID: {user.id}
+                                Tenant Name:
                             </div>
-                            <div className="name">
-                                <b>{this.state.tenantID}</b>
+                        </ul>
+                        <ul className="ul">
+                            <div className="info">
+                                <b>
+                                    {user.name}
+                                </b>
                             </div>
+                        </ul>
+                        <p></p>
+                        <ul className="ul">
+                            <div
+                                style={{ "text-align": "left", clear: "both", width: "100%" }}
+                            >
+                                Tenant ID:
+                            </div>
+                        </ul>
+                        <ul className="ul">
+                            <div className="idInfo">
+                                <b>
+                                    {user.id}
+                                </b>
+                            </div>
+                        </ul>
+                        <ul className="ul">
                             <div
                                 style={{ "text-align": "left", clear: "both", width: "100%" }}
                             >
                                 Auditor:
               </div>
-                            <div className="name">
+                        </ul>
+                        <ul className="ul">
+                            <div className="info">
                                 <b>{this.state.auditor}</b>
                             </div>
+                        </ul>
+                        <ul className="ul">
                             <div
                                 style={{ "text-align": "left", clear: "both", width: "100%" }}
                             >
                                 Tenant Location:
               </div>
-                            <div className="name">
+                        </ul>
+                        <ul className="ul">
+                            <div className="info">
                                 <b>
                                     {this.state.tenantLocation}
                                 </b>
                             </div>
+                        </ul>
+                        <ul className="ul">
                             <div
                                 style={{ "text-align": "left", clear: "both", width: "100%" }}
                             >
                                 Institution:
               </div>
-                            <div className="name">
+                        </ul>
+                        <ul className="ul">
+                            <div className="info">
                                 <b>
                                     {user.institution}
                                 </b>
                             </div>
-                        </Col>
-                        <Col span={9}>
-                            <Title>
-                                Hello {user.name.split(" ")[0]}!
-                            </Title>
-                        </Col>
+                        </ul>
                     </Row>
                 </Card>
                 <Card size="small" style={{ "background-color": "#F0F2F5" }}>
@@ -214,7 +251,7 @@ class AccountInfo extends Component {
                         </Form.Item>
                     </Form>
                 </Card>
-            </Layout>
+            </Layout >
         );
     }
 }

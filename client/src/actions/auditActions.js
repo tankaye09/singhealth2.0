@@ -2,7 +2,7 @@ import { getAllByPlaceholderText } from "@testing-library/dom";
 import axios from "axios";
 import { GET_ERRORS, GET_MESSAGE } from "./types";
 
-export const submit = (data) => (dispatch) => {
+export const submit = (data, history) => (dispatch) => {
   console.log("submit", data);
   let promise = new Promise((resolve, reject) => {
     axios
@@ -13,6 +13,7 @@ export const submit = (data) => (dispatch) => {
           payload: "Audit Created",
         });
         resolve(data);
+        history.push("/auditlist");
       })
       .catch((error) => {
         console.log("in the error");

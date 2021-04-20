@@ -49,7 +49,7 @@ class AuditList extends Component {
     this.deleteAudit = this.deleteAudit.bind(this);
     this.state = {
       audits: [],
-      switchState: "expired",
+      switchState: "ongoing",
       currentAudits: [],
       expiredAudits: [],
     };
@@ -79,7 +79,7 @@ class AuditList extends Component {
         if (
           new Date(
             moment(data[i].rectifyDate, "YYYY-MM-DDTHH:mm:ss.SSS").format()
-          ) >= new Date()
+          ) < new Date()
         ) {
           console.log("if: ", data[i]);
           expiredData.push(data[i]);
@@ -92,22 +92,12 @@ class AuditList extends Component {
       console.log(expiredData);
       console.log(currentData);
       this.setState({
-        audits: expiredData,
+        audits: currentData,
         expiredAudits: expiredData,
         currentAudits: currentData,
       });
     });
   }
-
-  // var ages = [32, 33, 16, 40];
-
-  // function checkExpired(row) {
-  //   return row.date >= new Date();
-  // }
-
-  // function myFunction() {
-  //   document.getElementById("demo").innerHTML = ages.filter(checkExpired);
-  // }
 
   onSwitchChange = () => {
     if (this.state.switchState === "expired") {
@@ -366,12 +356,13 @@ class AuditList extends Component {
               right: 0,
               "text-align": "center",
               float: "center",
-              "font-size": "6vw",
+              "font-size": "3vh",
             }}
           >
             Your Audits
           </h3>
           <Switch
+            defaultChecked="true"
             checkedChildren="Ongoing"
             unCheckedChildren="Expired"
             size="small"

@@ -251,7 +251,7 @@ class Directory extends Component {
         render: (record) => (
           <div>
             <Button
-              className="action-buttons"
+              className="action-buttons-normalwidth"
               size="small"
               onClick={() => this.onCreateClick(record)}
             >
@@ -260,7 +260,7 @@ class Directory extends Component {
               Audit
             </Button>
             <Button
-              className="action-buttons"
+              className="action-buttons-normalwidth"
               size="small"
               onClick={() => this.showModal(record)}
             >
@@ -270,7 +270,7 @@ class Directory extends Component {
             </Button>
 
             <Modal
-              title="Modal"
+              title="Confirm Delete"
               visible={this.state.visible}
               onOk={this.onDeleteClick.bind(this)}
               onCancel={this.hideModal}
