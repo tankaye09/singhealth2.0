@@ -2,21 +2,22 @@ import "../App.css";
 import {
   Collapse,
   Divider,
-  DatePicker,
-  Form,
   List,
   Input,
   Checkbox,
   Button,
   Modal,
+  Form,
+  DatePicker,
 } from "antd";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
-import { submit } from "../actions/auditActions.js";
+import { submit, display } from "../actions/auditActions.js";
 import dateformat from "dateformat";
 import store from "../store";
+
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
@@ -34,6 +35,8 @@ const { TextArea } = Input;
 const mapDispatchToProps = {
   submit,
 };
+//const cat0checkboxes= Fb.subcategories[0].subcategories.length();
+
 
 // TODO: Take score from json file => Update the score, replace the json file
 
@@ -45,11 +48,10 @@ class ChecklistNonFB extends Component {
     auditor: store.getState().auth.user.name,
     auditorId: store.getState().auth.user.id,
     checked: false,
-    catCounts: [0, 0, 0],
-    // counts[0]: for Professionalism & Staff Hygiene (20%),
-    //counts[1]: for Housekeeping & General Cleanliness (40%)
-    //counts[2]: for Workplace Safety & Health (40%)
+    catCounts: [0, 0, 0], 
     total_score: 0,
+    weightage:[20,40,45],//newly added for cal
+    //total_checkboxes_count:[Fb.subcategories[0].questions.length(),Fb.subcategories[1].questions.length(), Fb.subcategories[2].questions.length(),Fb.subcategories[3].questions.length(),],
     image: [],
     tempImageBase64: [],
     tempImageCaption: null,
@@ -61,6 +63,7 @@ class ChecklistNonFB extends Component {
     visibleConfirm: false,
     visibleAudit: false,
   };
+
   componentDidMount() {
     console.log("props: ", this.props.tenantInfo);
     if (typeof this.props.tenantInfo !== "undefined") {
@@ -70,22 +73,17 @@ class ChecklistNonFB extends Component {
 
   submitAudit = () => {
     // console.log(this.state);
-    // console.log(typeof this.state.date);
-    // console.log(typeof this.props.tenantInfo.record._id);
     this.props.submit({
       type: "Non-FB",
       auditor: store.getState().auth.user.name,
       auditorId: store.getState().auth.user.id,
       catCounts: this.state.catCounts,
       total_score:
-        (this.state.catCounts[0] +
-          this.state.catCounts[1] +
-          this.state.catCounts[2]) /
-        2,
+        this.state.total_score,
       image: this.state.image,
       date: this.state.date,
-      rectifyDate: this.state.rectifyDate,
       comment: this.state.comment,
+      rectifyDate: this.state.rectifyDate,
       location: this.props.tenantInfo.record.address,
       tenantID: this.props.tenantInfo.record._id,
       institution: this.props.tenantInfo.record.institution,
@@ -132,9 +130,19 @@ class ChecklistNonFB extends Component {
     });
   };
 
-  showFormModal = () => {
-    this.setState({
-      visibleForm: true,
+  fileSelectedHandler = (event) => {
+    console.log(event.target.files[0]);
+    fileUpload(event).then((data) => {
+      console.log("base64: ", data.base64);
+      this.setState({
+        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
+        tempImageBase64: [
+          {
+            base64: data.base64,
+            date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          },
+        ],
+      });
     });
   };
 
@@ -144,15 +152,16 @@ class ChecklistNonFB extends Component {
     });
   };
 
+  showFormModal = () => {
+    this.setState({
+      visibleForm: true,
+    });
+  };
+
   showConfirmModal = () => {
     this.setState({
       visibleConfirm: true,
     });
-  };
-
-  handleFormOk = (e) => {
-    console.log(e);
-    this.showConfirmModal();
   };
 
   handleAuditOk = (e) => {
@@ -162,11 +171,9 @@ class ChecklistNonFB extends Component {
     });
   };
 
-  handleCancel = (e) => {
+  handleFormOk = (e) => {
     console.log(e);
-    this.setState({
-      visibleForm: false,
-    });
+    this.showConfirmModal();
   };
 
   handleUploadOk = (e) => {
@@ -185,6 +192,13 @@ class ChecklistNonFB extends Component {
     });
   };
 
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visibleForm: false,
+    });
+  };
+
   createCheckbox = (label, catIndex) => (
     <Checkbox
       label={label}
@@ -194,21 +208,6 @@ class ChecklistNonFB extends Component {
     />
   );
 
-  fileSelectedHandler = (event) => {
-    console.log(event.target.files[0]);
-    fileUpload(event).then((data) => {
-      console.log("base64: ", data.base64);
-      this.setState({
-        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
-        tempImageBase64: [
-          {
-            base64: data.base64,
-            date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
-          },
-        ],
-      });
-    });
-  };
 
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -234,16 +233,17 @@ class ChecklistNonFB extends Component {
           this.setState((state) => state.catCounts[2]--);
         }
         break;
-
       default:
         break;
     }
   };
 
   render() {
+    // console.log(this.state.tenantInfo);
     const rectifyLabel = (
       <div>If there are no non-compliances, put {<b>today's</b>} date</div>
     );
+    //assigning array
     return (
       <div className="table">
         <h3>
@@ -263,12 +263,11 @@ class ChecklistNonFB extends Component {
         >
           <Form.Item
             name="date"
-            label="Audit Start Date"
             rules={[{ required: true, message: "Date of Incident" }]}
           >
             <DatePicker
               className="auditDate"
-              placeholder="Audit Date"
+              placeholder="Date"
               onChange={this.onChangeDate}
             />
           </Form.Item>
@@ -292,13 +291,7 @@ class ChecklistNonFB extends Component {
 
           <Form.Item
             name="Comment"
-            label="Notes or Comments"
-            rules={[
-              {
-                required: true,
-                message: "PLease enter some notes or comments about the audit",
-              },
-            ]}
+            rules={[{ required: true, message: "Description" }]}
           >
             <TextArea
               placeholder="Notes or Comments"
@@ -319,123 +312,120 @@ class ChecklistNonFB extends Component {
           Upload Photo
         </Button>
 
-        <div className="panels">
-          {nonFb.map((cat, catIndex) => {
-            // var catScore = cat.score;
-            return (
-              // Category
-              <Collapse defaultActiveKey={["1"]}>
-                <Panel
-                  header={<div catIndex={catIndex}>{cat.name}</div>}
-                  key={catIndex + 1}
-                  className="bg-orange"
-                >
-                  <div catIndex={catIndex}>
-                    {cat.subcategories.map((subCat, subCatIndex) => {
-                      return (
-                        // SubCategory
-                        <Collapse defaultActiveKey={["1"]}>
-                          <Panel
-                            header={
-                              <div subCatIndex={subCatIndex}>{subCat.name}</div>
-                            }
-                            key={subCatIndex + 1}
-                            className="bg-orange"
-                          >
-                            <List
-                              dataSource={subCat.questions} // Questions
-                              renderItem={(item) => (
-                                <List.Item>
-                                  <div className="checklist-item">
-                                    <div className="create-audit-row">
-                                      {item}
-                                    </div>
-                                    <div className="checklist-checkbox">
-                                      {this.createCheckbox(item, catIndex)}
-                                    </div>
+        {nonFb.map((cat, catIndex) => {
+          // var catScore = cat.score;
+          return (
+            // Category
+            <Collapse defaultActiveKey={["1"]}>
+              <Panel
+                header={<div catIndex={catIndex}>{cat.name}</div>}
+                key={catIndex + 1}
+                className="bg-orange"
+              >
+                <div catIndex={catIndex}>
+                  {cat.subcategories.map((subCat, subCatIndex) => {
+                    return (
+                      // SubCategory
+                      <Collapse defaultActiveKey={["1"]}>
+                        <Panel
+                          header={
+                            <div subCatIndex={subCatIndex}>{subCat.name}</div>
+                          }
+                          key={subCatIndex + 1}
+                          className="bg-orange"
+                        >
+                          <List
+                            dataSource={subCat.questions} // Questions
+                            renderItem={(item) => (
+                              <List.Item>
+                                <div className="checklist-item">
+                                  <div className="create-audit-row">{item}</div>
+                                  <div className="checklist-checkbox">
+                                    {this.createCheckbox(item, catIndex)}
                                   </div>
-                                </List.Item>
-                              )}
-                            />
-                          </Panel>
-                        </Collapse>
-                      );
-                    })}
-                  </div>
-                  <div>Score: {this.state.catCounts[catIndex] / 2}</div>
-                </Panel>
-              </Collapse>
-            );
-          })}
-          <b>
-            Total Score:{" "}
-            <span className="total_score">
-              {(this.state.catCounts[0] +
-                this.state.catCounts[1] +
-                this.state.catCounts[2]) /
-                2}
-            </span>
-          </b>
+                                </div>
+                              </List.Item>
+                            )}
+                          />
+                        </Panel>
+                      </Collapse>
+                    );
+                  })}
+                </div>
+                <div>Score: {Math.round(this.state.weightage[catIndex]/cat.score *(this.state.catCounts[catIndex]/2))}/{this.state.weightage[catIndex]}</div> 
+              </Panel>
+            </Collapse>
+          );
+        })}
+        <b>
+          Total Score:{" "}
+          <span className="total_score">
+            {Math.round(this.state.weightage[0]/6 *(this.state.catCounts[0]/2))
+            + Math.round(this.state.weightage[1]/12 *(this.state.catCounts[1]/2))
+            +Math.round(this.state.weightage[2]/16 *(this.state.catCounts[2]/2))
+            }/100
+          </span>
+        </b>
+
+        <Modal
+          title="Upload Photo"
+          visible={this.state.visibleForm}
+          onOk={this.handleFormOk}
+          onCancel={this.handleCancel}
+          okButtonProps={{ disabled: false }}
+          cancelButtonProps={{ disabled: false }}
+        >
+          <Form
+            name="photo_upload"
+            className="photo-upload"
+            onFinish={this.onFinish}
+          >
+            <Form.Item>
+              <Input type="file" onChange={this.fileSelectedHandler} />
+            </Form.Item>
+
+            <Form.Item
+              name="caption"
+              rules={[
+                {
+                  required: true,
+                  message: "Description",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Caption"
+                onChange={this.onChangeCaption}
+                value={this.state.caption}
+                id="caption"
+                type="caption"
+              />
+            </Form.Item>
+          </Form>
 
           <Modal
-            title="Upload Photo"
-            visible={this.state.visibleForm}
-            onOk={this.handleFormOk}
-            onCancel={this.handleCancel}
+            title="Upload Confirm"
+            destroyOnClose={true}
+            visible={this.state.visibleConfirm}
+            onOk={this.handleUploadOk}
             okButtonProps={{ disabled: false }}
-            cancelButtonProps={{ disabled: false }}
+            cancelButtonProps={{ disabled: true, visible: false }}
           >
-            <Form
-              name="photo_upload"
-              className="photo-upload"
-              onFinish={this.onFinish}
-            >
-              <Form.Item>
-                <Input type="file" onChange={this.fileSelectedHandler} />
-              </Form.Item>
-
-              <Form.Item
-                name="caption"
-                rules={[
-                  {
-                    required: true,
-                    message: "Description",
-                  },
-                ]}
-              >
-                <Input
-                  placeholder="Caption"
-                  onChange={this.onChangeCaption}
-                  value={this.state.caption}
-                  id="caption"
-                  type="caption"
-                />
-              </Form.Item>
-            </Form>
-            <Modal
-              title="Upload Confirm"
-              destroyOnClose={true}
-              visible={this.state.visibleConfirm}
-              onOk={this.handleUploadOk}
-              okButtonProps={{ disabled: false }}
-              cancelButtonProps={{ disabled: true, visible: false }}
-            >
-              <p>Photo Added!</p>
-            </Modal>
+            <p>Photo Added!</p>
           </Modal>
-          <Button
-            onClick={() => this.submitAudit()}
-            className="submit-button"
-            type="primary"
-            htmlType="submit"
-          >
-            SUBMIT
-          </Button>
-        </div>
+        </Modal>
+        <Button
+          className="submit-button"
+          type="primary"
+          onClick={() => this.submitAudit()}
+        >
+          SUBMIT
+        </Button>
       </div>
     );
   }
 }
+
 ChecklistNonFB.propTypes = {
   tenantInfo: PropTypes.object.isRequired,
 };

@@ -2,7 +2,7 @@
     "fb": [
         {
             "name": "Professionalism & Staff Hygiene (10%)",
-            "score": 0,
+            "score": 13,
             "subcategories": [
                 {
                     "name": "Professionalism",
@@ -31,7 +31,7 @@
         },
         {
             "name": "Housekeeping & General Cleanliness (20%)",
-            "score": 0,
+            "score": 17,
             "subcategories": [
                 {
                     "name": "General Environment Cleanliness",
@@ -64,7 +64,7 @@
         },
         {
             "name": "Food Hygiene (35%)",
-            "score": 0,
+            "score": 37,
             "subcategories": [
                 {
                     "name": "Storage & Preparation of Food",
@@ -117,7 +117,7 @@
         },
         {
             "name": "Healthier Choice in line with HPB’s Healthy Eating’s Initiative (15%)",
-            "score": 0,
+            "score": 11,
             "subcategories": [
                 {
                     "name": "Food",
@@ -144,7 +144,7 @@
         },
         {
             "name": "Workplace Safety & Health (20%)",
-            "score": 0,
+            "score": 18,
             "subcategories": [
                 {
                     "name": "General Safety",
@@ -185,7 +185,7 @@
     "non_fb": [
         {
             "name": "Professionalism & Staff Hygiene (20%)",
-            "score": 0,
+            "score": 6,
             "subcategories": [
                 {
                     "name": "Professionalism",
@@ -207,7 +207,7 @@
         },
         {
             "name": "Housekeeping & General Cleanliness (40%)",
-            "score": 0,
+            "score": 12,
             "subcategories": [
                 {
                     "name": "General Environment Cleanliness",
@@ -230,7 +230,7 @@
         },
         {
             "name": "Workplace Safety & Health (40%)",
-            "score": 0,
+            "score": 16,
             "subcategories": [
                 {
                     "name": "General Safety",
