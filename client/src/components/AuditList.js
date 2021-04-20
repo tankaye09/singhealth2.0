@@ -332,7 +332,7 @@ class AuditList extends Component {
         dataIndex: "",
         key: "x",
         fixed: "right",
-        width: "10%",
+        width: "15%",
         render: (record) => (
           <div>
             <Button
@@ -347,7 +347,7 @@ class AuditList extends Component {
               size="small"
               onClick={() => this.onReminderClick(record)}
             >
-              Reminder
+              Notify
             </Button>
           </div>
         ),
@@ -387,8 +387,8 @@ class AuditList extends Component {
             }
             columns={columns}
             dataSource={this.state.audits}
-            scroll={{ x: 800, y: 300 }}
-            style={{ "padding-top": "10vw" }}
+            scroll={{ x: 800, y: "68vh" }}
+            style={{ "padding-top": "6vw" }}
           />
         </div>
       </Layout>

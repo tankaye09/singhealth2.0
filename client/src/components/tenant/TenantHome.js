@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { NavLink, useHistory } from "react-router-dom";
-import { Table, Input, Space, Button } from "antd";
+import { Table, Input, Space, Button, Layout } from "antd";
 import { display } from "../../actions/auditActions.js";
 import { setSelectedTenant, getTenant } from "../../actions/tenantActions";
 import Highlighter from "react-highlight-words";
@@ -212,8 +212,7 @@ class TenantHome extends Component {
         title: "Date",
         dataIndex: "date",
         key: "date",
-        fixed: "left",
-        width: "150",
+        width: "40%",
         sorter: (a, b) => {
           if (a.date > b.date) return 1;
           else return -1;
@@ -227,8 +226,7 @@ class TenantHome extends Component {
         title: "Score",
         dataIndex: "total_score",
         key: "total_score",
-        fixed: "left",
-        width: "150",
+        width: "25%",
         sorter: (a, b) => {
           if (a.score > b.score) return 1;
           else return -1;
@@ -238,8 +236,7 @@ class TenantHome extends Component {
         title: "Action",
         dataIndex: "",
         key: "x",
-        fixed: "right",
-        width: "20%",
+        width: "35%",
         render: (record) => (
           <div>
             <Button
@@ -256,15 +253,15 @@ class TenantHome extends Component {
       },
     ];
     return (
-      <div className="table">
+      <Layout className="table">
+        <h3>Your Audits</h3>
         <Table
           columns={columns}
           dataSource={this.state.actualAudits}
           rowClassName={(record) => (record.total_score < 95 ? "red" : "green")}
-          title={() => <div className="table-title">Your Audits</div>}
-          scroll={{ x: 400 }}
+          scroll={{ y: "72vh" }}
         />
-      </div>
+      </Layout>
     );
   }
 }

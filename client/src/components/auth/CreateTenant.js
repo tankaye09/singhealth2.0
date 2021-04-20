@@ -73,15 +73,15 @@ class CreateTenant extends Component {
     };
     return (
       <Layout>
-        <h2
+        <h3
           style={{
-            background: "#fff5bd",
-            width: "98%",
-            "margin-bottom": "auto",
+            background: "#f3ab1b",
+            "border-radius": "5px",
+            margin: "5vw",
           }}
         >
           Create a Tenant Account
-        </h2>
+        </h3>
         <Content>
           <Form
             {...layout}

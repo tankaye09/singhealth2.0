@@ -290,7 +290,7 @@ class Directory extends Component {
           <Table
             columns={columns}
             dataSource={this.state.tenantData}
-            scroll={{ x: 400, y: 300 }}
+            scroll={{ x: 400, y: "68vh" }}
           />
         </div>
       </Layout>

@@ -10,6 +10,10 @@ html,
 body {
   background: #f0f2f5;
 }
+
+h3 {
+  font-size: 6vw;
+}
 /* Navbar */
 
 .menuBar {
@@ -172,6 +176,7 @@ div.form {
 }
 .login-register-form-button {
   width: 100%;
+  border-radius: 3px;
 }
 
 .App {
@@ -314,10 +319,21 @@ div.form {
   margin-bottom: 50px;
   width: 100%;
   font-weight: bold;
+  border-radius: 3px;
 }
 
 .action-buttons {
-  width: 150%;
+  width: 100%;
+  height: auto;
+  font-size: smaller;
+  color: #f3ab1b;
+  font-weight: bold;
+  border-color: #f3ab1b;
+  border-radius: 3px;
+}
+
+.action-buttons-normalwidth {
+  width: 100%;
   height: auto;
   font-size: smaller;
   color: #f3ab1b;
