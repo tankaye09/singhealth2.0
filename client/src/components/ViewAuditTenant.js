@@ -97,13 +97,14 @@ class ViewAuditTenant extends Component {
       var tempArray = this.state.image;
     }
     console.log(tempArray);
-    tempArray.push([
+    tempArray.push(
       {
         base64: this.state.tempImageBase64[0].base64,
         date: this.state.tempImageBase64[0].date,
         caption: this.state.tempImageCaption,
+        uploader: "Tenant(You)",
       },
-    ]);
+    );
     console.log(tempArray);
     this.setState({
       imageUpload:

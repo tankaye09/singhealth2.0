@@ -99,13 +99,14 @@ class ViewAudit extends Component {
       var tempArray = this.state.image;
     }
     console.log(tempArray);
-    tempArray.push([
+    tempArray.push(
       {
         base64: this.state.tempImageBase64[0].base64,
         date: this.state.tempImageBase64[0].date,
         caption: this.state.tempImageCaption,
+        uploader: this.state.auditor,
       },
-    ]);
+    );
     console.log(tempArray);
     this.setState({
       imageUpload:
@@ -137,7 +138,15 @@ class ViewAudit extends Component {
       if (this.state.comment[i] != null) {
         console.log(this.state.comment);
         console.log(Comm);
-        Comm.push(this.state.comment[i]);
+        if (this.state.comment[i].uploader == "Tenant(You)") {
+          Comm.push({
+            content: this.state.comment[i].content,
+            date: this.state.comment[i].date,
+            author: "Tenant",
+          });
+        } else {
+          Comm.push(this.state.comment[i]);
+        }
       }
 
       if (this.state.image !== null && this.state.image[i] !== undefined && this.state.image !== []) {
@@ -153,7 +162,7 @@ class ViewAudit extends Component {
     if (Comm != []) {
       for (var j = 0; j < Comm.length; j++) {
         if (Comm[j].content) {
-          cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
+          cardAlign = Comm[j].author === "Tenant" ? "cardRight" : "cardLeft";
           output.push(
             <Card size="small" className={cardAlign}>
               <Comment
@@ -163,12 +172,11 @@ class ViewAudit extends Component {
             </Card>
           );
         } else {
-          cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
+          cardAlign = Comm[j].uploader === "Tenant" ? "cardRight" : "cardLeft";
           output.push(
             <Card className={cardAlign} size="small">
               <Comment
                 author={<a>{Comm[j].uploader}</a>}
-                className={cardAlign}
                 content={<p>{Comm[j].caption}</p>}
               ></Comment>
               <Image
