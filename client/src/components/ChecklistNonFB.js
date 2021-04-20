@@ -91,7 +91,10 @@ class ChecklistNonFB extends Component {
         auditor: store.getState().auth.user.name,
         auditorId: store.getState().auth.user.id,
         catCounts: this.state.catCounts,
-        total_score: this.state.total_score,
+        total_score:
+          this.state.catCounts[0] +
+          this.state.catCounts[1] +
+          this.state.catCounts[2],
         image: this.state.image,
         date: this.state.date,
         rectifyDate: this.state.rectifyDate,
@@ -343,7 +346,7 @@ class ChecklistNonFB extends Component {
           >
             Upload Photo
           </Button>
-          <div className="panels">
+          <div className="table">
             {nonFb.map((cat, catIndex) => {
               // var catScore = cat.score;
               return (

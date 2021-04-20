@@ -83,7 +83,12 @@ class Checklist extends Component {
         auditor: store.getState().auth.user.name,
         auditorId: store.getState().auth.user.id,
         catCounts: this.state.catCounts,
-        total_score: this.state.total_score,
+        total_score:
+          this.state.catCounts[0] +
+          this.state.catCounts[1] +
+          this.state.catCounts[2] +
+          this.state.catCounts[3] +
+          this.state.catCounts[4],
         image: this.state.image,
         date: this.state.date,
         comment: this.state.comment,
