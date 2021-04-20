@@ -50,6 +50,8 @@ class AuditList extends Component {
     this.state = {
       audits: [],
       switchState: "expired",
+      currentAudits: [],
+      expiredAudits: [],
     };
   }
 
@@ -65,32 +67,59 @@ class AuditList extends Component {
     //   });
     this.props.display((data) => {
       console.log(data);
+      // let expireData = data.filter((row) => row.rectifyDate.date >= new Date());
+      var expiredData = [];
+      var currentData = [];
       for (var i = 0; i < data.length; i++) {
         if (data[i].type === "Non-FB") {
           data[i].total_score = ((data[i].total_score / 34) * 100).toFixed(2);
         } else {
           data[i].total_score = ((data[i].total_score / 96) * 100).toFixed(2);
         }
+        if (
+          new Date(
+            moment(data[i].rectifyDate, "YYYY-MM-DDTHH:mm:ss.SSS").format()
+          ) >= new Date()
+        ) {
+          console.log("if: ", data[i]);
+          expiredData.push(data[i]);
+        } else {
+          console.log("else: ", data[i]);
+          currentData.push(data[i]);
+        }
       }
-      this.setState({ audits: data });
+
+      console.log(expiredData);
+      console.log(currentData);
+      this.setState({
+        audits: expiredData,
+        expiredAudits: expiredData,
+        currentAudits: currentData,
+      });
     });
   }
 
   // var ages = [32, 33, 16, 40];
 
-  // function checkExpired(age) {
-  //   return age >= 18;
+  // function checkExpired(row) {
+  //   return row.date >= new Date();
   // }
 
   // function myFunction() {
-  //   document.getElementById("demo").innerHTML = ages.filter(checkAdult);
+  //   document.getElementById("demo").innerHTML = ages.filter(checkExpired);
   // }
 
   onSwitchChange = () => {
     if (this.state.switchState === "expired") {
-      this.setState({ switchState: "ongoing" });
+      this.setState({
+        switchState: "ongoing",
+        audits: this.state.currentAudits,
+      });
     } else {
-      this.setState({ switchState: "expired" });
+      this.setState({
+        switchState: "expired",
+        audits: this.state.expiredAudits,
+      });
     }
   };
 
@@ -252,7 +281,7 @@ class AuditList extends Component {
         },
         defaultSortOrder: "descend",
         render: (text) =>
-          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("MM/DD/YY"),
+          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("DD/MM/YY"),
       },
       {
         title: "Date",
