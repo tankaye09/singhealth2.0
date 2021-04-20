@@ -35,7 +35,7 @@ class ViewAudit extends Component {
     // auditorComments: ["Bla", "blabla"],
     // tenantComments: ["Response", "response"],
     comment: "",
-    image: "",
+    image: [],
     date: "",
     rectifyDate: "",
     catCounts: "",
@@ -50,6 +50,7 @@ class ViewAudit extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props.tenantInfo.record.comment);
     this.setState({
       _id: this.props.tenantInfo.record._id,
       total_score: this.props.tenantInfo.record.total_score,
@@ -91,7 +92,12 @@ class ViewAudit extends Component {
   handleUploadOk = (e) => {
     console.log(e);
     console.log(this.state);
-    var tempArray = this.state.image;
+    if (this.state.image == null) {
+      var tempArray = [];
+    }
+    else {
+      var tempArray = this.state.image;
+    }
     console.log(tempArray);
     tempArray.push([
       {
@@ -102,6 +108,12 @@ class ViewAudit extends Component {
     ]);
     console.log(tempArray);
     this.setState({
+      imageUpload:
+      {
+        base64: this.state.tempImageBase64[0].base64,
+        date: this.state.tempImageBase64[0].date,
+        caption: this.state.tempImageCaption,
+      },
       image: tempArray,
       visibleConfirm: false,
     });
@@ -111,6 +123,7 @@ class ViewAudit extends Component {
   displayComments() {
     var output = [];
     var Comm = [];
+    console.log(Comm);
     for (
       var i = 0;
       i <
@@ -120,11 +133,16 @@ class ViewAudit extends Component {
       );
       i++
     ) {
+      console.log(Comm);
       if (this.state.comment[i] != null) {
+        console.log(this.state.comment);
+        console.log(Comm);
         Comm.push(this.state.comment[i]);
       }
 
-      if (this.state.image !== null && this.state.image[i] !== null) {
+      if (this.state.image !== null && this.state.image[i] !== undefined && this.state.image !== []) {
+        console.log(Comm);
+        console.log(this.state.image);
         Comm.push(this.state.image[i]);
       }
     }
@@ -132,32 +150,34 @@ class ViewAudit extends Component {
     console.log(Comm);
 
     let cardAlign = "cardLeft";
-    for (var j = 0; j < Comm.length; j++) {
-      if (Comm[j].content) {
-        cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
-        output.push(
-          <Card size="small" className={cardAlign}>
-            <Comment
-              author={<a>{Comm[j].author}</a>}
-              content={<p>{Comm[j].content}</p>}
-            />
-          </Card>
-        );
-      } else {
-        cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
-        output.push(
-          <Card className={cardAlign} size="small">
-            <Comment
-              author={<a>{Comm[j].uploader}</a>}
-              className="caption"
-              content={<p>{Comm[j].caption}</p>}
-            ></Comment>
-            <Image
-              width={100}
-              src={`data:image/jpeg;base64,${Comm[j].base64}`}
-            />
-          </Card>
-        );
+    if (Comm != []) {
+      for (var j = 0; j < Comm.length; j++) {
+        if (Comm[j].content) {
+          cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
+          output.push(
+            <Card size="small" className={cardAlign}>
+              <Comment
+                author={<a>{Comm[j].author}</a>}
+                content={<p>{Comm[j].content}</p>}
+              />
+            </Card>
+          );
+        } else {
+          cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
+          output.push(
+            <Card className={cardAlign} size="small">
+              <Comment
+                author={<a>{Comm[j].uploader}</a>}
+                className={cardAlign}
+                content={<p>{Comm[j].caption}</p>}
+              ></Comment>
+              <Image
+                width={100}
+                src={`data:image/jpeg;base64,${Comm[j].base64}`}
+              />
+            </Card>
+          );
+        }
       }
     }
     return <div>{output}</div>;
@@ -176,7 +196,7 @@ class ViewAudit extends Component {
           base64: this.state.tempImageBase64[0].base64,
           date: this.state.tempImageBase64[0].date,
           caption: this.state.tempImageCaption,
-          uploader: "auditor",
+          uploader: this.state.auditor,
         },
       ],
       // image: tempArray,

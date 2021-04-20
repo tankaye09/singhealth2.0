@@ -47,7 +47,7 @@ class Checklist extends Component {
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     total_score: 0,
-    image: null,
+    image: [],
     tempImageBase64: [],
     tempImageCaption: null,
     date: null,

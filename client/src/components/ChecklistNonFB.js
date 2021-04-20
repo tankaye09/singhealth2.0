@@ -50,7 +50,7 @@ class ChecklistNonFB extends Component {
     //counts[1]: for Housekeeping & General Cleanliness (40%)
     //counts[2]: for Workplace Safety & Health (40%)
     total_score: 0,
-    image: null,
+    image: [],
     tempImageBase64: [],
     tempImageCaption: null,
     date: null,

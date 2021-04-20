@@ -90,7 +90,12 @@ class ViewAuditTenant extends Component {
   handleUploadOk = (e) => {
     console.log(e);
     console.log(this.state);
-    var tempArray = this.state.image;
+    if (this.state.image == null) {
+      var tempArray = [];
+    }
+    else {
+      var tempArray = this.state.image;
+    }
     console.log(tempArray);
     tempArray.push([
       {
@@ -101,9 +106,13 @@ class ViewAuditTenant extends Component {
     ]);
     console.log(tempArray);
     this.setState({
+      imageUpload:
+      {
+        base64: this.state.tempImageBase64[0].base64,
+        date: this.state.tempImageBase64[0].date,
+        caption: this.state.tempImageCaption,
+      },
       image: tempArray,
-    });
-    this.setState({
       visibleConfirm: false,
     });
     this.updateImage();
@@ -121,8 +130,16 @@ class ViewAuditTenant extends Component {
       );
       i++
     ) {
-      Comm.push(this.state.comment[i]);
-      if (this.state.image !== null && this.state.image[i] !== null) {
+      console.log(Comm);
+      if (this.state.comment[i] != null) {
+        console.log(this.state.comment);
+        console.log(Comm);
+        Comm.push(this.state.comment[i]);
+      }
+
+      if (this.state.image !== null && this.state.image[i] !== undefined && this.state.image !== []) {
+        console.log(Comm);
+        console.log(this.state.image);
         Comm.push(this.state.image[i]);
       }
     }
@@ -150,7 +167,7 @@ class ViewAuditTenant extends Component {
             <p></p>
             <Comment
               author={<a>{Comm[j].uploader}</a>}
-              className="caption"
+              className={cardAlign}
               content={<p>{Comm[j].caption}</p>}
             ></Comment>
             <Image
@@ -177,7 +194,7 @@ class ViewAuditTenant extends Component {
           base64: this.state.tempImageBase64[0].base64,
           date: this.state.tempImageBase64[0].date,
           caption: this.state.tempImageCaption,
-          uploader: "tenant",
+          uploader: "Tenant(You)",
         },
       ],
       // image: tempArray,
