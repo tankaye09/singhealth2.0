@@ -121,11 +121,11 @@ router.post("/auditupdate", (req, res) => {
     console.log("auditorId: ", req.body.auditorId);
     console.log("tenant_id: ", req.body.tenantID);
     if (typeof req.body.auditorId !== "undefined") {
-      console.log("if");
+      // console.log("if");
       receiverId = req.body.auditorId;
       resolve("Preparing to send to auditor");
     } else {
-      console.log("else");
+      // console.log("else");
       Tenant.findOne({ _id: req.body.tenantID })
         .then((tenant) => {
           receiverId = tenant.userId;
@@ -205,8 +205,8 @@ router.post("/reminder", (req, res) => {
       <p>Hello ${user.name},</p>
       <p>Your Singhealth Audit will expire on 
       ${moment(req.body.record.rectifyDate, "YYYY-MM-DDTHH:mm:ss.SSS").format(
-            "DD/MM/YYYY"
-          )}. Please visit http://localhost:3000/ to login to your account and resolve the audit. 
+        "DD/MM/YYYY"
+      )}. Please visit http://localhost:3000/ to login to your account and resolve the audit. 
       </p>
       <p>Thank you</p>
       `;

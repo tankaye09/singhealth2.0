@@ -150,7 +150,7 @@ class ViewAuditTenant extends Component {
     let cardAlign = "cardLeft";
     for (var j = 0; j < Comm.length; j++) {
       if (Comm[j].content) {
-        console.log("if: ", Comm[j].content);
+        // console.log("if: ", Comm[j].content);
         cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
         output.push(
           <Card size="small" className={cardAlign}>
@@ -162,7 +162,7 @@ class ViewAuditTenant extends Component {
         );
       } else {
         cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
-        console.log("else: ", typeof Comm[j]);
+        // console.log("else: ", typeof Comm[j]);
         output.push(
           <Card className={cardAlign} size="small">
             <p></p>

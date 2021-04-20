@@ -5,7 +5,7 @@ let Audit = require("../../models/Audits");
 // @desc Register user
 // @access Public
 router.post("/add", (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const newAudit = new Audit({
     type: req.body.type,
     auditor: req.body.auditor,
@@ -23,7 +23,7 @@ router.post("/add", (req, res) => {
 
   newAudit
     .save()
-    .then(() => res.json("Audit added!"))
+    .then(() => res.send("Audit added!"))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
@@ -54,7 +54,7 @@ router.put("/update", function (req, res) {
 });
 
 router.put("/updateImage", function (req, res) {
-  console.log(req.body.image);
+  // console.log(req.body.image);
   Audit.findOneAndUpdate(
     { _id: req.body._id },
     {

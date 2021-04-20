@@ -81,10 +81,10 @@ class AuditList extends Component {
             moment(data[i].rectifyDate, "YYYY-MM-DDTHH:mm:ss.SSS").format()
           ) < new Date()
         ) {
-          console.log("if: ", data[i]);
+          // console.log("if: ", data[i]);
           expiredData.push(data[i]);
         } else {
-          console.log("else: ", data[i]);
+          // console.log("else: ", data[i]);
           currentData.push(data[i]);
         }
       }

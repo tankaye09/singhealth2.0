@@ -8,15 +8,15 @@ export const submit = (data, history) => (dispatch) => {
     axios
       .post("/api/audits/add", data)
       .then(() => {
+        resolve(data);
         dispatch({
           type: GET_MESSAGE,
-          payload: "Audit Created",
+          payload: "Audit Created, an email has been sent to notify Tenant",
         });
-        resolve(data);
         history.push("/auditlist");
       })
       .catch((error) => {
-        console.log("in the error");
+        console.log(error.response.data);
         dispatch({
           type: GET_ERRORS,
           payload: error.response.data,
@@ -27,9 +27,11 @@ export const submit = (data, history) => (dispatch) => {
 
   promise
     .then((message) => {
+      console.log("in submit promse");
       sendEmail(message);
     })
     .catch((message) => {
+      console.log("in submit promse catch");
       console.log(message);
     });
 };
@@ -92,23 +94,23 @@ export const deleteAudit = (data) => {
     });
 };
 
-export const sendEmail = (data) => (dispatch) => {
+export const sendEmail = (data) => {
   console.log("In send email");
   axios
     .post("/api/sendemail/audit", data)
     .then((res) => {
       console.log("email sent success");
-      dispatch({
-        type: GET_MESSAGE,
-        payload: "Email Sent to Tenant",
-      });
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
     })
     .catch((err) => {
       console.log("email sent failed, err: ", err);
-      dispatch({
-        type: GET_ERRORS,
-        payload: "Email Sent Failed",
-      });
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
     });
 };
 

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Typography, Input, Button, Layout, Row, Col, Card, Form } from "antd";
+import { Container } from "reactstrap";
 import { LockOutlined } from "@ant-design/icons";
 import { display } from "../../actions/auditActions.js";
 import { setSelectedTenant, getTenant } from "../../actions/tenantActions";
@@ -96,57 +97,115 @@ class AccountInfo extends Component {
     return (
       <Layout>
         <Card>
-          <ul className="ul">
-            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
-              Tenant Name:
-            </div>
-          </ul>
-          <ul className="ul">
-            <div className="info">
-              <b> {user.name}</b>
-            </div>
-          </ul>
-          <p></p>
-          <ul className="ul">
-            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
-              Tenant ID:
-            </div>
-          </ul>
-          <ul className="ul">
-            <div className="idInfo">
-              <b>{user.id}</b>
-            </div>
-          </ul>
-          <ul className="ul">
-            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
-              Auditor:
-            </div>
-          </ul>
-          <ul className="ul">
-            <div className="info">
-              <b>{this.state.auditor}</b>
-            </div>
-          </ul>
-          <ul className="ul">
-            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
-              Tenant Location:
-            </div>
-          </ul>
-          <ul className="ul">
-            <div className="info">
-              <b>{this.state.tenantLocation}</b>
-            </div>
-          </ul>
-          <ul className="ul">
-            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
-              Institution:
-            </div>
-          </ul>
-          <ul className="ul">
-            <div className="info">
-              <b>{user.institution}</b>
-            </div>
-          </ul>
+          <Row>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{ "text-align": "left", clear: "both", width: "100%" }}
+                >
+                  Tenant Name:
+                </div>
+              </ul>
+            </Col>
+            <Col span={12}>
+              {" "}
+              <ul className="ul">
+                <div className="info">
+                  <b>{user.name}</b>
+                </div>
+              </ul>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{ "text-align": "left", clear: "both", width: "100%" }}
+                >
+                  Tenant ID:
+                </div>
+              </ul>
+            </Col>
+            <Col span={12}>
+              <ul className="ul">
+                <div className="idInfo">
+                  <b>{user.id}</b>
+                </div>
+              </ul>
+            </Col>
+          </Row>
+          <Row justify={"center"} align={"middle"}>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{ "text-align": "left", clear: "both", width: "100%" }}
+                >
+                  Auditor:
+                </div>
+              </ul>
+            </Col>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{
+                    "text-align": "right",
+                    clear: "both",
+                    width: "100%",
+                  }}
+                >
+                  <b>{this.state.auditor}</b>
+                </div>
+              </ul>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{ "text-align": "left", clear: "both", width: "100%" }}
+                >
+                  Tenant Location:
+                </div>
+              </ul>
+            </Col>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{
+                    "text-align": "right",
+                    clear: "both",
+                    width: "100%",
+                  }}
+                >
+                  <b>{this.state.tenantLocation}</b>
+                </div>
+              </ul>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{ "text-align": "left", clear: "both", width: "100%" }}
+                >
+                  Institution:
+                </div>
+              </ul>
+            </Col>
+            <Col span={12}>
+              <ul className="ul">
+                <div
+                  style={{
+                    "text-align": "right",
+                    clear: "both",
+                    width: "100%",
+                  }}
+                >
+                  <b>{user.institution}</b>
+                </div>
+              </ul>
+            </Col>
+          </Row>
         </Card>
         <Card size="small" style={{ "background-color": "#F0F2F5" }}>
           <Form
