@@ -155,6 +155,30 @@ export const resetPassword = (data) => (dispatch) => {
     });
 };
 
+export const changePassword = (data) => (dispatch) => {
+  console.log("changepassword");
+  console.log(data);
+  axios
+    .put("/api/users/changepassword", data)
+    .then((res) => {
+      console.log("axios called");
+      console.log(res.data);
+      sendEmailPasswordChange(res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Password has been Changed",
+      });
+    })
+    .catch((err) => {
+      console.log("axios called but error");
+      console.log(err);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Old Password is Incorrect",
+      });
+    });
+};
+
 export const sendEmailPasswordReset = (data) => {
   console.log("In send email");
   axios
@@ -179,6 +203,26 @@ export const sendEmail = (data) => {
   console.log("In send email");
   axios
     .post("/api/sendemail/create", data)
+    .then((res) => {
+      console.log("email sent success");
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
+    })
+    .catch((err) => {
+      console.log("email sent failed, err: ", err);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
+    });
+};
+
+export const sendEmailPasswordChange = (data) => {
+  console.log("In send email");
+  axios
+    .post("/api/sendemail/change", data)
     .then((res) => {
       console.log("email sent success");
       // dispatch({

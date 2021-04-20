@@ -240,4 +240,40 @@ router.put("/resetpassword", (req, res) => {
   });
 });
 
+router.put("/changepassword", (req, res) => {
+  console.log("axios called inside axios");
+
+  // Hash password before saving in database
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(req.body.newPass, salt, (err, hash) => {
+      if (err) throw err;
+      hashed = hash;
+      User.findOne({ _id: req.body.updateId }).then((user) => {
+        // Check password
+        bcrypt.compare(req.body.oldPass, user.password).then((isMatch) => {
+          if (isMatch) {
+            User.findOneAndUpdate({ _id: req.body.updateId },
+              { password: hashed },
+              (error, data) => {
+                if (error) {
+                  console.log(error);
+                  res.send(error);
+                } else {
+                  console.log("This is the data: ", data);
+                  data.password = req.body.newPass;
+                  console.log("This is the new data: ", data);
+                  res.send(data);
+                }
+              })
+          } else {
+            return res
+              .status(400)
+              .json({ passwordincorrect: "Password incorrect" });
+          }
+        });
+      });
+    });
+  });
+});
+
 module.exports = router;

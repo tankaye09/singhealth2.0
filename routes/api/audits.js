@@ -54,7 +54,7 @@ router.put("/update", function (req, res) {
 });
 
 router.put("/updateImage", function (req, res) {
-  console.log(req.body._id);
+  console.log(req.body.image);
   Audit.findOneAndUpdate(
     { _id: req.body._id },
     {

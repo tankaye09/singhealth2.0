@@ -205,8 +205,8 @@ router.post("/reminder", (req, res) => {
       <p>Hello ${user.name},</p>
       <p>Your Singhealth Audit will expire on 
       ${moment(req.body.record.rectifyDate, "YYYY-MM-DDTHH:mm:ss.SSS").format(
-        "DD/MM/YYYY"
-      )}. Please visit http://localhost:3000/ to login to your account and resolve the audit. 
+            "DD/MM/YYYY"
+          )}. Please visit http://localhost:3000/ to login to your account and resolve the audit. 
       </p>
       <p>Thank you</p>
       `;
@@ -255,13 +255,61 @@ router.post("/reminder", (req, res) => {
 router.post("/reset", async (req, res) => {
   console.log("Res in sendemail/reset: ", req.body);
   const output = `
-    <h3>Singhealth Account Password Resetted</h3>
+    <h3>Singhealth Account Password Reset</h3>
     <p>Hello User,</p>
-    <p>Your Password has been resetted. Please visit http://localhost:3000/ to login to your account </p>
+    <p>Your Password has been reset. Please visit http://localhost:3000/ to login to your account </p>
     <ul>
       <li>New password: ${req.body.password}</li>
     </ul>
     <p>You are advised to change your password after logging in</p>
+    <p>Thank you</p>
+    `;
+
+  let transporter = nodemailer.createTransport({
+    host: "smtp-mail.outlook.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: "singhealthbot@outlook.com", // username
+      pass: "Singhealthb0t", // password
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail(
+    {
+      from: '"Singhealth Bot" <singhealthbot@outlook.com>', // sender address
+      to: `${req.body.email}`, // list of receivers
+      subject: "Singhealth Notification: New Singhealth Tenant Account Created", // Subject line
+      // text: "Hello world?", // plain text body
+      html: output, // html body
+    },
+    (error, info) => {
+      if (error) {
+        console.log("email sent error");
+        res.send(error);
+      } else {
+        console.log("Message sent: %s", info.messageId);
+        res.send(info.messageId);
+      }
+    }
+  );
+  // console.log("Message sent: %s", info.messageId);
+  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+});
+
+router.post("/change", async (req, res) => {
+  console.log("Res in sendemail/change: ", req.body);
+  const output = `
+    <h3>Singhealth Account Password Change</h3>
+    <p>Hello User,</p>
+    <p>Your Password has been changed. Please visit http://localhost:3000/ to login to your account </p>
+    <ul>
+      <li>New password: ${req.body.password}</li>
+    </ul>
     <p>Thank you</p>
     `;
 
