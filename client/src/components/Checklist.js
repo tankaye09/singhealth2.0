@@ -84,11 +84,21 @@ class Checklist extends Component {
         auditorId: store.getState().auth.user.id,
         catCounts: this.state.catCounts,
         total_score:
-          this.state.catCounts[0] +
-          this.state.catCounts[1] +
-          this.state.catCounts[2] +
-          this.state.catCounts[3] +
-          this.state.catCounts[4],
+          Math.round(
+            (this.state.weightage[0] / 13) * (this.state.catCounts[0] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[1] / 17) * (this.state.catCounts[1] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[2] / 37) * (this.state.catCounts[2] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[3] / 11) * (this.state.catCounts[3] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[4] / 18) * (this.state.catCounts[4] / 2)
+          ),
         image: this.state.image,
         date: this.state.date,
         comment: this.state.comment,

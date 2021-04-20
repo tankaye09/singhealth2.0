@@ -65,6 +65,7 @@ class AuditList extends Component {
     //   .catch((error) => {
     //     console.log(error);
     //   });
+    window.scrollTo(0, 0);
     this.props.display((data) => {
       console.log(data);
       // let expireData = data.filter((row) => row.rectifyDate.date >= new Date());
