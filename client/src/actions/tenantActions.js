@@ -27,8 +27,8 @@ export const getTenant = (onDataReceived) => {
       // console.log("response is:", response.data);
       onDataReceived(response.data);
     })
-    .catch(() => {
-      alert("Error");
+    .catch((err) => {
+      console.log(err);
     });
 };
 

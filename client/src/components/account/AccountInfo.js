@@ -89,6 +89,12 @@ class AccountInfo extends Component {
     }
   };
 
+  renderRow = (stateRow) => {
+    if (stateRow !== "") {
+      return true;
+    }
+  };
+
   render() {
     const { user } = this.props.auth;
     const { errors } = this.state.errors;
@@ -102,7 +108,7 @@ class AccountInfo extends Component {
                 <div
                   style={{ "text-align": "left", clear: "both", width: "100%" }}
                 >
-                  Tenant Name:
+                  {this.renderRow(user.name) ? "Tenant Name: " : ""}
                 </div>
               </ul>
             </Col>
@@ -121,7 +127,7 @@ class AccountInfo extends Component {
                 <div
                   style={{ "text-align": "left", clear: "both", width: "100%" }}
                 >
-                  Tenant ID:
+                  {this.renderRow(user.id) ? "Tenant ID: " : ""}
                 </div>
               </ul>
             </Col>
@@ -139,7 +145,7 @@ class AccountInfo extends Component {
                 <div
                   style={{ "text-align": "left", clear: "both", width: "100%" }}
                 >
-                  Auditor:
+                  {this.renderRow(this.state.auditor) ? "Auditor: " : ""}
                 </div>
               </ul>
             </Col>
@@ -163,7 +169,9 @@ class AccountInfo extends Component {
                 <div
                   style={{ "text-align": "left", clear: "both", width: "100%" }}
                 >
-                  Tenant Location:
+                  {this.renderRow(this.state.tenantLocation)
+                    ? "Tenant Location: "
+                    : ""}
                 </div>
               </ul>
             </Col>
@@ -187,7 +195,7 @@ class AccountInfo extends Component {
                 <div
                   style={{ "text-align": "left", clear: "both", width: "100%" }}
                 >
-                  Institution:
+                  {this.renderRow(user.institution) ? "Institution: " : ""}
                 </div>
               </ul>
             </Col>
