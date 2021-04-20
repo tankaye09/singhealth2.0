@@ -23,7 +23,9 @@ class RightMenu extends Component {
           </NavLink>
         </Menu.Item>
         <Menu.Item key="app">
-          <a href="">Hello {user.name}</a>
+          <NavLink to="/accountinfo">
+            <a href="">Hello {user.name}</a>
+          </NavLink>
         </Menu.Item>
       </Menu>
     );
