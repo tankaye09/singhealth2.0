@@ -26,7 +26,6 @@ class ResetPassword extends Component {
   }
 
   componentDidMount() {
-    // If logged in and user navigates to Login page, should redirect them to dashboard
     if (!recaptchaOn) {
       this.setState({
         isVerified: true,

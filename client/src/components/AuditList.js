@@ -1,7 +1,7 @@
 import React, { Component, TextArea } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Input, Table, Button, Layout, Space } from "antd";
+import { Input, Table, Button, Layout, Space, Switch, Row, Col } from "antd";
 import { connect } from "react-redux";
 import moment from "moment";
 import Highlighter from "react-highlight-words";
@@ -47,7 +47,10 @@ class AuditList extends Component {
     super(props);
 
     this.deleteAudit = this.deleteAudit.bind(this);
-    this.state = { audits: [] };
+    this.state = {
+      audits: [],
+      switchState: "expired",
+    };
   }
 
   componentDidMount() {
@@ -72,6 +75,24 @@ class AuditList extends Component {
       this.setState({ audits: data });
     });
   }
+
+  // var ages = [32, 33, 16, 40];
+
+  // function checkExpired(age) {
+  //   return age >= 18;
+  // }
+
+  // function myFunction() {
+  //   document.getElementById("demo").innerHTML = ages.filter(checkAdult);
+  // }
+
+  onSwitchChange = () => {
+    if (this.state.switchState === "expired") {
+      this.setState({ switchState: "ongoing" });
+    } else {
+      this.setState({ switchState: "expired" });
+    }
+  };
 
   onViewClick = (record) => {
     //pass to redux
@@ -164,7 +185,9 @@ class AuditList extends Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : "#a35709" }} />
+      <SearchOutlined
+        style={{ color: filtered ? "#1890ff" : "#a35709", padding: "auto" }}
+      />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -215,8 +238,33 @@ class AuditList extends Component {
         title: "Addr.",
         dataIndex: "location",
         key: "location",
-        width: "20%",
+        width: "10%",
         ...this.getColumnSearchProps("location"),
+      },
+      {
+        title: "Expiry",
+        dataIndex: "rectifyDate",
+        key: "rectifyDate",
+        width: "12%",
+        sorter: (a, b) => {
+          if (a.rectifyDate > b.rectifyDate) return 1;
+          else return -1;
+        },
+        defaultSortOrder: "descend",
+        render: (text) =>
+          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("MM/DD/YY"),
+      },
+      {
+        title: "Date",
+        dataIndex: "date",
+        key: "date",
+        width: "14%",
+        sorter: (a, b) => {
+          if (a.date > b.date) return 1;
+          else return -1;
+        },
+        render: (text) =>
+          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("DD/MM/YY"),
       },
       {
         title: "Tenant ID",
@@ -231,20 +279,6 @@ class AuditList extends Component {
         key: "institution",
         width: "15%",
         ...this.getColumnSearchProps("institution"),
-      },
-      {
-        title: "Date",
-        dataIndex: "date",
-        key: "date",
-        width: "15%",
-        sorter: (a, b) => {
-          if (a.date > b.date) return 1;
-          else return -1;
-        },
-        defaultSortOrder: "descend",
-        ...this.getColumnSearchProps("date"),
-        render: (text) =>
-          moment(text, "YYYY-MM-DDTHH:mm:ss.SSS").format("DD/MM/YYYY"),
       },
       {
         title: "Type",
@@ -294,7 +328,30 @@ class AuditList extends Component {
     return (
       <Layout>
         <div className="table">
-          <h3>Your Audits</h3>
+          <h3
+            style={{
+              position: "absolute",
+              "margin-left": "auto",
+              "margin-right": "auto",
+              left: 0,
+              right: 0,
+              "text-align": "center",
+              float: "center",
+              "font-size": "6vw",
+            }}
+          >
+            Your Audits
+          </h3>
+          <Switch
+            checkedChildren="Ongoing"
+            unCheckedChildren="Expired"
+            size="small"
+            style={{
+              float: "right",
+              "margin-top": "2.5vw",
+            }}
+            onChange={this.onSwitchChange}
+          ></Switch>
           <Table
             rowClassName={(record) =>
               record.total_score < 95 ? "red" : "green"
@@ -302,6 +359,7 @@ class AuditList extends Component {
             columns={columns}
             dataSource={this.state.audits}
             scroll={{ x: 800, y: 300 }}
+            style={{ "padding-top": "10vw" }}
           />
         </div>
       </Layout>
