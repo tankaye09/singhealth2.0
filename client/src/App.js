@@ -22,6 +22,8 @@ import Checklist from "./components/Checklist";
 import ChecklistNonFB from "./components/ChecklistNonFB";
 import CreateTenant from "./components/auth/CreateTenant";
 import ViewAuditAuditor from "./components/ViewAudit";
+import AccountInfoStaff from "./components/account/AccountInfo";
+
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
 import ViewAuditTenant from "./components/ViewAuditTenant";
@@ -78,7 +80,11 @@ class App extends Component {
                 path="/viewaudit"
                 component={ViewAuditAuditor}
               />
-              <StaffRoute exact path="/accountinfo" component={AccountInfo} />
+              <StaffRoute
+                exact
+                path="/accountinfostaff"
+                component={AccountInfoStaff}
+              />
 
               <TenantRoute exact path="/tenant" component={TenantHome} />
               <TenantRoute

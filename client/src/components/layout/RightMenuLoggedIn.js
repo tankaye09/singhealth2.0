@@ -15,6 +15,10 @@ class RightMenu extends Component {
   };
   render() {
     const { user } = this.props.auth;
+    let url = "/accountinfo";
+    if (user.usertype === "staff") {
+      url = "/accountinfostaff";
+    }
 
     return (
       <Menu mode="vertical">
@@ -24,7 +28,7 @@ class RightMenu extends Component {
           </NavLink>
         </Menu.Item>
         <Menu.Item key="app">
-          <NavLink to="/accountinfo">
+          <NavLink to={url}>
             {user.name + "  "}
             <UserOutlined />
           </NavLink>
