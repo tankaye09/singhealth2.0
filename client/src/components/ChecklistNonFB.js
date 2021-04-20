@@ -72,24 +72,27 @@ class ChecklistNonFB extends Component {
     // console.log(this.state);
     // console.log(typeof this.state.date);
     // console.log(typeof this.props.tenantInfo.record._id);
-    this.props.submit({
-      type: "Non-FB",
-      auditor: store.getState().auth.user.name,
-      auditorId: store.getState().auth.user.id,
-      catCounts: this.state.catCounts,
-      total_score:
-        (this.state.catCounts[0] +
-          this.state.catCounts[1] +
-          this.state.catCounts[2]) /
-        2,
-      image: this.state.image,
-      date: this.state.date,
-      rectifyDate: this.state.rectifyDate,
-      comment: this.state.comment,
-      location: this.props.tenantInfo.record.address,
-      tenantID: this.props.tenantInfo.record._id,
-      institution: this.props.tenantInfo.record.institution,
-    });
+    this.props.submit(
+      {
+        type: "Non-FB",
+        auditor: store.getState().auth.user.name,
+        auditorId: store.getState().auth.user.id,
+        catCounts: this.state.catCounts,
+        total_score:
+          (this.state.catCounts[0] +
+            this.state.catCounts[1] +
+            this.state.catCounts[2]) /
+          2,
+        image: this.state.image,
+        date: this.state.date,
+        rectifyDate: this.state.rectifyDate,
+        comment: this.state.comment,
+        location: this.props.tenantInfo.record.address,
+        tenantID: this.props.tenantInfo.record._id,
+        institution: this.props.tenantInfo.record.institution,
+      },
+      this.props.history
+    );
     this.showAuditModal();
     window.scrollTo(0, 0); // Scroll to top
   };

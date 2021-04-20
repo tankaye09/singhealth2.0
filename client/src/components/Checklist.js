@@ -68,26 +68,29 @@ class Checklist extends Component {
 
   submitAudit = () => {
     // console.log(this.state);
-    this.props.submit({
-      type: "FB",
-      auditor: store.getState().auth.user.name,
-      auditorId: store.getState().auth.user.id,
-      catCounts: this.state.catCounts,
-      total_score:
-        (this.state.catCounts[0] +
-          this.state.catCounts[1] +
-          this.state.catCounts[2] +
-          this.state.catCounts[3] +
-          this.state.catCounts[4]) /
-        2,
-      image: this.state.image,
-      date: this.state.date,
-      comment: this.state.comment,
-      rectifyDate: this.state.rectifyDate,
-      location: this.props.tenantInfo.record.address,
-      tenantID: this.props.tenantInfo.record._id,
-      institution: this.props.tenantInfo.record.institution,
-    });
+    this.props.submit(
+      {
+        type: "FB",
+        auditor: store.getState().auth.user.name,
+        auditorId: store.getState().auth.user.id,
+        catCounts: this.state.catCounts,
+        total_score:
+          (this.state.catCounts[0] +
+            this.state.catCounts[1] +
+            this.state.catCounts[2] +
+            this.state.catCounts[3] +
+            this.state.catCounts[4]) /
+          2,
+        image: this.state.image,
+        date: this.state.date,
+        comment: this.state.comment,
+        rectifyDate: this.state.rectifyDate,
+        location: this.props.tenantInfo.record.address,
+        tenantID: this.props.tenantInfo.record._id,
+        institution: this.props.tenantInfo.record.institution,
+      },
+      this.props.history
+    );
     this.showAuditModal();
     window.scrollTo(0, 0); // Scroll to top
   };
