@@ -71,11 +71,11 @@ class AuditList extends Component {
       var expiredData = [];
       var currentData = [];
       for (var i = 0; i < data.length; i++) {
-        if (data[i].type === "Non-FB") {
+        /* if (data[i].type === "Non-FB") {
           data[i].total_score = ((data[i].total_score / 34) * 100).toFixed(2);
         } else {
           data[i].total_score = ((data[i].total_score / 96) * 100).toFixed(2);
-        }
+        } */
         if (
           new Date(
             moment(data[i].rectifyDate, "YYYY-MM-DDTHH:mm:ss.SSS").format()
