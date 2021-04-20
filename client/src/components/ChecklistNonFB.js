@@ -17,6 +17,7 @@ import importJSON from "../data/questionsDict.json";
 import { submit } from "../actions/auditActions.js";
 import dateformat from "dateformat";
 import store from "../store";
+import { GET_MESSAGE } from "../actions/types";
 const fileUpload = require("fuctbase64");
 const nonFb = importJSON.non_fb;
 const { Panel } = Collapse;
@@ -46,10 +47,9 @@ class ChecklistNonFB extends Component {
     auditorId: store.getState().auth.user.id,
     checked: false,
     catCounts: [0, 0, 0],
-    // counts[0]: for Professionalism & Staff Hygiene (20%),
-    //counts[1]: for Housekeeping & General Cleanliness (40%)
-    //counts[2]: for Workplace Safety & Health (40%)
     total_score: 0,
+    weightage: [20, 40, 45], //newly added for cal
+    //total_checkboxes_count:[Fb.subcategories[0].questions.length(),Fb.subcategories[1].questions.length(), Fb.subcategories[2].questions.length(),Fb.subcategories[3].questions.length(),],
     image: [],
     tempImageBase64: [],
     tempImageCaption: null,
@@ -68,6 +68,12 @@ class ChecklistNonFB extends Component {
     }
   }
 
+  imageUploaded = () => {
+    if (this.state.image.length > 0) {
+      return <div className="red">Image Uploaded!</div>;
+    }
+  };
+
   submitAudit = () => {
     // console.log(this.state);
     // console.log(typeof this.state.date);
@@ -78,11 +84,7 @@ class ChecklistNonFB extends Component {
         auditor: store.getState().auth.user.name,
         auditorId: store.getState().auth.user.id,
         catCounts: this.state.catCounts,
-        total_score:
-          (this.state.catCounts[0] +
-            this.state.catCounts[1] +
-            this.state.catCounts[2]) /
-          2,
+        total_score: this.state.total_score,
         image: this.state.image,
         date: this.state.date,
         rectifyDate: this.state.rectifyDate,
@@ -175,17 +177,20 @@ class ChecklistNonFB extends Component {
   handleUploadOk = (e) => {
     console.log(e);
     console.log(this.state);
-    this.setState({
-      image: [
-        {
-          base64: this.state.tempImageBase64[0].base64,
-          date: this.state.tempImageBase64[0].date,
-          caption: this.state.tempImageCaption,
-          uploader: this.state.auditor,
-        },
-      ],
-      visibleConfirm: false,
-    });
+    if (this.state.tempImageBase64.length > 0) {
+      this.setState({
+        image: [
+          {
+            base64: this.state.tempImageBase64[0].base64,
+            date: this.state.tempImageBase64[0].date,
+            caption: this.state.tempImageCaption,
+            uploader: this.state.auditor,
+          },
+        ],
+        visibleForm: false,
+        visibleConfirm: false,
+      });
+    }
   };
 
   createCheckbox = (label, catIndex) => (
@@ -237,7 +242,6 @@ class ChecklistNonFB extends Component {
           this.setState((state) => state.catCounts[2]--);
         }
         break;
-
       default:
         break;
     }
@@ -257,7 +261,6 @@ class ChecklistNonFB extends Component {
               : ""}
           </b>
         </h3>
-
         <Form
           // {...layout}
           name="Non-FB Checklist"
@@ -313,7 +316,7 @@ class ChecklistNonFB extends Component {
             />
           </Form.Item>
         </Form>
-
+        {this.imageUploaded()}
         <Button
           type="dashed"
           className="submit-button"
@@ -321,7 +324,6 @@ class ChecklistNonFB extends Component {
         >
           Upload Photo
         </Button>
-
         <div className="panels">
           {nonFb.map((cat, catIndex) => {
             // var catScore = cat.score;
@@ -365,7 +367,14 @@ class ChecklistNonFB extends Component {
                       );
                     })}
                   </div>
-                  <div>Score: {this.state.catCounts[catIndex] / 2}</div>
+                  <div>
+                    Score:{" "}
+                    {Math.round(
+                      (this.state.weightage[catIndex] / cat.score) *
+                        (this.state.catCounts[catIndex] / 2)
+                    )}
+                    /{this.state.weightage[catIndex]}
+                  </div>
                 </Panel>
               </Collapse>
             );
@@ -373,17 +382,24 @@ class ChecklistNonFB extends Component {
           <b>
             Total Score:{" "}
             <span className="total_score">
-              {(this.state.catCounts[0] +
-                this.state.catCounts[1] +
-                this.state.catCounts[2]) /
-                2}
+              {Math.round(
+                (this.state.weightage[0] / 6) * (this.state.catCounts[0] / 2)
+              ) +
+                Math.round(
+                  (this.state.weightage[1] / 12) * (this.state.catCounts[1] / 2)
+                ) +
+                Math.round(
+                  (this.state.weightage[2] / 16) * (this.state.catCounts[2] / 2)
+                )}
+              /100
             </span>
           </b>
 
           <Modal
             title="Upload Photo"
+            destroyOnClose={true}
             visible={this.state.visibleForm}
-            onOk={this.handleFormOk}
+            onOk={this.handleUploadOk}
             onCancel={this.handleCancel}
             okButtonProps={{ disabled: false }}
             cancelButtonProps={{ disabled: false }}
@@ -415,7 +431,7 @@ class ChecklistNonFB extends Component {
                 />
               </Form.Item>
             </Form>
-            <Modal
+            {/* <Modal
               title="Upload Confirm"
               destroyOnClose={true}
               visible={this.state.visibleConfirm}
@@ -424,7 +440,7 @@ class ChecklistNonFB extends Component {
               cancelButtonProps={{ disabled: true, visible: false }}
             >
               <p>Photo Added!</p>
-            </Modal>
+            </Modal> */}
           </Modal>
           <Button
             onClick={() => this.submitAudit()}

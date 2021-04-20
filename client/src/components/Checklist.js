@@ -47,6 +47,8 @@ class Checklist extends Component {
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     total_score: 0,
+    weightage: [20, 40, 45], //newly added for cal
+    //total_checkboxes_count:[Fb.subcategories[0].questions.length(),Fb.subcategories[1].questions.length(), Fb.subcategories[2].questions.length(),Fb.subcategories[3].questions.length(),],
     image: [],
     tempImageBase64: [],
     tempImageCaption: null,
@@ -66,6 +68,12 @@ class Checklist extends Component {
     }
   }
 
+  imageUploaded = () => {
+    if (this.state.image.length > 0) {
+      return <div className="red">Image Uploaded!</div>;
+    }
+  };
+
   submitAudit = () => {
     // console.log(this.state);
     this.props.submit(
@@ -74,13 +82,7 @@ class Checklist extends Component {
         auditor: store.getState().auth.user.name,
         auditorId: store.getState().auth.user.id,
         catCounts: this.state.catCounts,
-        total_score:
-          (this.state.catCounts[0] +
-            this.state.catCounts[1] +
-            this.state.catCounts[2] +
-            this.state.catCounts[3] +
-            this.state.catCounts[4]) /
-          2,
+        total_score: this.state.total_score,
         image: this.state.image,
         date: this.state.date,
         comment: this.state.comment,
@@ -182,17 +184,20 @@ class Checklist extends Component {
   handleUploadOk = (e) => {
     console.log(e);
     console.log(this.state);
-    this.setState({
-      image: [
-        {
-          base64: this.state.tempImageBase64[0].base64,
-          date: this.state.tempImageBase64[0].date,
-          caption: this.state.tempImageCaption,
-          uploader: this.state.auditor,
-        },
-      ],
-      visibleConfirm: false,
-    });
+    if (this.state.tempImageBase64.length > 0) {
+      this.setState({
+        image: [
+          {
+            base64: this.state.tempImageBase64[0].base64,
+            date: this.state.tempImageBase64[0].date,
+            caption: this.state.tempImageCaption,
+            uploader: this.state.auditor,
+          },
+        ],
+        visibleForm: false,
+        visibleConfirm: false,
+      });
+    }
   };
 
   handleCancel = (e) => {
@@ -335,6 +340,7 @@ class Checklist extends Component {
             />
           </Form.Item>
         </Form>
+        {this.imageUploaded()}
 
         <Button
           type="dashed"
@@ -384,7 +390,24 @@ class Checklist extends Component {
                     );
                   })}
                 </div>
-                <div>Score: {this.state.catCounts[catIndex] / 2}</div>
+                <b>
+                  Total Score:{" "}
+                  <span className="total_score">
+                    {Math.round(
+                      (this.state.weightage[0] / 6) *
+                        (this.state.catCounts[0] / 2)
+                    ) +
+                      Math.round(
+                        (this.state.weightage[1] / 12) *
+                          (this.state.catCounts[1] / 2)
+                      ) +
+                      Math.round(
+                        (this.state.weightage[2] / 16) *
+                          (this.state.catCounts[2] / 2)
+                      )}
+                    /100
+                  </span>
+                </b>
               </Panel>
             </Collapse>
           );
@@ -403,8 +426,9 @@ class Checklist extends Component {
 
         <Modal
           title="Upload Photo"
+          destroyOnClose={true}
           visible={this.state.visibleForm}
-          onOk={this.handleFormOk}
+          onOk={this.handleUploadOk}
           onCancel={this.handleCancel}
           okButtonProps={{ disabled: false }}
           cancelButtonProps={{ disabled: false }}
@@ -437,7 +461,7 @@ class Checklist extends Component {
             </Form.Item>
           </Form>
 
-          <Modal
+          {/* <Modal
             title="Upload Confirm"
             destroyOnClose={true}
             visible={this.state.visibleConfirm}
@@ -446,7 +470,7 @@ class Checklist extends Component {
             cancelButtonProps={{ disabled: true, visible: false }}
           >
             <p>Photo Added!</p>
-          </Modal>
+          </Modal> */}
         </Modal>
         <Button
           className="submit-button"

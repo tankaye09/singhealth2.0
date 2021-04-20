@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-    Typography,
-    Input,
-    Button,
-    Layout,
-    Row,
-    Col,
-    Card,
-    Form,
-} from "antd";
+import { Typography, Input, Button, Layout, Row, Col, Card, Form } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import { display } from "../../actions/auditActions.js";
 import { setSelectedTenant, getTenant } from "../../actions/tenantActions";
@@ -20,253 +11,236 @@ import PropTypes from "prop-types";
 const { Title } = Typography;
 
 const gridStyleLeft = {
-    width: '50%',
-    textAlign: 'Left',
+  width: "50%",
+  textAlign: "Left",
 };
 
 const gridStyleRight = {
-    width: '50%',
-    textAlign: 'Right',
+  width: "50%",
+  textAlign: "Right",
 };
 
-
 class AccountInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tenantId: "",
-            updateId: "",
-            tenantLocation: "",
-            auditor: "",
-            errors: {},
-            oldPass: "",
-            rePass: "",
-            newPass: "",
-        };
-    }
-
-    componentDidMount() {
-        console.log("Mounted: ", store.getState().auth.user.id);
-        getTenant((data) => {
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].userId === store.getState().auth.user.id) {
-                    this.setState(
-                        { tenantId: data[i]._id, tenantLocation: data[i].address, auditor: data[i].auditor, updateId: data[i].userId, },
-                        console.log(data[i]._id),
-                    );
-                }
-            }
-        });
-    }
-
-    onChangeOld = (values) => {
-        console.log(this.state);
-        this.setState({
-            oldPass: values.nativeEvent.explicitOriginalTarget.value,
-        });
+  constructor(props) {
+    super(props);
+    this.state = {
+      tenantId: "",
+      updateId: "",
+      tenantLocation: "",
+      auditor: "",
+      errors: {},
+      oldPass: "",
+      rePass: "",
+      newPass: "",
     };
+  }
 
-    onChangeRe = (values) => {
-        console.log(this.state);
-        this.setState({
-            rePass: values.nativeEvent.explicitOriginalTarget.value,
-        });
-    };
-
-    onChangeNew = (values) => {
-        console.log(this.state);
-        this.setState({
-            newPass: values.nativeEvent.explicitOriginalTarget.value,
-        });
-    };
-
-    changePass = () => {
-        console.log(this.state);
-        if (this.state.newPass == this.state.rePass) {
-            this.props.changePassword({
-                oldPass: this.state.oldPass,
-                rePass: this.state.rePass,
-                newPass: this.state.newPass,
-                updateId: this.state.updateId,
-            });
-        } else {
-            console.log("Password Mismatch");
+  componentDidMount() {
+    console.log("Mounted: ", store.getState().auth.user.id);
+    getTenant((data) => {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].userId === store.getState().auth.user.id) {
+          this.setState(
+            {
+              tenantId: data[i]._id,
+              tenantLocation: data[i].address,
+              auditor: data[i].auditor,
+              updateId: data[i].userId,
+            },
+            console.log(data[i]._id)
+          );
         }
-    }
+      }
+    });
+  }
 
-    render() {
-        const { user } = this.props.auth;
-        const { errors } = this.state.errors;
+  onChangeOld = (values) => {
+    console.log(this.state);
+    this.setState({
+      oldPass: values.nativeEvent.explicitOriginalTarget.value,
+    });
+  };
 
-        return (
-            <Layout>
-                <Card>
-                    <Row>
-                        <ul className="ul">
-                            <div
-                                style={{ "text-align": "left", clear: "both", width: "100%" }}
-                            >
-                                Tenant Name:
-                            </div>
-                        </ul>
-                        <ul className="ul">
-                            <div className="info">
-                                <b>
-                                    {user.name}
-                                </b>
-                            </div>
-                        </ul>
-                        <p></p>
-                        <ul className="ul">
-                            <div
-                                style={{ "text-align": "left", clear: "both", width: "100%" }}
-                            >
-                                Tenant ID:
-                            </div>
-                        </ul>
-                        <ul className="ul">
-                            <div className="idInfo">
-                                <b>
-                                    {user.id}
-                                </b>
-                            </div>
-                        </ul>
-                        <ul className="ul">
-                            <div
-                                style={{ "text-align": "left", clear: "both", width: "100%" }}
-                            >
-                                Auditor:
-              </div>
-                        </ul>
-                        <ul className="ul">
-                            <div className="info">
-                                <b>{this.state.auditor}</b>
-                            </div>
-                        </ul>
-                        <ul className="ul">
-                            <div
-                                style={{ "text-align": "left", clear: "both", width: "100%" }}
-                            >
-                                Tenant Location:
-              </div>
-                        </ul>
-                        <ul className="ul">
-                            <div className="info">
-                                <b>
-                                    {this.state.tenantLocation}
-                                </b>
-                            </div>
-                        </ul>
-                        <ul className="ul">
-                            <div
-                                style={{ "text-align": "left", clear: "both", width: "100%" }}
-                            >
-                                Institution:
-              </div>
-                        </ul>
-                        <ul className="ul">
-                            <div className="info">
-                                <b>
-                                    {user.institution}
-                                </b>
-                            </div>
-                        </ul>
-                    </Row>
-                </Card>
-                <Card size="small" style={{ "background-color": "#F0F2F5" }}>
-                    <Form
-                        className="addComment"
-                        layout="vertical"
-                        size="small"
-                        initialValues={{
-                            remember: false,
-                        }}
-                    >
-                        <Form.Item name="changePassword" label={<b>Change Password</b>}>
-                        </Form.Item>
-                        <Form.Item
-                            name="oldpassword"
-                            rules={[
-                                { required: true, message: "Please input your Old Password!" },
-                            ]}
-                        >
-                            <Input
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                                placeholder="Old Password"
-                                onChange={this.onChangeOld}
-                                // value={this.state.password}
-                                // error={errors.password}
-                                id="oldpassword"
-                                type="password"
-                            // className={classnames("", {
-                            //     // invalid: errors.password || errors.passwordincorrect,
-                            // })}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="newpassword"
-                            rules={[
-                                { required: true, message: "Please input your New Password!" },
-                            ]}
-                        >
-                            <Input
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                                placeholder="New Password"
-                                onChange={this.onChangeNew}
-                                value={this.state.password}
-                                // error={errors.password}
-                                id="newpassword"
-                                type="password"
-                            // className={classnames("", {
-                            //     // invalid: errors.password || errors.passwordincorrect,
-                            // })}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="repassword"
-                            rules={[
-                                { required: true, message: "Please input your Password!" },
-                            ]}
-                        >
-                            <Input
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                                placeholder="Re-type Password"
-                                onChange={this.onChangeRe}
-                                // value={this.state.password}
-                                // error={errors.password}
-                                id="repassword"
-                                type="password"
-                            // className={classnames("", {
-                            //     // invalid: errors.password || errors.passwordincorrect,
-                            // })}
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button
-                                className="view-audit-buttons"
-                                onClick={this.changePass}
-                            >
-                                Change Password
-                </Button>
-                        </Form.Item>
-                    </Form>
-                </Card>
-            </Layout >
-        );
+  onChangeRe = (values) => {
+    console.log(this.state);
+    this.setState({
+      rePass: values.nativeEvent.explicitOriginalTarget.value,
+    });
+  };
+
+  onChangeNew = (values) => {
+    console.log(this.state);
+    this.setState({
+      newPass: values.nativeEvent.explicitOriginalTarget.value,
+    });
+  };
+
+  changePass = () => {
+    console.log(this.state);
+    if (this.state.newPass == this.state.rePass) {
+      this.props.changePassword({
+        oldPass: this.state.oldPass,
+        rePass: this.state.rePass,
+        newPass: this.state.newPass,
+        updateId: this.state.updateId,
+      });
+    } else {
+      console.log("Password Mismatch");
     }
+  };
+
+  render() {
+    const { user } = this.props.auth;
+    const { errors } = this.state.errors;
+
+    return (
+      <Layout>
+        <Card>
+          <ul className="ul">
+            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
+              Tenant Name:
+            </div>
+          </ul>
+          <ul className="ul">
+            <div className="info">
+              <b> {user.name}</b>
+            </div>
+          </ul>
+          <p></p>
+          <ul className="ul">
+            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
+              Tenant ID:
+            </div>
+          </ul>
+          <ul className="ul">
+            <div className="idInfo">
+              <b>{user.id}</b>
+            </div>
+          </ul>
+          <ul className="ul">
+            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
+              Auditor:
+            </div>
+          </ul>
+          <ul className="ul">
+            <div className="info">
+              <b>{this.state.auditor}</b>
+            </div>
+          </ul>
+          <ul className="ul">
+            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
+              Tenant Location:
+            </div>
+          </ul>
+          <ul className="ul">
+            <div className="info">
+              <b>{this.state.tenantLocation}</b>
+            </div>
+          </ul>
+          <ul className="ul">
+            <div style={{ "text-align": "left", clear: "both", width: "100%" }}>
+              Institution:
+            </div>
+          </ul>
+          <ul className="ul">
+            <div className="info">
+              <b>{user.institution}</b>
+            </div>
+          </ul>
+        </Card>
+        <Card size="small" style={{ "background-color": "#F0F2F5" }}>
+          <Form
+            className="addComment"
+            layout="vertical"
+            size="small"
+            initialValues={{
+              remember: false,
+            }}
+          >
+            <Form.Item
+              name="changePassword"
+              label={<b>Change Password</b>}
+            ></Form.Item>
+            <Form.Item
+              name="oldpassword"
+              rules={[
+                { required: true, message: "Please input your Old Password!" },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Old Password"
+                onChange={this.onChangeOld}
+                // value={this.state.password}
+                // error={errors.password}
+                id="oldpassword"
+                type="password"
+                // className={classnames("", {
+                //     // invalid: errors.password || errors.passwordincorrect,
+                // })}
+              />
+            </Form.Item>
+            <Form.Item
+              name="newpassword"
+              rules={[
+                { required: true, message: "Please input your New Password!" },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="New Password"
+                onChange={this.onChangeNew}
+                value={this.state.password}
+                // error={errors.password}
+                id="newpassword"
+                type="password"
+                // className={classnames("", {
+                //     // invalid: errors.password || errors.passwordincorrect,
+                // })}
+              />
+            </Form.Item>
+            <Form.Item
+              name="repassword"
+              rules={[
+                { required: true, message: "Please input your Password!" },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Re-type Password"
+                onChange={this.onChangeRe}
+                // value={this.state.password}
+                // error={errors.password}
+                id="repassword"
+                type="password"
+                // className={classnames("", {
+                //     // invalid: errors.password || errors.passwordincorrect,
+                // })}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button className="view-audit-buttons" onClick={this.changePass}>
+                Change Password
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Layout>
+    );
+  }
 }
 
 AccountInfo.propTypes = {
-    setSelectedTenant: PropTypes.func.isRequired,
+  setSelectedTenant: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
-    userID: state.auth.user.id,
-    auth: state.auth,
-    errors: state.errors,
+  userID: state.auth.user.id,
+  auth: state.auth,
+  errors: state.errors,
 });
 export default connect(mapStateToProps, {
-    setSelectedTenant,
-    getTenant,
-    display,
-    changePassword,
+  setSelectedTenant,
+  getTenant,
+  display,
+  changePassword,
 })(AccountInfo);
