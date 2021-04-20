@@ -26,6 +26,7 @@ import ViewAuditAuditor from "./components/ViewAudit";
 import TenantHome from "./components/tenant/TenantHome";
 import ViewAuditTenant from "./components/ViewAuditTenant";
 import ResetPassword from "./components/auth/ResetPassword";
+import AccountInfo from "./components/account/AccountInfo"
 //Error warning
 import MessageDisplay from "./components/MessageDisplay";
 
@@ -83,6 +84,11 @@ class App extends Component {
                 exact
                 path="/viewaudittenant"
                 component={ViewAuditTenant}
+              />
+              <TenantRoute
+                exact
+                path="/accountinfo"
+                component={AccountInfo}
               />
             </Switch>
           </div>
