@@ -17,6 +17,7 @@ import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
 import dateformat from "dateformat";
 import store from "../store";
+
 const fileUpload = require("fuctbase64");
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
@@ -34,6 +35,8 @@ const { TextArea } = Input;
 const mapDispatchToProps = {
   submit,
 };
+//const cat0checkboxes= Fb.subcategories[0].subcategories.length();
+
 
 // TODO: Take score from json file => Update the score, replace the json file
 
@@ -47,6 +50,8 @@ class Checklist extends Component {
     checked: false,
     catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
     total_score: 0,
+    weightage: [10, 20, 35, 15, 20],//newly added for cal
+    //total_checkboxes_count:[Fb.subcategories[0].questions.length(),Fb.subcategories[1].questions.length(), Fb.subcategories[2].questions.length(),Fb.subcategories[3].questions.length(),],
     image: [],
     tempImageBase64: [],
     tempImageCaption: null,
@@ -68,29 +73,21 @@ class Checklist extends Component {
 
   submitAudit = () => {
     // console.log(this.state);
-    this.props.submit(
-      {
-        type: "FB",
-        auditor: store.getState().auth.user.name,
-        auditorId: store.getState().auth.user.id,
-        catCounts: this.state.catCounts,
-        total_score:
-          (this.state.catCounts[0] +
-            this.state.catCounts[1] +
-            this.state.catCounts[2] +
-            this.state.catCounts[3] +
-            this.state.catCounts[4]) /
-          2,
-        image: this.state.image,
-        date: this.state.date,
-        comment: this.state.comment,
-        rectifyDate: this.state.rectifyDate,
-        location: this.props.tenantInfo.record.address,
-        tenantID: this.props.tenantInfo.record._id,
-        institution: this.props.tenantInfo.record.institution,
-      },
-      this.props.history
-    );
+    this.props.submit({
+      type: "FB",
+      auditor: store.getState().auth.user.name,
+      auditorId: store.getState().auth.user.id,
+      catCounts: this.state.catCounts,
+      total_score:
+        this.state.total_score,
+      image: this.state.image,
+      date: this.state.date,
+      comment: this.state.comment,
+      rectifyDate: this.state.rectifyDate,
+      location: this.props.tenantInfo.record.address,
+      tenantID: this.props.tenantInfo.record._id,
+      institution: this.props.tenantInfo.record.institution,
+    });
     this.showAuditModal();
     window.scrollTo(0, 0); // Scroll to top
   };
@@ -210,23 +207,7 @@ class Checklist extends Component {
       onChange={(e) => this.handleCount(e, catIndex)}
     />
   );
-  //// for food hygiene cat
-  // createfoodCheckbox = (label) => (
-  //   <Checkbox
-  //     label={label}
-  //     handleCheckboxChange={this.toggleCheckbox}
-  //     key={label}
-  //     onChange={(e) => this.handlefoodCheckCount(e)}
-  //   />
-  // );
-  // handlefoodCheckCount = (e) => {
-  //   const { checked, type } = e.target;
-  //   if (type === "checkbox" && checked === true) {
-  //     this.setState((state) => state.food_count++);
-  //   } else {
-  //     this.setState((state) => state.food_count--);
-  //   }
-  // };
+
 
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
@@ -276,6 +257,7 @@ class Checklist extends Component {
     const rectifyLabel = (
       <div>If there are no non-compliances, put {<b>today's</b>} date</div>
     );
+    //assigning array
     return (
       <div className="table">
         <h3>
@@ -384,7 +366,7 @@ class Checklist extends Component {
                     );
                   })}
                 </div>
-                <div>Score: {this.state.catCounts[catIndex] / 2}</div>
+                <div>Score: {Math.round(this.state.weightage[catIndex] / cat.score * (this.state.catCounts[catIndex] / 2))}/{this.state.weightage[catIndex]}</div>
               </Panel>
             </Collapse>
           );
@@ -392,13 +374,12 @@ class Checklist extends Component {
         <b>
           Total Score:{" "}
           <span className="total_score">
-            {(this.state.catCounts[0] +
-              this.state.catCounts[1] +
-              this.state.catCounts[2] +
-              this.state.catCounts[3] +
-              this.state.catCounts[4]) /
-              2}
-          </span>
+            {Math.round(this.state.weightage[0] / 13 * (this.state.catCounts[0] / 2))
+              + Math.round(this.state.weightage[1] / 17 * (this.state.catCounts[1] / 2))
+              + Math.round(this.state.weightage[2] / 37 * (this.state.catCounts[2] / 2))
+              + Math.round(this.state.weightage[3] / 11 * (this.state.catCounts[3] / 2))
+              + Math.round(this.state.weightage[4] / 18 * (this.state.catCounts[4] / 2))}
+          </span>/100
         </b>
 
         <Modal

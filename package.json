@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/tankaye09/singhealth2.0#readme",
   "dependencies": {
+    "@testing-library/dom": "^7.30.3",
+    "antd": "^4.15.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "concurrently": "^6.0.0",
@@ -31,6 +34,7 @@
     "image-to-base64": "^2.1.1",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
     "moments": "0.0.2",
     "mongoose": "^5.11.19",
     "nodemailer": "^6.5.0",
@@ -40,12 +44,16 @@
     "react-dom": "^17.0.2",
     "react-highlight-words": "^0.17.0",
     "react-recaptcha": "^2.3.10",
+    "react-redux": "^7.2.3",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-toastify": "^7.0.3",
     "reactjs-popup": "^2.0.4",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "typescript": "^4.2.3",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "web-vitals": "^1.1.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.16.1",
