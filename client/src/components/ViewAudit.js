@@ -183,19 +183,34 @@ class ViewAudit extends Component {
             );
           }
         } else {
-          cardAlign = Comm[j].uploader === "Tenant" ? "cardRight" : "cardLeft";
-          output.push(
-            <Card className={cardAlign} size="small">
-              <Comment
-                author={<a>{Comm[j].uploader}</a>}
-                content={<p>{Comm[j].caption}</p>}
-              ></Comment>
-              <Image
-                width={100}
-                src={`data:image/jpeg;base64,${Comm[j].base64}`}
-              />
-            </Card>
-          );
+          cardAlign = Comm[j].uploader === "Tenant(You)" ? "cardRight" : "cardLeft";
+          if (Comm[j].author == "Tenant") {
+            output.push(
+              <Card className={cardAlign} size="small">
+                <Comment
+                  author={<a>Tenant</a>}
+                  content={<p>{Comm[j].caption}</p>}
+                ></Comment>
+                <Image
+                  width={100}
+                  src={`data:image/jpeg;base64,${Comm[j].base64}`}
+                />
+              </Card>
+            );
+          } else {
+            output.push(
+              <Card className={cardAlign} size="small">
+                <Comment
+                  author={<a>{Comm[j].uploader}</a>}
+                  content={<p>{Comm[j].caption}</p>}
+                ></Comment>
+                <Image
+                  width={100}
+                  src={`data:image/jpeg;base64,${Comm[j].base64}`}
+                />
+              </Card>
+            );
+          }
         }
       }
     }
