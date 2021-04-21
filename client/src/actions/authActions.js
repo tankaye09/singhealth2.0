@@ -105,7 +105,7 @@ export const registerTenant = (userData, history) => (dispatch) => {
           type: GET_MESSAGE,
           payload: "Tenant Created",
         });
-        history.push("/auditlist");
+        history.push("/directoy");
         resolve(userData);
       }) // TODO: set up ViewTenants{AuditorName} or sth
       .catch((error) => {
