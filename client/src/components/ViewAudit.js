@@ -162,15 +162,26 @@ class ViewAudit extends Component {
     if (Comm != []) {
       for (var j = 0; j < Comm.length; j++) {
         if (Comm[j].content) {
-          cardAlign = Comm[j].author === "Tenant" ? "cardRight" : "cardLeft";
-          output.push(
-            <Card size="small" className={cardAlign}>
-              <Comment
-                author={<a>{Comm[j].author}</a>}
-                content={<p>{Comm[j].content}</p>}
-              />
-            </Card>
-          );
+          cardAlign = Comm[j].author === "Tenant(You)" ? "cardRight" : "cardLeft";
+          if (Comm[j].author == "Tenant(You)") {
+            output.push(
+              <Card size="small" className={cardAlign}>
+                <Comment
+                  author={<a>Tenant</a>}
+                  content={<p>{Comm[j].content}</p>}
+                />
+              </Card>
+            );
+          } else {
+            output.push(
+              <Card size="small" className={cardAlign}>
+                <Comment
+                  author={<a>{Comm[j].author}</a>}
+                  content={<p>{Comm[j].content}</p>}
+                />
+              </Card>
+            );
+          }
         } else {
           cardAlign = Comm[j].uploader === "Tenant" ? "cardRight" : "cardLeft";
           output.push(
