@@ -8,8 +8,13 @@ const staffkey = require("./routes/api/staffkey");
 const audits = require("./routes/api/audits");
 const photos = require("./routes/api/photos");
 const tenants = require("./routes/api/tenants");
+const sendemail = require("./routes/api/sendemail");
 
 const app = express();
+
+// Change limit of payload
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 
 // Bodyparser middleware
 app.use(
@@ -40,6 +45,7 @@ app.use("/api/audits", audits);
 app.use("/api/photos", photos);
 app.use("/api/tenants", tenants);
 app.use("/api/staffkey", staffkey);
+app.use("/api/sendEmail", sendemail);
 
 const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there
 

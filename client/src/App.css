@@ -1,5 +1,19 @@
 @import "~antd/dist/antd.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
+html,
+body {
+  font-family: "Roboto Slab", serif;
+}
+
+html,
+body {
+  background: #f0f2f5;
+}
+
+h3 {
+  font-size: 3vh;
+}
 /* Navbar */
 
 .menuBar {
@@ -162,6 +176,7 @@ div.form {
 }
 .login-register-form-button {
   width: 100%;
+  border-radius: 3px;
 }
 
 .App {
@@ -234,11 +249,18 @@ div.form {
 }
 
 .table {
-  width: 90%;
+  width: 95%;
   max-width: 767px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
+}
+
+.table-row-light {
+  background-color: #ffffff;
+}
+.table-row-dark {
+  background-color: #fbfbfb;
 }
 
 .table-title {
@@ -248,8 +270,8 @@ div.form {
 
 /* Change header text and background color   */
 .ant-table-thead > tr > th {
-  color: rgb(0, 0, 0);
-  background: #fff5bd !important;
+  color: rgb(255, 255, 255);
+  background: #f3ab1b !important;
   font-weight: 600;
 }
 
@@ -280,7 +302,7 @@ div.form {
 }
 
 .bg-orange {
-  background-color: #fff5bd;
+  background-color: #f3ab1b;
 }
 
 .uppercase {
@@ -297,6 +319,35 @@ div.form {
   margin-bottom: 50px;
   width: 100%;
   font-weight: bold;
+  border-radius: 3px;
+}
+
+.action-buttons {
+  width: 80%;
+  height: auto;
+  font-size: smaller;
+  color: #f3ab1b;
+  font-weight: bold;
+  border-color: #f3ab1b;
+  border-radius: 3px;
+}
+
+.action-buttons-normalwidth {
+  width: 105%;
+  height: auto;
+  font-size: smaller;
+  color: #f3ab1b;
+  font-weight: bold;
+  border-color: #f3ab1b;
+  border-radius: 3px;
+}
+
+.view-audit-buttons {
+  height: auto;
+  color: #f3ab1b;
+  font-weight: bold;
+  border-color: #f3ab1b;
+  border-radius: 3px;
 }
 
 .create-audit-row {
@@ -314,6 +365,19 @@ div.form {
   display: inline-flex;
 }
 
+.auditDate {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.red {
+  color: #cc7351;
+}
+.green {
+  color: #9dab86;
+}
+
 /* Dropdown */
 .dropdown {
   text-align: left;
@@ -329,4 +393,96 @@ div.form {
 #nav-drawer .ant-drawer-body {
   background-color: #ffffff !important;
   padding: 0;
+}
+
+.commentBox {
+  margin-left: auto;
+  width: 40%;
+}
+
+.auditDate {
+  margin-left: auto;
+}
+.total_score {
+  margin-left: auto;
+}
+
+.upon {
+  font-size: 50px;
+  font-style: italic;
+}
+
+.addComment {
+  /* height: 50px;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  margin-left: 10%; */
+  /* width: 40%; */
+  margin: auto;
+}
+
+.cardLeft {
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 80%;
+  margin-top: 2px;
+  text-align: left;
+}
+
+.cardRight {
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 80%;
+  margin-top: 2px;
+  margin-left: 20%;
+  text-align: right;
+}
+
+.caption {
+  margin-top: -8%;
+  padding-left: 30%;
+  width: 100%;
+  text-align: left;
+}
+
+.name {
+  font-size: auto;
+  word-wrap: break-word;
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+}
+
+.info {
+  font-size: auto;
+  word-wrap: break-word;
+  /* display: inline-block; */
+  text-align: right;
+  width: 100%;
+}
+
+.idInfo {
+  font-size: 12px;
+  word-wrap: break-word;
+  /* display: inline-block; */
+  text-align: right;
+  width: 100%;
+}
+
+.score {
+  font-size: 30;
+  font-size: 3vh;
+  float: left;
+  font-weight: bold;
+}
+
+.name2 {
+  font-size: 20px;
+  font-style: italic;
+}
+
+.ul {
+  padding: 0;
+  align-self: auto;
+  display: inline;
 }

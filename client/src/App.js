@@ -21,9 +21,14 @@ import Directory from "./components/TenantList";
 import Checklist from "./components/Checklist";
 import ChecklistNonFB from "./components/ChecklistNonFB";
 import CreateTenant from "./components/auth/CreateTenant";
+import ViewAuditAuditor from "./components/ViewAudit";
+import AccountInfoStaff from "./components/account/AccountInfo";
+
 //Tenant Flow
 import TenantHome from "./components/tenant/TenantHome";
-import TenantEditAudit from "./components/tenant/EditAudit";
+import ViewAuditTenant from "./components/ViewAuditTenant";
+import ResetPassword from "./components/auth/ResetPassword";
+import AccountInfo from "./components/account/AccountInfo";
 //Error warning
 import MessageDisplay from "./components/MessageDisplay";
 
@@ -59,6 +64,7 @@ class App extends Component {
             <Route exact path="/" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/resetpassword" component={ResetPassword} />
             <Switch>
               <StaffRoute exact path="/auditlist" component={AuditList} />
               <StaffRoute exact path="/checklistFB" component={Checklist} />
@@ -69,13 +75,24 @@ class App extends Component {
               />
               <StaffRoute exact path="/directory" component={Directory} />
               <StaffRoute exact path="/createtenant" component={CreateTenant} />
+              <StaffRoute
+                exact
+                path="/viewaudit"
+                component={ViewAuditAuditor}
+              />
+              <StaffRoute
+                exact
+                path="/accountinfostaff"
+                component={AccountInfoStaff}
+              />
 
               <TenantRoute exact path="/tenant" component={TenantHome} />
               <TenantRoute
                 exact
-                path="/tenant/editAudit"
-                component={TenantEditAudit}
+                path="/viewaudittenant"
+                component={ViewAuditTenant}
               />
+              <TenantRoute exact path="/accountinfo" component={AccountInfo} />
             </Switch>
           </div>
         </Router>

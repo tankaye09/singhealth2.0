@@ -5,32 +5,82 @@ let Audit = require("../../models/Audits");
 // @desc Register user
 // @access Public
 router.post("/add", (req, res) => {
-    console.log(req.body);
-    const newAudit = new Audit({
-        type: req.body.type,
-        catCounts: req.body.catCounts,
-        profcount: req.body.profcount,
-        gc_count: req.body.gc_count,
-        food_count: req.body.food_count,
-        health_count: req.body.health_count,
-        safety_count: req.body.safety_count,
-        total_score: req.body.total_score,
-        image: req.body.image,
-        date: req.body.date,
-        description: req.body.description,
-        location: req.body.location,
-    });
+  // console.log(req.body);
+  const newAudit = new Audit({
+    type: req.body.type,
+    auditor: req.body.auditor,
+    auditorId: req.body.auditorId,
+    catCounts: req.body.catCounts,
+    total_score: req.body.total_score,
+    image: req.body.image,
+    date: req.body.date,
+    rectifyDate: req.body.rectifyDate,
+    comment: req.body.comment,
+    location: req.body.location,
+    tenantID: req.body.tenantID,
+    institution: req.body.institution,
+  });
 
-    newAudit
-        .save()
-        .then(() => res.json("Audit added!"))
-        .catch((err) => res.status(400).json("Error: " + err));
+  newAudit
+    .save()
+    .then(() => res.send("Audit added!"))
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
 router.route("/").get((req, res) => {
-    Audit.find()
-        .then((data) => res.json(data))
-        .catch((err) => res.status(400).json("Error: " + err));
+  // console.log("test");
+  Audit.find()
+    .then((data) => res.json(data))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+router.put("/update", function (req, res) {
+  console.log(req.body._id);
+  Audit.findOneAndUpdate(
+    { _id: req.body._id },
+    {
+      $push: {
+        comment: req.body.comment,
+      },
+      new: true,
+    }
+  )
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
+router.put("/updateImage", function (req, res) {
+  // console.log(req.body.image);
+  Audit.findOneAndUpdate(
+    { _id: req.body._id },
+    {
+      $push: {
+        image: req.body.image,
+      },
+      new: true,
+    }
+  )
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
+router.post("/", function (req, res) {
+  // console.log(req.body._id);
+  Audit.findOneAndDelete({ tenantID: req.body.tenantID })
+    .then((doc) => {
+      res.send(doc);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 module.exports = router;

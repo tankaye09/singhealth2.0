@@ -7,28 +7,16 @@ const AuditSchema = new Schema({
     type: String,
     required: true,
   },
+  auditor: {
+    type: String,
+    required: true,
+  },
+  auditorId: {
+    type: String,
+    required: true,
+  },
   catCounts: {
     type: [],
-    required: false,
-  },
-  profcount: {
-    type: Number,
-    required: false,
-  },
-  gc_count: {
-    type: Number,
-    required: false,
-  },
-  food_count: {
-    type: Number,
-    required: false,
-  },
-  health_count: {
-    type: Number,
-    required: false,
-  },
-  safety_count: {
-    type: Number,
     required: false,
   },
   total_score: {
@@ -36,18 +24,30 @@ const AuditSchema = new Schema({
     required: true,
   },
   image: {
-    type: String,
-    required: true,
+    type: [],
+    required: false,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
-  description: {
+  rectifyDate: {
     type: String,
+    required: true,
+  },
+  comment: {
+    type: [],
     required: true,
   },
   location: {
+    type: String,
+    required: false,
+  },
+  tenantID: {
+    type: String,
+    required: true,
+  },
+  institution: {
     type: String,
     required: true,
   },

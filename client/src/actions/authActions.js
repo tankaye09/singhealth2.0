@@ -97,19 +97,144 @@ export const logoutUser = () => (dispatch) => {
 /* Tenant */
 // Register Tenant
 export const registerTenant = (userData, history) => (dispatch) => {
+  let promise = new Promise((resolve, reject) => {
+    axios
+      .post("/api/users/createtenant", userData)
+      .then((res) => {
+        dispatch({
+          type: GET_MESSAGE,
+          payload: "Tenant Created",
+        });
+        history.push("/directory");
+        resolve(userData);
+      }) // TODO: set up ViewTenants{AuditorName} or sth
+      .catch((error) => {
+        dispatch({
+          type: GET_ERRORS,
+          payload: error.response.data,
+        });
+        reject("Tenant Creation Failed");
+      });
+  });
+
+  promise
+    .then((message) => {
+      sendEmail(message);
+    })
+    .catch((message) => {
+      console.log(message);
+    });
+};
+
+export const deleteTenant = (data) => {
+  console.log(data);
+  return axios.post("/api/users/deletetenant", data).catch((err) => {
+    console.log(err);
+  });
+};
+
+export const resetPassword = (data) => (dispatch) => {
+  console.log("resetpassword");
   axios
-    .post("/api/users/createtenant", userData)
+    .put("/api/users/resetpassword", data)
     .then((res) => {
+      console.log("axios called");
+      sendEmailPasswordReset(res.data);
       dispatch({
         type: GET_MESSAGE,
-        payload: "Tenant Created",
+        payload: "Password Resetted if email is valid",
       });
-      history.push("/createtenant");
-    }) // TODO: set up ViewTenants{AuditorName} or sth
-    .catch((err) =>
+    })
+    .catch((err) => {
+      console.log("axios called but error");
+      console.log(err);
       dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      })
-    );
+        type: GET_MESSAGE,
+        payload: "Password Resetted if email is valid",
+      });
+    });
+};
+
+export const changePassword = (data) => (dispatch) => {
+  console.log("changepassword");
+  console.log(data);
+  axios
+    .put("/api/users/changepassword", data)
+    .then((res) => {
+      console.log("axios called");
+      console.log(res.data);
+      sendEmailPasswordChange(res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Password has been Changed",
+      });
+    })
+    .catch((err) => {
+      console.log("axios called but error");
+      console.log(err);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: "Old Password is Incorrect",
+      });
+    });
+};
+
+export const sendEmailPasswordReset = (data) => {
+  console.log("In send email");
+  axios
+    .post("/api/sendemail/reset", data)
+    .then((res) => {
+      console.log("email sent success");
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
+    })
+    .catch((err) => {
+      console.log("email sent failed, err: ", err);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
+    });
+};
+
+export const sendEmail = (data) => {
+  console.log("In send email");
+  axios
+    .post("/api/sendemail/create", data)
+    .then((res) => {
+      console.log("email sent success");
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
+    })
+    .catch((err) => {
+      console.log("email sent failed, err: ", err);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
+    });
+};
+
+export const sendEmailPasswordChange = (data) => {
+  console.log("In send email");
+  axios
+    .post("/api/sendemail/change", data)
+    .then((res) => {
+      console.log("email sent success");
+      // dispatch({
+      //   type: GET_MESSAGE,
+      //   payload: "Email Sent to Tenant",
+      // });
+    })
+    .catch((err) => {
+      console.log("email sent failed, err: ", err);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   payload: "Email Sent Failed",
+      // });
+    });
 };

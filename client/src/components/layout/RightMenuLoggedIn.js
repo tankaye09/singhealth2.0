@@ -4,6 +4,7 @@ import { logoutUser } from "../../actions/authActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { NavLink, withRouter } from "react-router-dom";
+import { UserOutlined } from "@ant-design/icons";
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -14,6 +15,10 @@ class RightMenu extends Component {
   };
   render() {
     const { user } = this.props.auth;
+    let url = "/accountinfo";
+    if (user.usertype === "staff") {
+      url = "/accountinfostaff";
+    }
 
     return (
       <Menu mode="vertical">
@@ -23,7 +28,10 @@ class RightMenu extends Component {
           </NavLink>
         </Menu.Item>
         <Menu.Item key="app">
-          <a href="">Hello {user.name}</a>
+          <NavLink to={url}>
+            {user.name + "  "}
+            <UserOutlined />
+          </NavLink>
         </Menu.Item>
       </Menu>
     );

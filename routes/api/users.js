@@ -11,6 +11,9 @@ const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
 
+// Password generator
+var generator = require("generate-password");
+
 // @route POST api/users/register
 // @desc Register user
 // @access Public
@@ -114,9 +117,11 @@ const Tenant = require("../../models/Tenant");
 // @desc Register tenant
 // @access Public -> TODO: make
 router.post("/createtenant", (req, res) => {
-  // var resJsonUser;
-  // var resJsonTenant;
   console.log("inside router.post");
+  // var newpassword = generator.generate({
+  //   length: 10,
+  //   numbers: true,
+  // });
 
   User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
@@ -158,30 +163,123 @@ router.post("/createtenant", (req, res) => {
 
       promise
         .then((message) => {
-          console.log(message);
-          User.findOne({ email: req.body.email }).then((newlyCreatedUser) => {
-            //create Tenant entry
-            const newTenant = new Tenant({
-              userId: newlyCreatedUser._id,
-              address: req.body.address,
-              institution: req.body.institution,
-              auditor: req.body.auditor,
-              type: req.body.type,
-            });
-
-            // save in database
-            newTenant
-              .save()
-              .then()
-              .catch((err) => {
-                console.log(err);
+          console.log("Inside promise: ", message);
+          console.log("email: ", req.body.email);
+          var millisecondsToWait = 500;
+          setTimeout(function () {
+            User.find({ email: req.body.email }).then((newlyCreatedUser) => {
+              console.log("newlycreated: ", newlyCreatedUser);
+              console.log("newlycreated[0]: ", newlyCreatedUser[0]);
+              //create Tenant entry
+              const newTenant = new Tenant({
+                userId: newlyCreatedUser[0]._id,
+                address: req.body.address,
+                institution: req.body.institution,
+                auditor: req.body.auditor,
+                type: req.body.type,
               });
-          });
+
+              // save in database
+              newTenant
+                .save()
+                .then()
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
+          }, millisecondsToWait);
         })
         .catch((message) => {
           console.log(message);
         });
     }
+  });
+});
+
+router.post("/deletetenant", (req, res) => {
+  User.findOneAndDelete({ _id: req.body._id })
+    .then(() => {
+      console.log("Tenant Deleted2");
+    })
+    .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
+var newpassword = generator.generate({
+  length: 10,
+  numbers: true,
+});
+// let newpassword = "newpassword";
+let hashed = "";
+router.put("/resetpassword", (req, res) => {
+  console.log("axios called inside axios");
+
+  // Hash password before saving in database
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newpassword, salt, (err, hash) => {
+      if (err) throw err;
+      hashed = hash;
+      User.findOneAndUpdate(
+        { email: req.body.email },
+        { password: hashed },
+        (error, data) => {
+          if (error) {
+            console.log(error);
+            res.send(error);
+          } else {
+            console.log("This is the data: ", data);
+            data.password = newpassword;
+            console.log("This is the new data: ", data);
+            res.send(data);
+          }
+        }
+      );
+      // .then(() => {
+      //   console.log("Password reseted");
+      //   console.log(res);
+      // })
+      // .catch((err) => {
+      //   console.log("password not reseted");
+      //   console.log(err);
+      // });
+    });
+  });
+});
+
+router.put("/changepassword", (req, res) => {
+  console.log("axios called inside axios");
+
+  // Hash password before saving in database
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(req.body.newPass, salt, (err, hash) => {
+      if (err) throw err;
+      hashed = hash;
+      User.findOne({ _id: req.body.updateId }).then((user) => {
+        // Check password
+        bcrypt.compare(req.body.oldPass, user.password).then((isMatch) => {
+          if (isMatch) {
+            User.findOneAndUpdate(
+              { _id: req.body.updateId },
+              { password: hashed },
+              (error, data) => {
+                if (error) {
+                  console.log(error);
+                  res.send(error);
+                } else {
+                  console.log("This is the data: ", data);
+                  data.password = req.body.newPass;
+                  console.log("This is the new data: ", data);
+                  res.send(data);
+                }
+              }
+            );
+          } else {
+            return res
+              .status(400)
+              .json({ passwordincorrect: "Password incorrect" });
+          }
+        });
+      });
+    });
   });
 });
 

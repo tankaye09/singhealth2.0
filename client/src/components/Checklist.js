@@ -11,66 +11,160 @@ import {
   DatePicker,
 } from "antd";
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import importJSON from "../data/questionsDict.json";
 import { submit, display } from "../actions/auditActions.js";
-import SelelctTenant from "./SelelctTenant";
-
+import dateformat from "dateformat";
+import store from "../store";
+const fileUpload = require("fuctbase64");
 const Fb = importJSON.fb;
 const { Panel } = Collapse;
+const { TextArea } = Input;
+
+// const layout = {
+//   labelCol: {
+//     span: 8,
+//   },
+//   wrapperCol: {
+//     span: 16,
+//   },
+// };
+
+const mapDispatchToProps = {
+  submit,
+};
 
 // TODO: Take score from json file => Update the score, replace the json file
 
 class Checklist extends Component {
-  // componentWillMount = () => {
-  //   this.selectedCheckboxes = new Set();
-  // };
+  // not exactly dynamic
+  state = {
+    tenantInfo: {},
+    type: "FB",
+    auditor: store.getState().auth.user.name,
+    auditorId: store.getState().auth.user.id,
+    checked: false,
+    catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
+    total_score: 0,
+    weightage: [10, 20, 35, 15, 20], //newly added for cal
+    //total_checkboxes_count:[Fb.subcategories[0].questions.length(),Fb.subcategories[1].questions.length(), Fb.subcategories[2].questions.length(),Fb.subcategories[3].questions.length(),],
+    image: [],
+    tempImageBase64: [],
+    tempImageCaption: null,
+    date: null,
+    rectifyDate: null,
+    comment: null,
+    location: "",
+    visibleForm: false,
+    visibleConfirm: false,
+    visibleAudit: false,
+    errors: {},
+  };
 
-  // toggleCheckbox = (label) => {
-  //   if (this.selectedCheckboxes.has(label)) {
-  //     this.selectedCheckboxes.delete(label);
-  //   } else {
-  //     this.selectedCheckboxes.add(label);
-  //   }
-  // };
+  componentDidMount() {
+    console.log("props: ", this.props.tenantInfo);
+    if (typeof this.props.tenantInfo !== "undefined") {
+      this.setState({ tenantInfo: this.props.tenantInfo.record });
+    }
+  }
 
-  // handleFormSubmit = (formSubmitEvent) => {
-  //   formSubmitEvent.preventDefault();
-
-  //   for (const checkbox of this.selectedCheckboxes) {
-  //     console.log(checkbox, "is selected.");
-  //   }
-  // };
-
-  // onFinish = () => {
-  //   var newState = [];
-  //   for (var i = 0; i < this.state.catCounts.length; i++) {
-  //     newState.push(this.state.catCounts[i] / 2);
-  //   }
-  //   const submitData = {
-  //     catCounts: newState,
-  //   };
-
-  //   console.log(submitData);
-  // };
+  imageUploaded = () => {
+    if (this.state.image.length > 0) {
+      return <div className="red">Image Uploaded!</div>;
+    }
+  };
 
   submitAudit = () => {
-    console.log(this.state);
-    submit({
-      type: "Non-FB",
-      catCounts: this.state.catCounts,
-      total_score:
-        this.state.catCounts[0] +
-        this.state.catCounts[1] +
-        this.state.catCounts[2] +
-        this.state.catCounts[3] +
-        this.state.catCounts[4],
-
-      image: this.state.image,
-      date: this.state.date,
-      description: this.state.description,
-      location: this.state.location,
-    });
+    // console.log(this.state);
+    this.props.submit(
+      {
+        type: "FB",
+        auditor: store.getState().auth.user.name,
+        auditorId: store.getState().auth.user.id,
+        catCounts: this.state.catCounts,
+        total_score:
+          Math.round(
+            (this.state.weightage[0] / 13) * (this.state.catCounts[0] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[1] / 17) * (this.state.catCounts[1] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[2] / 37) * (this.state.catCounts[2] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[3] / 11) * (this.state.catCounts[3] / 2)
+          ) +
+          Math.round(
+            (this.state.weightage[4] / 18) * (this.state.catCounts[4] / 2)
+          ),
+        image: this.state.image,
+        date: this.state.date,
+        comment: this.state.comment,
+        rectifyDate: this.state.rectifyDate,
+        location: this.props.tenantInfo.record.address,
+        tenantID: this.props.tenantInfo.record._id,
+        institution: this.props.tenantInfo.record.institution,
+      },
+      this.props.history
+    );
     this.showAuditModal();
+    window.scrollTo(0, 0); // Scroll to top
+  };
+
+  onChange = (e) => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onChangeComment = (comment) => {
+    this.setState({
+      comment: [
+        {
+          content: comment.nativeEvent.explicitOriginalTarget.value,
+          date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          author: store.getState().auth.user.name,
+        },
+      ],
+    });
+  };
+
+  onChangeCaption = (caption) => {
+    console.log(this.state);
+    this.setState({
+      tempImageCaption: caption.nativeEvent.explicitOriginalTarget.value,
+    });
+  };
+
+  onChangeDate = (date, dateString) => {
+    this.setState({
+      date: dateformat(date._d.toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+    });
+  };
+
+  onChangeRectifyDate = (rectifyDate, dateString) => {
+    this.setState({
+      rectifyDate: dateformat(
+        rectifyDate._d.toString(),
+        "yyyy-mm-dd'T'HH:MM:ss.sssZ"
+      ),
+    });
+  };
+
+  fileSelectedHandler = (event) => {
+    console.log(event.target.files[0]);
+    fileUpload(event).then((data) => {
+      console.log("base64: ", data.base64);
+      this.setState({
+        // image: [{ "base64": data.base64, "date": dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"), "caption": "" }]
+        tempImageBase64: [
+          {
+            base64: data.base64,
+            date: dateformat(Date().toString(), "yyyy-mm-dd'T'HH:MM:ss.sssZ"),
+          },
+        ],
+      });
+    });
   };
 
   showAuditModal = () => {
@@ -105,8 +199,33 @@ class Checklist extends Component {
 
   handleUploadOk = (e) => {
     console.log(e);
+    console.log(this.state);
+    if (this.state.tempImageBase64.length > 0) {
+      this.setState({
+        image: [
+          {
+            base64: this.state.tempImageBase64[0].base64,
+            date: this.state.tempImageBase64[0].date,
+            caption: this.state.tempImageCaption,
+            uploader: this.state.auditor,
+          },
+        ],
+        visibleForm: false,
+        visibleConfirm: false,
+      });
+    }
+  };
+
+  onFinish = (values) => {
+    console.log("in onfinish");
+    this.submitAudit();
+    window.scrollTo(0, 0);
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
     this.setState({
-      visibleConfirm: false,
+      visibleForm: false,
     });
   };
 
@@ -118,44 +237,24 @@ class Checklist extends Component {
       onChange={(e) => this.handleCount(e, catIndex)}
     />
   );
-  handlegcCheckCount = (e) => {
-    const { checked, type } = e.target;
-    if (type === "checkbox" && checked === true) {
-      this.setState((state) => state.gc_count++);
-    } else {
-      this.setState((state) => state.gc_count--);
-    }
-  };
-  //for food hygiene cat
-  createfoodCheckbox = (label) => (
-    <Checkbox
-      label={label}
-      handleCheckboxChange={this.toggleCheckbox}
-      key={label}
-      onChange={(e) => this.handlefoodCheckCount(e)}
-    />
-  );
-  handlefoodCheckCount = (e) => {
-    const { checked, type } = e.target;
-    if (type === "checkbox" && checked === true) {
-      this.setState((state) => state.food_count++);
-    } else {
-      this.setState((state) => state.food_count--);
-    }
-  };
+  //// for food hygiene cat
+  // createfoodCheckbox = (label) => (
+  //   <Checkbox
+  //     label={label}
+  //     handleCheckboxChange={this.toggleCheckbox}
+  //     key={label}
+  //     onChange={(e) => this.handlefoodCheckCount(e)}
+  //   />
+  // );
+  // handlefoodCheckCount = (e) => {
+  //   const { checked, type } = e.target;
+  //   if (type === "checkbox" && checked === true) {
+  //     this.setState((state) => state.food_count++);
+  //   } else {
+  //     this.setState((state) => state.food_count--);
+  //   }
+  // };
 
-  // not exactly dynamic
-  state = {
-    checked: false,
-    catCounts: [0, 0, 0, 0, 0], // counts[0]: for Professionalism & Staff Hygiene (10%), counts[1]: for Housekeeping & General Cleanliness (20%)
-    image: null,
-    date: null,
-    description: "",
-    location: "",
-    visibleForm: false,
-    visibleConfirm: false,
-    visibleAudit: false,
-  };
   handleCount = (e, catIndex) => {
     const { checked, type } = e.target;
     switch (catIndex) {
@@ -200,117 +299,202 @@ class Checklist extends Component {
   };
 
   render() {
+    // console.log(this.state.tenantInfo);
+    const { errors } = this.state;
+    const rectifyLabel = (
+      <div>If there are no non-compliances, put {<b>today's</b>} date</div>
+    );
     return (
       <div className="table">
-        <h1>FB CheckList</h1>
-        <p>
-          <SelelctTenant />
-        </p>
-
-        {Fb.map((cat, catIndex) => {
-          // var catScore = cat.score;
-          return (
-            // Category
-            <Collapse defaultActiveKey={["1"]}>
-              <Panel
-                header={<div catIndex={catIndex}>{cat.name}</div>}
-                key={catIndex + 1}
-                className="bg-orange"
-              >
-                <div catIndex={catIndex}>
-                  {cat.subcategories.map((subCat, subCatIndex) => {
-                    return (
-                      // SubCategory
-                      <Collapse defaultActiveKey={["1"]}>
-                        <Panel
-                          header={
-                            <div subCatIndex={subCatIndex}>{subCat.name}</div>
-                          }
-                          key={subCatIndex + 1}
-                          className="bg-orange"
-                        >
-                          <List
-                            dataSource={subCat.questions} // Questions
-                            renderItem={(item) => (
-                              <List.Item>
-                                <div className="checklist-item">
-                                  <div className="create-audit-row">{item}</div>
-                                  <div className="checklist-checkbox">
-                                    {this.createCheckbox(item, catIndex)}
-                                  </div>
-                                </div>
-                              </List.Item>
-                            )}
-                          />
-                        </Panel>
-                      </Collapse>
-                    );
-                  })}
-                </div>
-                <div>Score: {this.state.catCounts[catIndex] / 2}</div>
-              </Panel>
-            </Collapse>
-          );
-        })}
-        <Button type="primary" onClick={this.showFormModal}>
-          Upload Photo
-        </Button>
-        <Modal
-          title="Upload Photo"
-          visible={this.state.visibleForm}
-          onOk={this.handleFormOk}
-          onCancel={this.handleCancel}
-          okButtonProps={{ disabled: false }}
-          cancelButtonProps={{ disabled: false }}
+        <h3>
+          F&B Audit for Tenant at Address:{" "}
+          <b style={{ "text-decoration": "underline" }}>
+            {typeof this.state.tenantInfo !== "undefined"
+              ? this.state.tenantInfo.address
+              : ""}
+            {", "}
+            {typeof this.state.tenantInfo !== "undefined"
+              ? this.state.tenantInfo.institution
+              : ""}
+          </b>
+        </h3>
+        <Form
+          // {...layout}
+          name="FB Checklist"
+          onFinish={this.onFinish}
         >
-          <Form
-            name="photo_upload"
-            className="photo-upload"
-            onFinish={this.onFinish}
+          <Form.Item
+            name="date"
+            rules={[{ required: true, message: "Date of Incident" }]}
+            id="auditDate"
+            error={errors.auditDate}
           >
-            <Form.Item>
-              <Input type="file" onChange={this.fileSelectedHandler} />
-            </Form.Item>
-            <Form.Item
-              name="date"
-              rules={[{ required: true, message: "Date of Incident" }]}
-            >
-              <DatePicker placeholder="Date" onChange={this.onChangeDate} />
-            </Form.Item>
-
-            <Form.Item
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Description",
-                },
-              ]}
-            >
-              <Input
-                placeholder="Description"
-                onChange={this.onChange}
-                value={this.state.description}
-                id="description"
-                type="description"
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="location"
-              rules={[{ required: true, message: "Location of Incident" }]}
-            >
-              <Input
-                placeholder="Location"
-                onChange={this.onChange}
-                value={this.state.location}
-                id="location"
-                type="location"
-              />
-            </Form.Item>
-          </Form>
-
+            <DatePicker
+              className="auditDate"
+              placeholder="Date"
+              onChange={this.onChangeDate}
+            />
+          </Form.Item>
+          <Form.Item
+            name="recitfyDate"
+            label={rectifyLabel}
+            id="rectifyDate"
+            error={errors.rectifyDate}
+            rules={[
+              {
+                required: true,
+                message: "Please enter the timeframe to rectify non-compliance",
+              },
+            ]}
+          >
+            <DatePicker
+              className="auditDate"
+              placeholder="Rectification Deadline"
+              onChange={this.onChangeRectifyDate}
+            />
+          </Form.Item>
+          <Form.Item
+            name="Comment"
+            label="Notes or Comments"
+            id="comment"
+            error={errors.comment}
+            rules={[
+              {
+                required: true,
+                message: "PLease enter some notes or comments about the audit",
+              },
+            ]}
+          >
+            <TextArea
+              placeholder="Notes or Comments"
+              onChange={this.onChangeComment}
+              value={this.state.comment}
+              id="comment"
+              type="comment"
+              rows={4}
+            />
+          </Form.Item>
+          {this.imageUploaded()}
+          <Button
+            type="dashed"
+            className="submit-button"
+            onClick={this.showFormModal}
+          >
+            Upload Photo
+          </Button>
+          {Fb.map((cat, catIndex) => {
+            // var catScore = cat.score;
+            return (
+              // Category
+              <Collapse defaultActiveKey={["1"]}>
+                <Panel
+                  header={<div catIndex={catIndex}>{cat.name}</div>}
+                  key={catIndex + 1}
+                  className="bg-orange"
+                >
+                  <div catIndex={catIndex}>
+                    {cat.subcategories.map((subCat, subCatIndex) => {
+                      return (
+                        // SubCategory
+                        <Collapse defaultActiveKey={["1"]}>
+                          <Panel
+                            header={
+                              <div subCatIndex={subCatIndex}>{subCat.name}</div>
+                            }
+                            key={subCatIndex + 1}
+                            className="bg-orange"
+                          >
+                            <List
+                              dataSource={subCat.questions} // Questions
+                              renderItem={(item) => (
+                                <List.Item>
+                                  <div className="checklist-item">
+                                    <div className="create-audit-row">
+                                      {item}
+                                    </div>
+                                    <div className="checklist-checkbox">
+                                      {this.createCheckbox(item, catIndex)}
+                                    </div>
+                                  </div>
+                                </List.Item>
+                              )}
+                            />
+                          </Panel>
+                        </Collapse>
+                      );
+                    })}
+                  </div>
+                  <b>
+                    Score:{" "}
+                    {Math.round(
+                      (this.state.weightage[catIndex] / cat.score) *
+                        (this.state.catCounts[catIndex] / 2)
+                    )}
+                    /{this.state.weightage[catIndex]}
+                  </b>
+                </Panel>
+              </Collapse>
+            );
+          })}
+          <b>
+            Total Score:{" "}
+            <span className="total_score">
+              {Math.round(
+                (this.state.weightage[0] / 13) * (this.state.catCounts[0] / 2)
+              ) +
+                Math.round(
+                  (this.state.weightage[1] / 17) * (this.state.catCounts[1] / 2)
+                ) +
+                Math.round(
+                  (this.state.weightage[2] / 37) * (this.state.catCounts[2] / 2)
+                ) +
+                Math.round(
+                  (this.state.weightage[3] / 11) * (this.state.catCounts[3] / 2)
+                ) +
+                Math.round(
+                  (this.state.weightage[4] / 18) * (this.state.catCounts[4] / 2)
+                )}
+            </span>
+            /100
+          </b>{" "}
           <Modal
+            title="Upload Photo"
+            destroyOnClose={true}
+            visible={this.state.visibleForm}
+            onOk={this.handleUploadOk}
+            onCancel={this.handleCancel}
+            okButtonProps={{ disabled: false }}
+            cancelButtonProps={{ disabled: false }}
+          >
+            <Form
+              name="photo_upload"
+              className="photo-upload"
+              onFinish={this.onFinish}
+            >
+              <Form.Item>
+                <Input type="file" onChange={this.fileSelectedHandler} />
+              </Form.Item>
+
+              <Form.Item
+                name="caption"
+                rules={[
+                  {
+                    required: true,
+                    message: "Description",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Caption"
+                  onChange={this.onChangeCaption}
+                  value={this.state.caption}
+                  id="caption"
+                  type="caption"
+                />
+              </Form.Item>
+            </Form>
+
+            {/* <Modal
             title="Upload Confirm"
             destroyOnClose={true}
             visible={this.state.visibleConfirm}
@@ -319,27 +503,26 @@ class Checklist extends Component {
             cancelButtonProps={{ disabled: true, visible: false }}
           >
             <p>Photo Added!</p>
+          </Modal> */}
           </Modal>
-        </Modal>
-        <Button
-          className="submit-button"
-          type="primary"
-          onClick={() => this.submitAudit()}
-        >
-          SUBMIT
-        </Button>
-
-        <Modal
-          title=""
-          visible={this.state.visibleAudit}
-          onOk={this.handleAuditOk}
-          okButtonProps={{ disabled: false }}
-          cancelButtonProps={{ disabled: true, visible: false }}
-        >
-          <p>Audit Uploaded!</p>
-        </Modal>
+          <Button
+            className="submit-button"
+            type="primary"
+            htmlType="submit"
+            // onClick={() => this.submitAudit()}
+          >
+            SUBMIT
+          </Button>
+        </Form>
       </div>
     );
   }
 }
-export default Checklist;
+
+Checklist.propTypes = {
+  tenantInfo: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  tenantInfo: state.tenantInfo,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Checklist);

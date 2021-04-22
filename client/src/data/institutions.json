@@ -10,5 +10,37 @@
     {
         "label": "KKH",
         "value": "KKH"
+    },
+    {
+        "label": "SKH",
+        "value": "SKH"
+    },
+    {
+        "label": "NCCS",
+        "value": "NCCS"
+    },
+    {
+        "label": "NDCS",
+        "value": "NDCS"
+    },
+    {
+        "label": "NHCS",
+        "value": "NHCS"
+    },
+    {
+        "label": "SNEC",
+        "value": "SNEC"
+    },
+    {
+        "label": "BVH",
+        "value": "BVH"
+    },
+    {
+        "label": "OCH",
+        "value": "OCH"
+    },
+    {
+        "label": "Academia",
+        "value": "Academia"
     }
 ]
