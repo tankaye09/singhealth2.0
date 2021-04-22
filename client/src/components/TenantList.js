@@ -42,11 +42,11 @@ class Directory extends Component {
     console.log("data");
     this.props.getTenants((data) => {
       for (var i = 0; i < data.length; i++) {
-        if (data[i].type === "Non-FB") {
-          data[i].total_score = (data[i].total_score / 34) * 100;
-        } else {
-          data[i].total_score = (data[i].total_score / 96) * 100;
-        }
+        // if (data[i].type === "Non-FB") {
+        //   data[i].total_score = (data[i].total_score / 34) * 100;
+        // } else {
+        //   data[i].total_score = (data[i].total_score / 96) * 100;
+        // }
       }
       this.setState({ tenantData: data });
       console.log(this.state.tenantData);
