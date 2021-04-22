@@ -19,7 +19,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 // TEST TEAM: for testing change to false
 // DEV TEAM: for dev change to true
-const recaptchaOn = false;
+const recaptchaOn = true;
 
 const institutions = institutionsData;
 

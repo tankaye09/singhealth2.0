@@ -164,25 +164,30 @@ router.post("/createtenant", (req, res) => {
       promise
         .then((message) => {
           console.log("Inside promise: ", message);
-          User.findOne({ email: req.body.email }).then((newlyCreatedUser) => {
-            console.log("newlycreated: ", newlyCreatedUser);
-            //create Tenant entry
-            const newTenant = new Tenant({
-              userId: newlyCreatedUser._id,
-              address: req.body.address,
-              institution: req.body.institution,
-              auditor: req.body.auditor,
-              type: req.body.type,
-            });
-
-            // save in database
-            newTenant
-              .save()
-              .then()
-              .catch((err) => {
-                console.log(err);
+          console.log("email: ", req.body.email);
+          var millisecondsToWait = 500;
+          setTimeout(function () {
+            User.find({ email: req.body.email }).then((newlyCreatedUser) => {
+              console.log("newlycreated: ", newlyCreatedUser);
+              console.log("newlycreated[0]: ", newlyCreatedUser[0]);
+              //create Tenant entry
+              const newTenant = new Tenant({
+                userId: newlyCreatedUser[0]._id,
+                address: req.body.address,
+                institution: req.body.institution,
+                auditor: req.body.auditor,
+                type: req.body.type,
               });
-          });
+
+              // save in database
+              newTenant
+                .save()
+                .then()
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
+          }, millisecondsToWait);
         })
         .catch((message) => {
           console.log(message);
@@ -252,7 +257,8 @@ router.put("/changepassword", (req, res) => {
         // Check password
         bcrypt.compare(req.body.oldPass, user.password).then((isMatch) => {
           if (isMatch) {
-            User.findOneAndUpdate({ _id: req.body.updateId },
+            User.findOneAndUpdate(
+              { _id: req.body.updateId },
               { password: hashed },
               (error, data) => {
                 if (error) {
@@ -264,7 +270,8 @@ router.put("/changepassword", (req, res) => {
                   console.log("This is the new data: ", data);
                   res.send(data);
                 }
-              })
+              }
+            );
           } else {
             return res
               .status(400)

@@ -8,7 +8,7 @@ const moment = require("moment");
 // @route POST api/sendemail/create
 // @desc send email notification
 router.post("/create", async (req, res) => {
-  console.log("Res in sendemail/create: ", req.body);
+  console.log("Res in sendemail/create: ");
   const output = `
     <h3>Singhealth Tenant Account Created</h3>
     <p>Hello ${req.body.name},</p>
@@ -60,7 +60,7 @@ router.post("/create", async (req, res) => {
 // @route POST api/sendemail/audit
 // @desc send email notification
 router.post("/audit", (req, res) => {
-  console.log("Res in sendemail/audit: ", req.body);
+  console.log("Res in sendemail/audit: ");
   Tenant.findOne({ _id: req.body.tenantID }).then((tenant) => {
     console.log("tenant in findone: ", tenant);
     User.findOne({ _id: tenant.userId }).then(async (user) => {
@@ -113,7 +113,7 @@ router.post("/audit", (req, res) => {
 // @route POST api/sendemail/auditupdate
 // @desc send email notification
 router.post("/auditupdate", (req, res) => {
-  console.log("Res in sendemail/audit: ", req.body);
+  console.log("Res in sendemail/audit: ");
 
   // tenant makes update, email sent to auditor
   let receiverId;
@@ -193,7 +193,7 @@ router.post("/auditupdate", (req, res) => {
 // @route POST api/sendemail/reminder
 // @desc send email notification
 router.post("/reminder", (req, res) => {
-  console.log("Res in sendemail/reminder: ", req.body);
+  console.log("Res in sendemail/reminder: ");
   Tenant.findOne({ _id: req.body.record.tenantID })
     .then((tenant) => {
       console.log("tenant in findone: ", tenant);
@@ -253,7 +253,7 @@ router.post("/reminder", (req, res) => {
 
 // Send password reset email with new password
 router.post("/reset", async (req, res) => {
-  console.log("Res in sendemail/reset: ", req.body);
+  console.log("Res in sendemail/reset: ");
   const output = `
     <h3>Singhealth Account Password Reset</h3>
     <p>Hello User,</p>
@@ -302,7 +302,7 @@ router.post("/reset", async (req, res) => {
 });
 
 router.post("/change", async (req, res) => {
-  console.log("Res in sendemail/change: ", req.body);
+  console.log("Res in sendemail/change: ");
   const output = `
     <h3>Singhealth Account Password Change</h3>
     <p>Hello User,</p>

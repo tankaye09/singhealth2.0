@@ -73,7 +73,7 @@ router.put("/updateImage", function (req, res) {
 });
 
 router.post("/", function (req, res) {
-  console.log(req.body._id);
+  // console.log(req.body._id);
   Audit.findOneAndDelete({ tenantID: req.body.tenantID })
     .then((doc) => {
       res.send(doc);
